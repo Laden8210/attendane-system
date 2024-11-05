@@ -5,6 +5,19 @@ require_once '../repository/StudentRepository.php';
 require_once '../repository/UserRepository.php';
 require_once '../repository/CourseRepository.php';
 
+if (!isset($_SESSION['user_type_id']) || $_SESSION['user_type_id'] != 0) {
+
+    if (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 1) {
+        header('Location: ../admin/');
+        exit;
+    } elseif (isset($_SESSION['officer_id'])) {
+        header('Location: ../student/');
+        exit;
+    } else {
+        header('Location: ../index.php?view=login'); 
+        exit;
+    }
+}
 
 
 $studentRepository = new StudentRepository($conn);
@@ -22,12 +35,12 @@ switch ($view) {
         break;
 
     case 'course':
-        $title = 'Dashboard';
+        $title = 'Course';
         $content = '../content/super-admin/course.php';
         break;
 
     case 'admin-list':
-        $title = 'Dashboard';
+        $title = 'Admin';
         $content = '../content/super-admin/admin-list.php';
         break;
 

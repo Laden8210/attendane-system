@@ -1,4 +1,21 @@
 <?php
+
+session_start();
+if (isset($_SESSION['user_type_id']) || isset($_SESSION['officer_id'])) {
+
+    if (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 0) {
+        header('Location: super-admin/');
+        exit;
+    } elseif (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 1) {
+        header('Location: admin/');
+        exit;
+    } elseif (isset($_SESSION['officer_id'])) {
+
+        header('Location: student/');
+        exit;
+    }
+}
+
 $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
 
 require_once 'repository/config.php';

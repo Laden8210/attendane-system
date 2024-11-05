@@ -12,6 +12,20 @@ $studentRepository = new StudentRepository($conn);
 $eventRepository = new EventRepository($conn);
 $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
 
+if (!isset($_SESSION['user_type_id']) || $_SESSION['user_type_id'] != 1) {
+
+    if (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 0) {
+        header('Location: ../super-admin/');
+        exit;
+    } elseif (isset($_SESSION['officer_id'])) {
+        header('Location: ../student/');
+        exit;
+    } else {
+        header('Location: ../index.php?view=login'); 
+        exit;
+    }
+}
+
 switch ($view) {
     case 'dashboard':
         $title = 'Dashboard';
@@ -37,6 +51,10 @@ switch ($view) {
     case 'course':
         $title = "Course";
         $content = "../content/admin/course.php";
+        break;
+    case 'report':
+        $title = "Report";
+        $content = "../content/admin/report.php";
         break;
     default:
         $title = 'Dashboard';

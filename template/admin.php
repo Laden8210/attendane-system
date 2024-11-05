@@ -100,7 +100,7 @@
 
 
                 <li>
-                    <a href="index.php?view=logout" class="flex items-center p-2 rounded-lg hover:bg-red-400  group">
+                    <a href="../logout.php" class="flex items-center p-2 rounded-lg hover:bg-red-400  group">
                         <i class="fa fa-sign-out" aria-hidden="true"></i>
                         <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
                     </a>

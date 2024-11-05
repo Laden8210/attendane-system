@@ -11,7 +11,7 @@
             </div>
 
             <div class="text-white ">
-                <a href="">
+                <a href="../logout.php">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </a>
             </div>

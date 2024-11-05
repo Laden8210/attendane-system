@@ -87,6 +87,24 @@ class OfficerRepository
         $stmt->close();
         return $success;
     }
+
+    public function getOfficerByUsernameOrEmail($usernameOrEmail)
+{
+    $sql = "SELECT * FROM officers WHERE USERNAME = ? ";
+    $stmt = $this->conn->prepare($sql);
+    if ($stmt === false) {
+        die("ERROR: Could not prepare the statement: " . $this->conn->error);
+    }
+
+    $stmt->bind_param("s", $usernameOrEmail);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $officer = $result->fetch_assoc();
+
+    $stmt->close();
+    return $officer;
+}
+
 }
 
 ?>

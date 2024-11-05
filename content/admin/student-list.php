@@ -134,7 +134,6 @@ $students = $studentRepository->readAll();
         </div>
     </div>
 </section>
-
 <script>
     function deleteStudent(studentId) {
         Swal.fire({
@@ -148,12 +147,23 @@ $students = $studentRepository->readAll();
         }).then((result) => {
             if (result.isConfirmed) {
 
-                deleteStudentFromServer(studentId).then(() => {
-                    Swal.fire({
-                        title: "Deleted!",
-                        text: "The student record has been deleted.",
-                        icon: "success"
-                    });
+                deleteStudentFromServer(studentId).then((response) => {
+                    if (response.status === "success") {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "The student record has been deleted.",
+                            icon: "success"
+                        }).then(() => {
+           
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "There was a problem deleting the record.",
+                            icon: "error"
+                        });
+                    }
                 }).catch((error) => {
                     Swal.fire({
                         title: "Error!",
@@ -167,12 +177,12 @@ $students = $studentRepository->readAll();
 
     async function deleteStudentFromServer(studentId) {
         try {
-            const response = await fetch(`https://yourapi.com/students/${studentId}`, {
+            const response = await fetch('controller/delete-student.php', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
-
-                }
+                },
+                body: JSON.stringify({ id: studentId })
             });
 
             if (!response.ok) {
@@ -185,5 +195,6 @@ $students = $studentRepository->readAll();
         }
     }
 </script>
+
 
 <?php require_once 'modal/add-student.php'; ?>

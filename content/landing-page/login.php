@@ -45,51 +45,54 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault(); 
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent form submission
 
-        const formData = new FormData(this);
+    const formData = new FormData(this);
 
-        fetch('login-process.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: data.message,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        if (data.user_type_id == 0) {
-                            window.location.href = 'super-admin/';
-                        } else if (data.user_type_id == 1) {
-                            window.location.href = 'admin';
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: data.message,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+    fetch('login-process.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Redirect based on user type
+                    if (data.user_type_id == 0) {
+                        window.location.href = 'super-admin/';
+                    } else if (data.user_type_id == 1) {
+                        window.location.href = 'admin/';
+                    } else if (data.user_type_id == 2) {
+                        window.location.href = 'student/';
+                    }
+                });
+            } else {
                 Swal.fire({
                     title: 'Error!',
-                    text: 'An unexpected error occurred.',
+                    text: data.message,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'An unexpected error occurred.',
+                icon: 'error',
+                confirmButtonText: 'OK'
             });
-    });
+        });
+});
 
-    // Toggle password visibility
+
     document.getElementById("togglePassword").addEventListener("click", function() {
         const passwordField = document.getElementById("password");
         const toggleIcon = document.getElementById("toggleIcon");

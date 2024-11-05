@@ -9,7 +9,7 @@ class CourseRepository {
 
 
     public function createCourse($courseName, $courseCode, $courseImage, $description) {
-        $stmt = $this->conn->prepare("INSERT INTO COURSE (COURSE_NAME, COURSE_CODE, COURSE_IMAGE, DESCRIPTION) VALUES (?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO course (COURSE_NAME, COURSE_CODE, COURSE_IMAGE, DESCRIPTION) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $courseName, $courseCode, $courseImage, $description);
         if ($stmt->execute()) {
             return true;
@@ -19,7 +19,7 @@ class CourseRepository {
 
 
     public function getAllCourses() {
-        $stmt = $this->conn->prepare("SELECT * FROM COURSE");
+        $stmt = $this->conn->prepare("SELECT * FROM course");
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
@@ -27,7 +27,7 @@ class CourseRepository {
 
 
     public function getCourseById($id) {
-        $stmt = $this->conn->prepare("SELECT * FROM COURSE WHERE ID = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM course WHERE ID = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -35,13 +35,13 @@ class CourseRepository {
     }
 
     public function updateCourse($id, $courseName, $courseCode, $courseImage, $description) {
-        $stmt = $this->conn->prepare("UPDATE COURSE SET COURSE_NAME = ?, COURSE_CODE = ?, COURSE_IMAGE = ?, DESCRIPTION = ? WHERE ID = ?");
+        $stmt = $this->conn->prepare("UPDATE course SET COURSE_NAME = ?, COURSE_CODE = ?, COURSE_IMAGE = ?, DESCRIPTION = ? WHERE ID = ?");
         $stmt->bind_param("ssssi", $courseName, $courseCode, $courseImage, $description, $id);
         return $stmt->execute();
     }
 
     public function deleteCourse($id) {
-        $stmt = $this->conn->prepare("DELETE FROM COURSE WHERE ID = ?");
+        $stmt = $this->conn->prepare("DELETE FROM course WHERE ID = ?");
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }

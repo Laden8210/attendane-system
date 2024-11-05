@@ -22,7 +22,7 @@ class AttendanceRepository
     public function getAttendanceByEvent($eventId, $searchTerm = null)
     {
         if ($searchTerm) {
-            $sql = "SELECT attendance.*, students.FIRST_NAME, students.LAST_NAME 
+            $sql = "SELECT attendance.*, students.*
                     FROM attendance
                     JOIN students ON attendance.student_id = students.STUDENT_ID
                     WHERE attendance.event_id = ? AND (students.FIRST_NAME LIKE ? OR students.LAST_NAME LIKE ?)";
