@@ -2,8 +2,8 @@
 
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'u807574647_pcnl_db');
-define('DB_PASSWORD', 'u807574647_pcnl_db');
-define('DB_NAME', 'Pcnl_8210');
+define('DB_PASSWORD', 'Pcnl_8210');
+define('DB_NAME', 'u807574647_pcnl_db');
 
 
 try {
