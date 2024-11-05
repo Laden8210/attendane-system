@@ -1,9 +1,9 @@
 <?php
 
 define('DB_SERVER', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', 'Laden8210');
-define('DB_NAME', 'school_attendance_db');
+define('DB_USERNAME', 'u807574647_pcnl_db');
+define('DB_PASSWORD', 'u807574647_pcnl_db');
+define('DB_NAME', 'Pcnl_8210');
 
 
 try {
