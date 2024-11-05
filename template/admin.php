@@ -14,6 +14,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css" integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://kit.fontawesome.com/8d62d56333.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qr-creator/dist/qr-creator.min.js"></script>
+    <link rel="stylesheet" href="@sweetalert2/theme-material-ui/material-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+    <!-- Include DataTables JS -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <title><?php echo $title ?></title>
 </head>
 
@@ -23,51 +39,65 @@
         <div class="h-full px-3 py-4 overflow-y-auto  ">
 
             <div class="p-2 flex justify-start">
-                    <div class="rounded-full bg-slate-50 px-2 py-1">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                    </div>
-                    <span class="ms-3 text-xl font-bold text-white">Admin</span>
+                <div class="rounded-full bg-slate-50 px-2 py-1">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </div>
+                <span class="ms-3 text-xl font-bold text-white">Admin</span>
             </div>
             <hr>
             <ul class="space-y-2 font-medium text-white mt-2">
-    
+
                 <li>
-                    <a href="index.php" class="flex items-center p-2 rounded-lg hover:bg-violet-500 group <?php if($title == 'Dashboard'){echo "bg-violet-500"; } ?>">
+                    <a href="index.php" class="flex items-center p-2 rounded-lg hover:bg-violet-500 group <?php if ($title == 'Dashboard') {
+                                                                                                                echo "bg-violet-500";
+                                                                                                            } ?>">
                         <i class="fa fa-dashboard" aria-hidden="true"></i>
                         <span class="ms-3">Dashboard</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="index.php?view=student-list" class="flex items-center p-2 rounded-lg hover:bg-violet-500 group <?php if($title == 'Student List'){echo "bg-violet-500"; } ?>">
+                    <a href="index.php?view=student-list" class="flex items-center p-2 rounded-lg hover:bg-violet-500 group <?php if ($title == 'Student List') {
+                                                                                                                                echo "bg-violet-500";
+                                                                                                                            } ?>">
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <span class="flex-1 ms-3 whitespace-nowrap">Student List</span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.php?view=event-list" class="flex items-center p-2  rounded-lg  hover:bg-violet-500 group <?php if($title == 'Event'){echo "bg-violet-500"; } ?>">
+                    <a href="index.php?view=event-list" class="flex items-center p-2  rounded-lg  hover:bg-violet-500 group <?php if ($title == 'Event') {
+                                                                                                                                echo "bg-violet-500";
+                                                                                                                            } ?>">
                         <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
                         <span class="flex-1 ms-3 whitespace-nowrap">Event</span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.php?view=officer-list" class="flex items-center p-2  rounded-lg  hover:bg-violet-500 group <?php if($title == 'Officer Account'){echo "bg-violet-500"; } ?>">
+                    <a href="index.php?view=officer-list" class="flex items-center p-2  rounded-lg  hover:bg-violet-500 group <?php if ($title == 'Officer Account') {
+                                                                                                                                    echo "bg-violet-500";
+                                                                                                                                } ?>">
                         <i class="fa fa-user-circle" aria-hidden="true"></i>
                         <span class="flex-1 ms-3 whitespace-nowrap">Officer Account</span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.php?view=sms" class="flex items-center p-2 rounded-lg hover:bg-violet-500  group <?php if($title == 'SMS Notification'){echo "bg-violet-500"; } ?>">
+                    <a href="index.php?view=sms" class="flex items-center p-2 rounded-lg hover:bg-violet-500  group <?php if ($title == 'SMS Notification') {
+                                                                                                                        echo "bg-violet-500";
+                                                                                                                    } ?>">
                         <i class="fas fa-facebook-messenger"></i>
                         <span class="flex-1 ms-3 whitespace-nowrap">SMS Notification</span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.php?view=report" class="flex items-center p-2 rounded-lg hover:bg-violet-500  group <?php if($title == 'Report'){echo "bg-violet-500"; } ?>">
+                    <a href="index.php?view=report" class="flex items-center p-2 rounded-lg hover:bg-violet-500  group <?php if ($title == 'Report') {
+                                                                                                                            echo "bg-violet-500";
+                                                                                                                        } ?>">
                         <i class="fa fa-list" aria-hidden="true"></i>
                         <span class="flex-1 ms-3 whitespace-nowrap">Report</span>
                     </a>
                 </li>
+
+
 
                 <li>
                     <a href="index.php?view=logout" class="flex items-center p-2 rounded-lg hover:bg-red-400  group">
@@ -90,6 +120,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
-<script src="resource/js/script.js"></script>
+<script src="../resource/js/script.js"></script>
 
 </html>

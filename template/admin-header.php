@@ -12,7 +12,7 @@
 
             <div class="text-white ">
                 <a href="">
-                    <i class="fa-solid fa-gear"></i>
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
                 </a>
             </div>
         </div>

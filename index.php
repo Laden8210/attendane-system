@@ -1,6 +1,11 @@
 <?php
 $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
 
+require_once 'repository/config.php';
+require_once 'repository/CourseRepository.php';
+
+$courseRepository = new CourseRepository($conn);
+
 switch ($view) {
     case 'welcome':
         $title = 'Welcome';
@@ -16,7 +21,7 @@ switch ($view) {
         break;
     
     case 'login':
-        $title = 'Login';
+        $title = 'Login';   
         $content = 'content/landing-page/login.php';
         break;  
 

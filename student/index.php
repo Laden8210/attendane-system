@@ -1,6 +1,15 @@
 <?php
 $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
 
+require_once '../repository/config.php';
+require_once '../repository/StudentRepository.php';
+
+require_once '../repository/EventRepository.php';
+require_once '../repository/AttendanceRepository.php';
+
+
+$eventRepository = new EventRepository($conn);
+$attendanceRepository = new AttendanceRepository($conn);
 switch ($view) {
     case 'welcome':
         $title = 'Welcome';
