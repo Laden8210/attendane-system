@@ -1,9 +1,8 @@
 <?php require_once '../template/student-header.php';
 
-$eventId = $_GET['event_id']; // Assuming event_id is passed in the URL
+$eventId = $_GET['event_id']; 
 $eventRepository = new EventRepository($conn);
 $event = $eventRepository->getEventById($eventId);
-
 
 if (!$event) {
     echo "<h1>Event not found.</h1>";
@@ -22,7 +21,6 @@ if ($currentDateTime < $eventDate) {
     $status = 'On-going';
 }
 
-// Block access if the event is "Upcoming" or "Ended" using Swal
 if ($status !== 'On-going') {
     echo "<script>
         Swal.fire({
@@ -31,7 +29,7 @@ if ($status !== 'On-going') {
             icon: 'warning',
             confirmButtonText: 'Go Back'
         }).then(() => {
-            window.location.href = 'index.php'; // Redirect to the event listing or another page
+            window.location.href = 'index.php';
         });
     </script>";
     exit;
@@ -48,9 +46,9 @@ if ($status !== 'On-going') {
 
             <div class="flex justify-center m-10">
                 <div>
-
-                <input type="hidden" id="event_id" value="<?php echo $_GET['event_id']?>">
+                    <input type="hidden" id="event_id" value="<?php echo $_GET['event_id']?>">
                     <h2 class="text-center" id="scan-status">Scanning...</h2>
+                    <div id="user-info" class="mb-5"></div>
                     <div id="reader" class="h-96 w-96 rounded-lg shadow-lg"></div>
                     <button id="stop-button" class="mt-5 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">Stop Scanning</button>
                 </div>
@@ -64,95 +62,105 @@ if ($status !== 'On-going') {
     const eventId = document.getElementById('event_id').value;
     const html5QrCode = new Html5Qrcode("reader");
 
-    function startScanning() {
-        // Start scanning
-        html5QrCode.start(
-            { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: 500
-            },
-            onScanSuccess,
-            onScanError
-        ).catch(err => {
-            console.error(`Unable to start scanning: ${err}`);
-        });
+    async function displayUserInfo(qrCodeMessage) {
+        const response = await fetch(`controller/get-user-info.php?qrCode=${qrCodeMessage}&event_id=${eventId}`);
+        const userInfo = await response.json();
+
+        if (userInfo.success) {
+            // Display user info in a SweetAlert modal with a Confirm button
+            Swal.fire({
+                title: 'User Information',
+                html: `
+                    <p><strong>Name:</strong> ${userInfo.data.FIRST_NAME} ${userInfo.data.LAST_NAME}</p>
+                    <p><strong>Course:</strong> ${userInfo.data.COURSE}</p>
+                    <p><strong>Student ID:</strong> ${userInfo.data.STUDENT_ID}</p>
+                `,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm Attendance',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    confirmAttendance(qrCodeMessage);
+                } else {
+                    startScanning();
+                }
+            });
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'User information not found.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                startScanning();
+            });
+        }
     }
 
     function onScanSuccess(qrCodeMessage) {
-
         html5QrCode.stop().then(() => {
-            document.getElementById("scan-status").textContent = `Scanned: ${qrCodeMessage}. Waiting for response...`;
+            document.getElementById("scan-status").textContent = `Scanned: ${qrCodeMessage}. Retrieving user info...`;
+            displayUserInfo(qrCodeMessage);
+        }).catch(err => {
+            console.error("Unable to stop scanning:", err);
+        });
+    }
 
-
-            fetch('controller/save-attendance.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ qrCode: qrCodeMessage, event_id: eventId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-
-                if (data.success) {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Attendance successfully saved.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-
-                    document.getElementById("scan-status").textContent = `Attendance record successfully`;
-                } else {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: data.message,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                    document.getElementById("scan-status").textContent = `Attendance record unsuccessfully`;
-                }
-
-       
-                setTimeout(() => {
-                    startScanning();
-                }, 3000); 
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+    function confirmAttendance(qrCodeMessage) {
+        fetch('controller/save-attendance.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ qrCode: qrCodeMessage, event_id: eventId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Attendance successfully saved.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+                document.getElementById("scan-status").textContent = `Attendance recorded successfully`;
+            } else {
                 Swal.fire({
                     title: 'Error!',
-                    text: 'An error occurred while saving attendance.',
+                    text: data.message,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
-
-
-                setTimeout(() => {
-                    startScanning();
-                }, 1000);
+            }
+            setTimeout(() => startScanning(), 3000);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred while saving attendance.',
+                icon: 'error',
+                confirmButtonText: 'OK'
             });
-        }).catch(err => {
-            console.error("Unable to stop scanning:", err);
+            setTimeout(() => startScanning(), 1000);
         });
     }
 
-    function onScanError(errorMessage) {
-
-        console.warn(`QR Code scanning error: ${errorMessage}`);
+    function startScanning() {
+        html5QrCode.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 500 },
+            onScanSuccess,
+            errorMessage => console.warn(`QR Code scanning error: ${errorMessage}`)
+        ).catch(err => console.error(`Unable to start scanning: ${err}`));
     }
-
-
-    startScanning();
-
 
     document.getElementById("stop-button").addEventListener("click", () => {
-        html5QrCode.stop().then(ignore => {
+        html5QrCode.stop().then(() => {
             document.getElementById("scan-status").textContent = "Scanning stopped.";
-        }).catch(err => {
-            console.error("Unable to stop scanning:", err);
-        });
+        }).catch(err => console.error("Unable to stop scanning:", err));
     });
+
+    startScanning();
 </script>

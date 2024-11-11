@@ -7,20 +7,18 @@ require_once '../repository/StudentRepository.php';
 require_once '../repository/EventRepository.php';
 require_once '../repository/AttendanceRepository.php';
 
-if (!isset($_SESSION['officer_id'])) {
-
+if (isset($_SESSION['officer_id'])) {
+    echo '<script>';
     if (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 0) {
-        header('Location: ../super-admin/');
-        exit;
+        echo 'window.location.href = "../super-admin/";';
     } elseif (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 1) {
-        header('Location: ../admin/');
-        exit;
+        echo 'window.location.href = "../admin/";';
     } else {
-        header('Location: ../index.php?view=login'); 
-        exit;
+        echo 'window.location.href = "../index.php?view=login";';
     }
+    echo '</script>';
+    exit;
 }
-
 
 $eventRepository = new EventRepository($conn);
 $attendanceRepository = new AttendanceRepository($conn);
