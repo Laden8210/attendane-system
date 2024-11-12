@@ -159,6 +159,7 @@ if ($status !== 'On-going') {
     document.getElementById("stop-button").addEventListener("click", () => {
         html5QrCode.stop().then(() => {
             document.getElementById("scan-status").textContent = "Scanning stopped.";
+            
         }).catch(err => console.error("Unable to stop scanning:", err));
     });
 
