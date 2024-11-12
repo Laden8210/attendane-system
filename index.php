@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+
 if (isset($_SESSION['user_type_id']) || isset($_SESSION['officer_id'])) {
 
     if (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 0) {
@@ -32,9 +33,11 @@ if (count($usersExist) != 0) {
 
     $title = 'Create Account';
     $content = 'content/landing-page/create-account.php';
+
 } else {
     $courseRepository = new CourseRepository($conn);
-    $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
+    $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : '';
+
     switch ($view) {
         case 'welcome':
             $title = 'Welcome';

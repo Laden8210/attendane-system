@@ -1,3 +1,14 @@
+<?php 
+
+$courses = $courseRepository->getAllCourses();
+
+if (count($courses) == 0) {
+    echo "<script>window.location.href = 'index.php?view=login';</script>";
+    return;
+}
+
+?>
+
 <section class="w-screen h-screen flex items-center justify-center bg-gradient-to-r from-violet-500 to-violet-950">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 justify-center items-center">
         <?php

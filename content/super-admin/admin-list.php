@@ -258,18 +258,18 @@
             Swal.fire({
                 icon: 'success',
                 title: 'Success!',
-                text: data.message, // Display the message from the backend
+                text: data.message, 
                 confirmButtonText: 'OK'
             }).then(() => {
-                addStudentForm.reset(); // Reset the form after success
-                document.querySelector('[data-modal-hide="add-student-modal"]').click(); // Hide the modal
-                location.reload(); // Optionally reload the page to refresh the list
+                addStudentForm.reset(); 
+                document.querySelector('[data-modal-hide="add-student-modal"]').click(); 
+                location.reload(); 
             });
         } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
-                text: data.message || 'An error occurred. Please try again.', // Display error message from backend or fallback message
+                text: data.message || 'An error occurred. Please try again.', 
                 confirmButtonText: 'OK'
             });
         }

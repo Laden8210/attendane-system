@@ -46,7 +46,7 @@
 
 <script>
 document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
 
     const formData = new FormData(this);
 
