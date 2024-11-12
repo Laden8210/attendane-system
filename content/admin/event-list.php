@@ -178,9 +178,110 @@
         </div>
     </div>
 </div>
+<!-- Add Event Modal -->
+<div id="add-event-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden">
+    <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+        <div class="relative bg-white rounded-lg shadow-lg">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 border-b rounded-t">
+                <h3 class="text-xl font-semibold text-gray-900">Add New Event</h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center" data-modal-hide="add-event-modal">
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 1" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-4">
+                <form id="addEventForm" class="space-y-4">
+                    <div>
+                        <label for="event-name" class="block mb-2 text-sm font-medium text-gray-900">Event Name</label>
+                        <input type="text" name="event_name" id="event-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+                    </div>
+                    <div>
+                        <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+                        <textarea name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required></textarea>
+                    </div>
+                    <div>
+                        <label for="details" class="block mb-2 text-sm font-medium text-gray-900">Details</label>
+                        <textarea name="details" id="details" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required></textarea>
+                    </div>
+                    <div>
+                        <label for="event-date" class="block mb-2 text-sm font-medium text-gray-900">Event Date</label>
+                        <input type="date" name="event_date" id="event-date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">AM Time</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label for="am-time-in" class="block mb-2 text-sm font-medium text-gray-900">Time In</label>
+                                <input type="time" name="am_time_in" id="am-time-in" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+                            </div>
+                            <div>
+                                <label for="am-time-out" class="block mb-2 text-sm font-medium text-gray-900">Time Out</label>
+                                <input type="time" name="am_time_out" id="am-time-out" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">PM Time</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label for="pm-time-in" class="block mb-2 text-sm font-medium text-gray-900">Time In</label>
+                                <input type="time" name="pm_time_in" id="pm-time-in" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+                            </div>
+                            <div>
+                                <label for="pm-time-out" class="block mb-2 text-sm font-medium text-gray-900">Time Out</label>
+                                <input type="time" name="pm_time_out" id="pm-time-out" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required />
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5">Add Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const addEventForm = document.getElementById('addEventForm');
+
+    addEventForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(addEventForm);
+
+        try {
+            const response = await fetch('controller/add-event.php', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Event added successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Hide the modal and reload the page to show the new event
+                    const modal = new Modal(document.getElementById('add-event-modal'));
+                    modal.hide();
+                    location.reload();
+                });
+            } else {
+                Swal.fire('Error', data.message, 'error');
+            }
+        } catch (error) {
+            Swal.fire('Error', 'Failed to add event. Please try again.', 'error');
+        }
+    });
+});
+
     
     async function deleteEvent(eventId) {
         Swal.fire({

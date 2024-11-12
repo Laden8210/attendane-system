@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $amTimeOut = $_POST['am_time_out'] ?? '';
     $pmTimeIn = $_POST['pm_time_in'] ?? '';
     $pmTimeOut = $_POST['pm_time_out'] ?? '';
-    $eventDate = $_POST['date'] ?? '';
+    $eventDate = $_POST['event_date'] ?? '';
 
 
     if (empty($eventName)) {
