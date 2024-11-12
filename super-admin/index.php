@@ -4,7 +4,7 @@ require_once '../repository/config.php';
 require_once '../repository/StudentRepository.php';
 require_once '../repository/UserRepository.php';
 require_once '../repository/CourseRepository.php';
-if (!isset($_SESSION['officer_id'])) {
+if (isset($_SESSION['officer_id'])) {
     header('Location: ../student/');
     exit;
 }

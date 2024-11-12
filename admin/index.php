@@ -11,7 +11,7 @@ $studentRepository = new StudentRepository($conn);
 
 $eventRepository = new EventRepository($conn);
 $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
-if (!isset($_SESSION['officer_id'])) {
+if (isset($_SESSION['officer_id'])) {
     header('Location: ../student/');
     exit;
 }
