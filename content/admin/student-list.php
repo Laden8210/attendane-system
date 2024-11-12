@@ -47,6 +47,15 @@ $students = $studentRepository->readAll();
         link.href = paddedCanvas.toDataURL('image/png');
         link.click();
     }
+    function searchTable() {
+        const searchInput = document.getElementById("search").value.toLowerCase();
+        const rows = document.querySelectorAll("tbody tr");
+
+        rows.forEach(row => {
+            const studentData = row.innerText.toLowerCase();
+            row.style.display = studentData.includes(searchInput) ? "" : "none";
+        });
+    }
 </script>
 
 <section class="bg-violet-600 h-screen overflow-auto">
@@ -66,7 +75,7 @@ $students = $studentRepository->readAll();
                             <i class="fa fa-filter" aria-hidden="true"></i> Filter
                         </button>
                         <label for="search" class="text-black">Search</label>
-                        <input name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" />
+                        <input id="search" name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" onkeyup="searchTable()" />
                     </div>
                 </div>
 
