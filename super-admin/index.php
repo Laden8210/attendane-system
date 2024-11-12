@@ -5,7 +5,7 @@ require_once '../repository/StudentRepository.php';
 require_once '../repository/UserRepository.php';
 require_once '../repository/CourseRepository.php';
 
-if (!isset($_SESSION['user_type_id']) || $_SESSION['user_type_id'] != 0) {
+if (isset($_SESSION['user_type_id'])) {
 
     if (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 1) {
         header('Location: ../admin/');
