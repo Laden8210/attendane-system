@@ -28,7 +28,6 @@ $userRepository = new UserRepository($conn);
 $officerRepository = new OfficerRepository($conn);
 
 $usersExist = $userRepository->readAll();
-
 if (count($usersExist) != 0) {
 
     $title = 'Create Account';
