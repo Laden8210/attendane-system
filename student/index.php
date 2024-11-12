@@ -7,7 +7,7 @@ require_once '../repository/StudentRepository.php';
 require_once '../repository/EventRepository.php';
 require_once '../repository/AttendanceRepository.php';
 
-if (!isset($_SESSION['officer_id'])) {
+if (isset($_SESSION['officer_id'])) {
     echo '<script>';
     if (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 0) {
         echo 'window.location.href = "../super-admin/";';
