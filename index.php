@@ -28,7 +28,7 @@ $userRepository = new UserRepository($conn);
 $officerRepository = new OfficerRepository($conn);
 
 $usersExist = $userRepository->readAll();
-if (count($usersExist) != 0) {
+if (empty($usersExist)) {
 
     $title = 'Create Account';
     $content = 'content/landing-page/create-account.php';
