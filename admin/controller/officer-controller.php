@@ -1,13 +1,17 @@
 <?php
 require_once '../../repository/config.php';
 require_once '../../repository/OfficerRepository.php';
-
+require_once '../../repository/UserRepository.php';
+session_start();   
 $action = $_GET['action'];
 $officerRepository = new OfficerRepository($conn);
 
-if ($action === 'list') {
 
-    $officers = $officerRepository->getAllOfficers();
+if ($action === 'list') {
+    $userRepositoy = new UserRepository($conn);
+
+    $user = $userRepositoy->readUser($_SESSION['user_id']);
+    $officers = $officerRepository->getOfficersByCourse($user['course_id']);
     echo json_encode(['officers' => $officers]);
 }
 

@@ -40,6 +40,27 @@ class OfficerRepository
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getOfficersByCourse($courseId){
+        $sql = "SELECT officers.OFFICER_ID, officers.USERNAME, officers.PASSWORD, students.FIRST_NAME, students.LAST_NAME, students.COURSE, students.AVATAR
+                FROM officers 
+                JOIN students ON officers.STUDENT_ID = students.STUDENT_ID 
+                WHERE students.COURSE = ?";
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die("ERROR: Could not prepare the statement: " . $this->conn->error);
+        }
+
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $officers = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+        return $officers;
+    }
+
 
     public function getOfficerById($officerId)
     {

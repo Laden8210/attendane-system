@@ -8,6 +8,7 @@ require_once '../repository/EventRepository.php';
 require_once '../repository/SMSNotificationRepository.php';
 require_once '../repository/CourseRepository.php';
 require_once '../repository/UserRepository.php';
+require_once '../repository/OfficerRepository.php'; 
 
 $smsNotificationRepository = new SMSNotificationRepository($conn);
 $studentRepository = new StudentRepository($conn);
@@ -15,6 +16,7 @@ $courseRepository = new CourseRepository($conn);
 
 $userRepository = new UserRepository($conn);
 
+$officerRepository = new OfficerRepository($conn);
 $eventRepository = new EventRepository($conn);
 $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
 

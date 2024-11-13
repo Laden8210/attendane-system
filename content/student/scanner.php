@@ -71,6 +71,7 @@ if ($status !== 'On-going') {
             Swal.fire({
                 title: 'User Information',
                 html: `
+
                     <p><strong>Name:</strong> ${userInfo.data.FIRST_NAME} ${userInfo.data.LAST_NAME}</p>
                     <p><strong>Course:</strong> ${userInfo.data.COURSE}</p>
                     <p><strong>Student ID:</strong> ${userInfo.data.STUDENT_ID}</p>
