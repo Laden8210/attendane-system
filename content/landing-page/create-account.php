@@ -76,7 +76,7 @@ document.getElementById('createAccountForm').addEventListener('submit', function
                 icon: 'success',
                 confirmButtonText: 'OK'
             }).then(() => {
-                window.location.href = 'dashboard.php';
+                window.location.href = 'super-admin/index.php?view=dashboard';
             });
         } else {
             Swal.fire({
