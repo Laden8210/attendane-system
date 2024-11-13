@@ -40,6 +40,15 @@ class StudentRepository
     
         return $student_number;
     }
+
+    public function readStudentByID($id)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM students WHERE student_id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_assoc();
+    }
     
 
     public function readAll()
@@ -47,6 +56,15 @@ class StudentRepository
         $result = $this->conn->query("SELECT * FROM students");
 
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function readByCourse($course)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM students WHERE COURSE = ?");
+        $stmt->bind_param("s", $course);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
     
     public function readByStudentNumber($student_number)

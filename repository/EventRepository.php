@@ -10,12 +10,12 @@ class EventRepository
     }
 
     // Method to add a new event
-    public function addEvent($eventName, $description, $details, $amTimeIn, $amTimeOut, $pmTimeIn, $pmTimeOut, $eventDate)
+    public function addEvent($eventName, $description, $details, $amTimeIn, $amTimeOut, $pmTimeIn, $pmTimeOut, $eventDate, $course)
     {
-        $sql = "INSERT INTO events (event_name, description, details, am_time_in, am_time_out, pm_time_in, pm_time_out, event_date) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO events (event_name, description, details, am_time_in, am_time_out, pm_time_in, pm_time_out, event_date, course_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssssssss", $eventName, $description, $details, $amTimeIn, $amTimeOut, $pmTimeIn, $pmTimeOut, $eventDate);
+        $stmt->bind_param("ssssssssi", $eventName, $description, $details, $amTimeIn, $amTimeOut, $pmTimeIn, $pmTimeOut, $eventDate, $course);
 
         return $stmt->execute();
     }
@@ -28,6 +28,15 @@ class EventRepository
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getEventByCourse($course)
+    {
+        $sql = "SELECT * FROM events WHERE course_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $course);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
 
     public function getEventById($id)
     {

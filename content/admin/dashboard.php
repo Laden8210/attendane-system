@@ -25,8 +25,8 @@
                         <div class="grid grid-cols-3 items-center p-2">
                             <div class="rounded-full w-20 h-20 bg-green-100"></div>
                             <div class="text-white p-2 col-span-2">
-                                <h1 class="font-bold">On Going Event</h1>
-                                <div class="text-end"><span>12</span></div>
+                                <h1 class="font-bold">Event</h1>
+                                <div class="text-end"><span>17</span></div>
 
                             </div>
                         </div>
@@ -36,8 +36,8 @@
                         <div class="grid grid-cols-3 items-center p-2">
                             <div class="rounded-full w-20 h-20 bg-green-100"></div>
                             <div class="text-white p-2 col-span-2">
-                                <h1 class="font-bold">On Going Event</h1>
-                                <div class="text-end"><span>12</span></div>
+                                <h1 class="font-bold">Officer Account</h1>
+                                <div class="text-end"><span>15</span></div>
 
                             </div>
                         </div>
@@ -47,8 +47,8 @@
                         <div class="grid grid-cols-3 items-center p-2">
                             <div class="rounded-full w-20 h-20 bg-green-100"></div>
                             <div class="text-white p-2 col-span-2">
-                                <h1 class="font-bold">On Going Event</h1>
-                                <div class="text-end"><span>12</span></div>
+                                <h1 class="font-bold">Student</h1>
+                                <div class="text-end"><span>11</span></div>
 
                             </div>
                         </div>

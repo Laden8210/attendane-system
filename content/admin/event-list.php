@@ -34,7 +34,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $events = $eventRepository->getAllEvents(); ?>
+                            <?php $events = $eventRepository->getEventByCourse($user['course_id']); ?>
                             <?php foreach ($events as $event) : ?>
                                 <tr class="bg-white border-b text-xs text-center">
                                     <td class="px-2 py-3"><?= $event['id'] ?></td>

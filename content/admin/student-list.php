@@ -1,6 +1,8 @@
 <?php
 
-$students = $studentRepository->readAll();
+
+
+$students = $studentRepository->readByCourse($user['course_id']);
 ?>
 
 <script>

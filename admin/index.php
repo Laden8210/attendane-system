@@ -1,16 +1,23 @@
 <?php
 
+session_start();
 require_once '../repository/config.php';
 require_once '../repository/StudentRepository.php';
 
 require_once '../repository/EventRepository.php';
 require_once '../repository/SMSNotificationRepository.php';
+require_once '../repository/CourseRepository.php';
+require_once '../repository/UserRepository.php';
 
 $smsNotificationRepository = new SMSNotificationRepository($conn);
 $studentRepository = new StudentRepository($conn);
+$courseRepository = new CourseRepository($conn);
+
+$userRepository = new UserRepository($conn);
 
 $eventRepository = new EventRepository($conn);
 $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
+
 if (isset($_SESSION['officer_id'])) {
     header('Location: ../student/');
     exit;
@@ -26,6 +33,9 @@ if (isset($_SESSION['user_type_id'])) {
         exit;
     }
 }
+
+ $user = $userRepository->readUser($_SESSION['user_id']);
+$course = $courseRepository->getCourseById($user['course_id']);
 
 switch ($view) {
     case 'dashboard':

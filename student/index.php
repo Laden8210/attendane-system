@@ -1,13 +1,15 @@
 <?php
-$view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
 
+$view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : 'home';
+session_start();
 require_once '../repository/config.php';
 require_once '../repository/StudentRepository.php';
 
 require_once '../repository/EventRepository.php';
 require_once '../repository/AttendanceRepository.php';
 
-if (isset($_SESSION['officer_id'])) {
+
+if (!isset($_SESSION['officer_id'])) {
     echo '<script>';
     if (isset($_SESSION['user_type_id']) && $_SESSION['user_type_id'] == 0) {
         echo 'window.location.href = "../super-admin/";';
@@ -22,6 +24,10 @@ if (isset($_SESSION['officer_id'])) {
 
 $eventRepository = new EventRepository($conn);
 $attendanceRepository = new AttendanceRepository($conn);
+$studentRepository = new StudentRepository($conn);
+
+
+$student = $studentRepository->readStudentByID($_SESSION['officer_id']);
 switch ($view) {
     case 'welcome':
         $title = 'Welcome';

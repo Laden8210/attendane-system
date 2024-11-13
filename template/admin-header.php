@@ -6,7 +6,10 @@
                     <img src="../resource/img/logo.png" alt="" class="w-10">
                 </div>
                 <div class="w-3/4">
-                    <span class="font-bold">Web-based event attendance monitoring system</span> - Bachelor of Science in Information Technology
+                    <span class="font-bold">Web-based event attendance monitoring system</span> - <?php
+                                                                                                    echo $course['COURSE_NAME'] ?? "";
+                                                                                                    ?>
+
                 </div>
             </div>
 

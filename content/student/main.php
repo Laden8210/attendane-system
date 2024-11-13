@@ -1,7 +1,7 @@
 <?php
 
 require_once '../template/student-header.php';
-$events = $eventRepository->getAllEvents();
+$events = $eventRepository->getEventByCourse($student['COURSE']);
 ?>
 <section class="w-full h-screen bg-violet-600">
     <div class="w-full px-10 py-5" style="height: 90vh;">

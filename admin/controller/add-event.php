@@ -1,10 +1,12 @@
 <?php
 require_once '../../repository/config.php';
 require_once '../../repository/EventRepository.php';
+require_once '../../repository/UserRepository.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $eventRepository = new EventRepository($conn);
+    $userRepository = new UserRepository($conn);
 
     $eventName = trim($_POST['event_name'] ?? '');
     $description = trim($_POST['description'] ?? '');
@@ -14,6 +16,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $pmTimeIn = $_POST['pm_time_in'] ?? '';
     $pmTimeOut = $_POST['pm_time_out'] ?? '';
     $eventDate = $_POST['event_date'] ?? '';
+
+    session_start();
+
+    if (!isset($_SESSION['user_id'])) {
+        echo json_encode(['status' => 'error', 'message' => 'You must be logged in to add an event.']);
+        exit;
+    }
+
+    $user = $userRepository->readUser($_SESSION['user_id']);
+
+
+
+
 
 
     if (empty($eventName)) {
@@ -63,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         exit;
     }
 
-    $success = $eventRepository->addEvent($eventName, $description, $details, $amTimeIn, $amTimeOut, $pmTimeIn, $pmTimeOut, $eventDate);
+    $success = $eventRepository->addEvent($eventName, $description, $details, $amTimeIn, $amTimeOut, $pmTimeIn, $pmTimeOut, $eventDate, $user['course_id']);
 
     if ($success) {
         echo json_encode(['status' => 'success', 'message' => 'Event added successfully.']);

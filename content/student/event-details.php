@@ -6,8 +6,8 @@ $id = $_GET['id'];
 
 $event = $eventRepository->getEventById($id);
 
-// Fetch attendees for this event (assuming there's an attendee table)
-$attendees = $attendanceRepository->getAttendanceByEvent($id); // This method should be defined in your repository
+
+$attendees = $attendanceRepository->getAttendanceByEvent($id);
 
 ?>
 
