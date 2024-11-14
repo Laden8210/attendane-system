@@ -30,7 +30,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $events = $eventRepository->getEventByCourse($user['user_id']); ?>
+                            <?php $events = $eventRepository->getEventByCourse($user['course_id']); ?>
                             <?php foreach ($events as $event) : ?>
 
                                 <tr class="bg-white border-b text-xs text-center">
