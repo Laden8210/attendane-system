@@ -1,5 +1,6 @@
 <?php
 
+date_default_timezone_set('Asia/Manila');
 require_once '../../function/SMS.php';
 require_once '../../repository/config.php';
 require_once '../../repository/StudentRepository.php';
@@ -39,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $currentTime = date('Y-m-d H:i:s');
         $currentHour = date('H');
         $session = ($currentHour < 12) ? 'AM' : 'PM'; 
+
 
         $eventStartTime = ($session === 'AM') ? $event['am_time_in'] : $event['pm_time_in'];
         $eventEndTime = ($session === 'AM') ? $event['am_time_out'] : $event['pm_time_out'];
