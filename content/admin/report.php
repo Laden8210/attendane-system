@@ -41,45 +41,51 @@
                                     <td class="px-6 py-3"><?= $event['details'] ?></td>
 
                                     <td class="px-6 py-3">
-                                        <?php
-                                        $currentDate = date('Y-m-d');
-                                        $currentTime = date('H:i:s');
-                                        $eventDate = $event['event_date'];
-                                        $amTimeIn = date('H:i:s', strtotime($event['am_time_in']));
-                                        $amTimeOut = date('H:i:s', strtotime($event['am_time_out']));
-                                        $pmTimeIn = date('H:i:s', strtotime($event['pm_time_in']));
-                                        $pmTimeOut = date('H:i:s', strtotime($event['pm_time_out']));
+    <?php
+    $currentDate = date('Y-m-d');
+    $currentTime = date('H:i:s');
+    $eventDate = $event['event_date'];
+    $amTimeIn = date('H:i:s', strtotime($event['am_time_in']));
+    $amTimeOut = date('H:i:s', strtotime($event['am_time_out']));
+    $pmTimeIn = date('H:i:s', strtotime($event['pm_time_in']));
+    $pmTimeOut = date('H:i:s', strtotime($event['pm_time_out']));
 
-                                        $status = '';
-                                        if ($currentDate < $eventDate) {
-                                            $status = '<span class="px-2 py-1 text-white bg-blue-500 rounded-full">Upcoming</span>';
-                                        } elseif ($currentDate == $eventDate) {
-                                            if ($currentTime < $amTimeIn) {
-                                                $status = '<span class="px-2 py-1 text-white bg-blue-500 rounded-full">Upcoming</span>';
-                                            } elseif ($currentTime >= $amTimeIn && $currentTime <= $amTimeOut) {
-                                                $status = '<span class="px-2 py-1 text-white bg-green-500 rounded-full">Ongoing (AM)</span>';
-                                            } elseif ($currentTime > $amTimeOut && $currentTime < $pmTimeIn) {
-                                                $status = '<span class="px-2 py-1 text-white bg-yellow-500 rounded-full">Break</span>';
-                                            } elseif ($currentTime >= $pmTimeIn && $currentTime <= $pmTimeOut) {
-                                                $status = '<span class="px-2 py-1 text-white bg-green-500 rounded-full">Ongoing (PM)</span>';
-                                            } else {
-                                                $status = '<span class="px-2 py-1 text-white bg-red-500 rounded-full">Done</span>';
-                                            }
-                                        } else {
-                                            $status = '<span class="px-2 py-1 text-white bg-red-500 rounded-full">Done</span>';
-                                        }
-                                        echo $status;
-                                        ?>
-                                    </td>
+    $status = '';
+    $isEventDone = false; // Initialize a flag for "Done" status
 
-                                    <td class="px-6 py-3">
-                                        <?= date('g:i A', strtotime($event['am_time_in'])) . ' - ' . date('g:i A', strtotime($event['am_time_out'])) . ' : ' . date('g:i A', strtotime($event['pm_time_in'])) . ' - ' . date('g:i A', strtotime($event['pm_time_out'])) ?>
-                                    </td>
+    if ($currentDate < $eventDate) {
+        $status = '<span class="px-2 py-1 text-white bg-blue-500 rounded-full">Upcoming</span>';
+    } elseif ($currentDate == $eventDate) {
+        if ($currentTime < $amTimeIn) {
+            $status = '<span class="px-2 py-1 text-white bg-blue-500 rounded-full">Upcoming</span>';
+        } elseif ($currentTime >= $amTimeIn && $currentTime <= $amTimeOut) {
+            $status = '<span class="px-2 py-1 text-white bg-green-500 rounded-full">Ongoing (AM)</span>';
+        } elseif ($currentTime > $amTimeOut && $currentTime < $pmTimeIn) {
+            $status = '<span class="px-2 py-1 text-white bg-yellow-500 rounded-full">Break</span>';
+        } elseif ($currentTime >= $pmTimeIn && $currentTime <= $pmTimeOut) {
+            $status = '<span class="px-2 py-1 text-white bg-green-500 rounded-full">Ongoing (PM)</span>';
+        } else {
+            $status = '<span class="px-2 py-1 text-white bg-red-500 rounded-full">Done</span>';
+            $isEventDone = true; // Mark event as done
+        }
+    } else {
+        $status = '<span class="px-2 py-1 text-white bg-red-500 rounded-full">Done</span>';
+        $isEventDone = true; // Mark event as done
+    }
+    echo $status;
+    ?>
+</td>
 
-                                    <td class="px-6 py-3">
-                         
-                                        <button class="bg-green-500 px-2 py-1 rounded text-white" onclick="downloadReport(<?= $event['id'] ?>)">Download Report</button>
-                                    </td>
+<td class="px-6 py-3">
+    <?= date('g:i A', strtotime($event['am_time_in'])) . ' - ' . date('g:i A', strtotime($event['am_time_out'])) . ' : ' . date('g:i A', strtotime($event['pm_time_in'])) . ' - ' . date('g:i A', strtotime($event['pm_time_out'])) ?>
+</td>
+
+<td class="px-6 py-3">
+    <?php if ($isEventDone): ?>
+        <button class="bg-green-500 px-2 py-1 rounded text-white" onclick="downloadReport(<?= $event['id'] ?>)">Download Report</button>
+    <?php endif; ?>
+</td>
+
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
