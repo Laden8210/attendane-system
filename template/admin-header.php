@@ -14,7 +14,7 @@
             </div>
 
             <div class="text-white ">
-                <a href="">
+                <a href="../logout.php">
                     <i class="fa fa-sign-out" aria-hidden="true"></i>
                 </a>
             </div>

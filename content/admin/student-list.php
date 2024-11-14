@@ -73,9 +73,7 @@ $students = $studentRepository->readByCourse($user['course_id']);
                         <button data-modal-target="add-student-modal" data-modal-toggle="add-student-modal" class="shadow rounded bg-blue-500 px-2 py-1"><i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
                     </div>
                     <div class="flex justify-end gap-2 items-center">
-                        <button class="shadow rounded bg-green-500 px-2 py-1">
-                            <i class="fa fa-filter" aria-hidden="true"></i> Filter
-                        </button>
+
                         <label for="search" class="text-black">Search</label>
                         <input id="search" name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" onkeyup="searchTable()" />
                     </div>

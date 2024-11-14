@@ -2,14 +2,12 @@
     <div class="w-full px-10 py-5">
         <div class="bg-slate-50 w-full h-screen rounded-lg overflow-x-hidden overflow-y-auto ">
             <div class="pt-5 px-2 text-center">
-                <h1 class="text-2xl font-bold">Event List</h1>
+                <h1 class="text-2xl font-bold">Event Report List</h1>
                 <hr class="h-2 bg-cyan-500">
             </div>
             <div class="h-96 bg-slate-100 rounded ">
-                <div class="flex justify-between p-2 text-white">
-                    <div>
-                        <button data-modal-target="add-event-modal" data-modal-toggle="add-event-modal" class="shadow rounded bg-blue-500 px-2 py-1"><i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
-                    </div>
+                <div class="flex justify-end p-2 text-white">
+               
                     <div class="flex justify-end gap-2 items-center">
          
                         <label for="search" class="text-black">Search</label>

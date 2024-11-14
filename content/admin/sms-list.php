@@ -16,9 +16,7 @@ $smsNotifications = $smsNotificationRepository->getAllSMSNotifications($search);
             <div class="h-96 bg-slate-100 rounded">
                 <div class="flex justify-end p-2 text-white">
                     <div class="flex justify-end gap-2 items-center">
-                        <button class="shadow rounded bg-green-500 px-2 py-1">
-                            <i class="fa fa-filter" aria-hidden="true"></i> Filter
-                        </button>
+         
                         <label for="search" class="text-black">Search</label>
                         <input id="search-input" name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" />
                         <button id="search-button" class="ml-2 px-2 py-1 bg-cyan-500 text-white rounded">Search</button>
