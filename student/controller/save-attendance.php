@@ -21,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $qrCode = $data['qrCode'];
         $eventId = $data['event_id'];
 
-        // Retrieve the student by QR code
         $student = $studentRepository->readByStudentNumber($qrCode);
 
         if (!$student) {

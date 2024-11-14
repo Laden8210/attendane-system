@@ -120,8 +120,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const addOfficerModalElement = document.getElementById('add-officer-modal');
     const editOfficerModalElement = document.getElementById('edit-officer-modal');
     
-    const addOfficerModal = new Modal(addOfficerModalElement); // Modal for adding officers
-    const editOfficerModal = new Modal(editOfficerModalElement); // Modal for editing officers
+    const addOfficerModal = new Modal(addOfficerModalElement);
+    const editOfficerModal = new Modal(editOfficerModalElement); 
 
     // Fetch and display all officers
     async function fetchOfficers() {
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Add Officer form submission with Swal
+
     const addOfficerForm = document.querySelector('#add-officer-form');
     addOfficerForm.addEventListener('submit', async (e) => {
         e.preventDefault();

@@ -32,7 +32,7 @@ class EventRepository
     {
         $sql = "SELECT * FROM events WHERE course_id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $course);
+        $stmt->bind_param("i", $course);
         $stmt->execute();
 
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);

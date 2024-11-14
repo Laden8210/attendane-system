@@ -26,8 +26,8 @@ $eventRepository = new EventRepository($conn);
 $attendanceRepository = new AttendanceRepository($conn);
 $studentRepository = new StudentRepository($conn);
 
+$student = $studentRepository->readStudentByOfficerID($_SESSION['officer_id']);
 
-$student = $studentRepository->readStudentByID($_SESSION['officer_id']);
 switch ($view) {
     case 'welcome':
         $title = 'Welcome';

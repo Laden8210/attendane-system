@@ -21,6 +21,7 @@
                             placeholder="Email or Username" required>
                     </div>
                     <!-- Password Field -->
+                    <!-- Password Field -->
                     <div class="flex items-center relative">
                         <label for="password" class="mr-4 text-violet-900">
                             <i class="fas fa-unlock-alt"></i>
@@ -29,10 +30,12 @@
                             class="w-full p-2 outline-none rounded border border-gray-300"
                             placeholder="Password" required>
                         <button type="button" id="togglePassword"
-                            class="absolute inset-y-0 right-0 px-3 text-gray-500">
+                            class="absolute inset-y-0 right-0 px-3 text-gray-500 cursor-pointer"
+                            title="Toggle Password Visibility">
                             <i id="toggleIcon" class="fas fa-eye"></i>
                         </button>
                     </div>
+
                 </div>
                 <!-- Submit Button -->
                 <div class="flex justify-end mt-6">
@@ -48,25 +51,17 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Script Loaded"); // Confirm script is running
+    console.log("Script Loaded");
 
-    // Elements
     const togglePassword = document.getElementById("togglePassword");
     const passwordField = document.getElementById("password");
     const toggleIcon = document.getElementById("toggleIcon");
 
-    togglePassword.addEventListener("click", (e) => {
-        e.preventDefault(); 
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            toggleIcon.classList.remove("fa-eye");
-            toggleIcon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.type = "password";
-            toggleIcon.classList.remove("fa-eye-slash");
-            toggleIcon.classList.add("fa-eye");
-        }
-
+    togglePassword.addEventListener("click", () => {
+        const isPassword = passwordField.type === "password";
+        passwordField.type = isPassword ? "text" : "password";
+        toggleIcon.classList.toggle("fa-eye", !isPassword);
+        toggleIcon.classList.toggle("fa-eye-slash", isPassword);
         console.log(`Password visibility toggled to: ${passwordField.type}`);
     });
 });
@@ -78,52 +73,50 @@ document.addEventListener("DOMContentLoaded", () => {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    const formData = new FormData(this);
+        const formData = new FormData(this);
 
-    fetch('login-process.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    title: 'Success!',
-                    text: data.message,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    // Redirect based on user type
-                    if (data.user_type_id == 0) {
-                        window.location.href = 'super-admin/';
-                    } else if (data.user_type_id == 1) {
-                        window.location.href = 'admin/';
-                    } else if (data.user_type_id == 2) {
-                        window.location.href = 'student/';
-                    }
-                });
-            } else {
+        fetch('login-process.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Redirect based on user type
+                        if (data.user_type_id == 0) {
+                            window.location.href = 'super-admin/';
+                        } else if (data.user_type_id == 1) {
+                            window.location.href = 'admin/';
+                        } else if (data.user_type_id == 2) {
+                            window.location.href = 'student/';
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
                 Swal.fire({
                     title: 'Error!',
-                    text: data.message,
+                    text: 'An unexpected error occurred.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-                title: 'Error!',
-                text: 'An unexpected error occurred.',
-                icon: 'error',
-                confirmButtonText: 'OK'
             });
-        });
-});
-
-
+    });
 </script>

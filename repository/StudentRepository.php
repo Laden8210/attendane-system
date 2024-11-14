@@ -26,7 +26,6 @@ class StudentRepository
             $this->conn->rollback();
             return false;
         }
-
     }
 
 
@@ -35,9 +34,9 @@ class StudentRepository
         $result = $this->conn->query("SELECT COUNT(*) as count FROM students WHERE COURSE = '$course' AND BLOCK = '$block'");
         $count = $result->fetch_assoc()['count'];
         $count++;
-    
+
         $student_number = $course . $block . '-' . str_pad($count, 6, '0', STR_PAD_LEFT);
-    
+
         return $student_number;
     }
 
@@ -49,7 +48,21 @@ class StudentRepository
 
         return $stmt->get_result()->fetch_assoc();
     }
-    
+
+    public function readStudentByOfficerID($id)
+    {
+        $stmt = $this->conn->prepare("SELECT * 
+FROM students 
+JOIN officers 
+ON students.STUDENT_ID = officers.STUDENT_ID 
+WHERE officers.OFFICER_ID = ?");
+
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_assoc();
+    }
+
 
     public function readAll()
     {
@@ -66,7 +79,7 @@ class StudentRepository
 
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-    
+
     public function readByStudentNumber($student_number)
     {
         $stmt = $this->conn->prepare("SELECT * FROM students WHERE student_number = ?");
@@ -75,7 +88,7 @@ class StudentRepository
 
         return $stmt->get_result()->fetch_assoc();
     }
-    
+
     public function read($id)
     {
         $stmt = $this->conn->prepare("SELECT * FROM students WHERE student_id = ?");
@@ -109,5 +122,4 @@ class StudentRepository
             return false;
         }
     }
-
 }
