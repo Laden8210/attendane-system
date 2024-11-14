@@ -1,6 +1,6 @@
 <?php 
 $events = $eventRepository->getEventByCourse($user['course_id']);
-$officers = $officerRepository->getAllOfficers();
+$officers = $officerRepository->getOfficersByCourse($user['course_id']);
 $student  = $studentRepository->readByCourse($user['course_id']);
 
 ?>

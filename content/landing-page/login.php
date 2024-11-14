@@ -46,6 +46,34 @@
     </div>
 </section>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("Script Loaded"); // Confirm script is running
+
+    // Elements
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordField = document.getElementById("password");
+    const toggleIcon = document.getElementById("toggleIcon");
+
+    togglePassword.addEventListener("click", (e) => {
+        e.preventDefault(); 
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
+
+        console.log(`Password visibility toggled to: ${passwordField.type}`);
+    });
+});
+
+</script>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -98,14 +126,4 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 });
 
 
-    document.getElementById("togglePassword").addEventListener("click", function() {
-        const passwordField = document.getElementById("password");
-        const toggleIcon = document.getElementById("toggleIcon");
-
-        const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
-        passwordField.setAttribute("type", type);
-
-        toggleIcon.classList.toggle("fa-eye");
-        toggleIcon.classList.toggle("fa-eye-slash");
-    });
 </script>
