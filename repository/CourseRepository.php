@@ -8,9 +8,9 @@ class CourseRepository {
     }
 
 
-    public function createCourse($courseName, $courseCode, $courseImage, $description) {
-        $stmt = $this->conn->prepare("INSERT INTO course (COURSE_NAME, COURSE_CODE, COURSE_IMAGE, DESCRIPTION) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $courseName, $courseCode, $courseImage, $description);
+    public function createCourse($courseName, $courseImage, $description) {
+        $stmt = $this->conn->prepare("INSERT INTO course (COURSE_NAME, COURSE_IMAGE, DESCRIPTION) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $courseName,  $courseImage, $description);
         if ($stmt->execute()) {
             return true;
         }

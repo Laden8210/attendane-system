@@ -19,10 +19,12 @@ if (isset($_SESSION['user_type_id'])) {
     }
 }
 
-
+session_start();
 $studentRepository = new StudentRepository($conn);
 $courseRepository = new CourseRepository($conn);
 $userRepository = new UserRepository($conn);
+
+$user = $userRepository->readUser($_SESSION['user_id']);
 
 
 

@@ -21,7 +21,6 @@
                             placeholder="Email or Username" required>
                     </div>
                     <!-- Password Field -->
-                    <!-- Password Field -->
                     <div class="flex items-center relative">
                         <label for="password" class="mr-4 text-violet-900">
                             <i class="fas fa-unlock-alt"></i>
@@ -35,10 +34,14 @@
                             <i id="toggleIcon" class="fas fa-eye"></i>
                         </button>
                     </div>
-
                 </div>
                 <!-- Submit Button -->
-                <div class="flex justify-end mt-6">
+                <div class="flex justify-between mt-6">
+                    <!-- Back Button -->
+                    <button type="button" id="backButton"
+                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                        Back
+                    </button>
                     <button type="submit"
                         class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Login
@@ -51,7 +54,6 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Script Loaded");
 
     const togglePassword = document.getElementById("togglePassword");
     const passwordField = document.getElementById("password");
@@ -59,16 +61,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     togglePassword.addEventListener("click", () => {
         const isPassword = passwordField.type === "password";
-        passwordField.type = isPassword ? "text" : "password";
-        toggleIcon.classList.toggle("fa-eye", !isPassword);
-        toggleIcon.classList.toggle("fa-eye-slash", isPassword);
-        console.log(`Password visibility toggled to: ${passwordField.type}`);
+        console.log(isPassword);
+        if (!isPassword) {
+            passwordField.type = "text";
+            toggleIcon.classList.add("fa-eye-slash");
+            toggleIcon.classList.remove("fa-eye");
+        }else
+        {   
+            toggleIcon.classList.add("fa-eye");
+            toggleIcon.classList.remove("fa-eye-slash");
+            passwordField.type = "password";
+        }
+
+    });
+
+
+    const backButton = document.getElementById("backButton");
+    backButton.addEventListener("click", () => {
+
+        window.history.back(); 
     });
 });
-
 </script>
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

@@ -9,7 +9,7 @@ class StudentRepository
         $this->conn = $conn;
     }
 
-    public function addStudent($last_name, $first_name, $course, $block, $guardian_phone_no, $avatar)
+    public function addStudent($last_name, $first_name, $course, $block, $guardian_phone_no, $avatar, $year)
     {
         try {
             $this->conn->begin_transaction();
@@ -17,8 +17,8 @@ class StudentRepository
 
             $student_number = $this->generateStudentNumber($course, $block);
 
-            $this->conn->query("INSERT INTO students (LAST_NAME, FIRST_NAME, COURSE, BLOCK, GUARDIAN_PHONE_NO, AVATAR, STUDENT_NUMBER) 
-            VALUES ('$last_name', '$first_name', '$course', '$block', '$guardian_phone_no', '$avatar', '$student_number')");
+            $this->conn->query("INSERT INTO students (LAST_NAME, FIRST_NAME, COURSE, BLOCK, GUARDIAN_PHONE_NO, AVATAR, STUDENT_NUMBER, YEAR) 
+            VALUES ('$last_name', '$first_name', '$course', '$block', '$guardian_phone_no', '$avatar', '$student_number', '$year')");
             $student_id = $this->conn->insert_id;
             $this->conn->commit();
             return $student_id;
@@ -73,7 +73,9 @@ WHERE officers.OFFICER_ID = ?");
 
     public function readByCourse($course)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM students WHERE COURSE = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM students 
+        join course on students.COURSE = course.ID
+        WHERE COURSE = ?");
         $stmt->bind_param("s", $course);
         $stmt->execute();
 

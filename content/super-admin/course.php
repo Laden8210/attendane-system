@@ -1,7 +1,7 @@
 <section class=" bg-violet-600">
     <div class="w-full px-10 py-5">
 
-        <div class="bg-slate-50 w-full h-screen rounded-lg overflow-x-hidden overflow-y-auto ">
+        <div class="bg-slate-50 w-full  rounded-lg overflow-x-hidden overflow-y-auto ">
 
             <div class="pt-5 px-2 text-center">
                 <h1 class="text-2xl font-bold">Course List</h1>
@@ -59,10 +59,7 @@
                         <label for="course_name" class="block mb-2 text-sm font-medium text-gray-900">Course Name</label>
                         <input type="text" name="course_name" id="course_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
                     </div>
-                    <div>
-                        <label for="course_code" class="block mb-2 text-sm font-medium text-gray-900">Course Code</label>
-                        <input type="text" name="course_code" id="course_code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
-                    </div>
+  
                     <div>
                         <label for="course_image" class="block mb-2 text-sm font-medium text-gray-900">Course Image</label>
                         <input type="file" name="course_image" id="course_image" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
@@ -103,10 +100,7 @@
                         <label for="edit-course_name" class="block mb-2 text-sm font-medium text-gray-900">Course Name</label>
                         <input type="text" name="course_name" id="edit-course_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
                     </div>
-                    <div>
-                        <label for="edit-course_code" class="block mb-2 text-sm font-medium text-gray-900">Course Code</label>
-                        <input type="text" name="course_code" id="edit-course_code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
-                    </div>
+
                     <div>
                         <label for="edit-course_image" class="block mb-2 text-sm font-medium text-gray-900">Course Image</label>
                         <input type="file" name="course_image" id="edit-course_image" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
@@ -127,36 +121,36 @@
 
 <script>
     const courseList = document.getElementById('course-list');
-
     fetch('controller/get_courses.php')
         .then(response => response.json())
         .then(data => {
-            courseList.innerHTML = ''; // Clear the list before populating
+            courseList.innerHTML = '';
             data.forEach(course => {
-                // Use correct object keys (adjust if necessary)
-                const courseImage = course.COURSE_IMAGE || 'default-image.jpg'; // Fallback image
+
+                const courseImage = course.COURSE_IMAGE || 'default-image.jpg';
                 const courseName = course.COURSE_NAME || 'No Course Name';
                 const courseDescription = course.DESCRIPTION || 'No description available';
 
-                // Append each course as a card
                 courseList.innerHTML += `
-                <div class="min-h-52 rounded-lg shadow p-2 relative">
-                    <div class="w-full h-1/2 max-h-1/2 rounded-xl overflow-hidden">
-                        <img src="../resource/uploads/${courseImage}" alt="${courseName}" class="w-full h-full">
+                <div class="bg-white shadow-md rounded-lg border border-gray-300 overflow-hidden hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col">
+                    <!-- Image Section -->
+                    <div class="w-full h-40 bg-gray-200">
+                        <img src="../resource/uploads/${courseImage}" alt="${courseName}" class="w-full h-full object-cover">
                     </div>
-                    <div>
-                        <h1 class="text-xl font-bold">${courseName}</h1>
-                        <p class="text-sm">${courseDescription}</p>
+                    <!-- Content Section -->
+                    <div class="p-4 flex-grow">
+                        <h2 class="text-lg font-semibold text-gray-800">${courseName}</h2>
+                        <p class="text-sm text-gray-600 mt-2">${courseDescription}</p>
                     </div>
-             <div class="absolute bottom-2 right-2 flex gap-2">
-                <button class="bg-blue-500 px-2 py-1 rounded text-white" onclick="editCourse(${course.ID})">
-                    <i class="fa fa-edit" aria-hidden="true"></i>
-                </button>
-                <button class="bg-red-500 px-2 py-1 rounded text-white" onclick="deleteCourse(${course.ID})">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                </button>
-            </div>
-
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end gap-2 p-4">
+                        <button class="bg-blue-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition" onclick="editCourse(${course.ID})">
+                            <i class="fa fa-edit"></i> Edit
+                        </button>
+                        <button class="bg-red-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 transition" onclick="deleteCourse(${course.ID})">
+                            <i class="fa fa-trash"></i> Delete
+                        </button>
+                    </div>
                 </div>
             `;
             });
@@ -224,26 +218,76 @@
             });
     });
 
-  
+
     // Delete course
-function deleteCourse(course_id) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(`controller/delete_course.php?course_id=${course_id}`, {
-                method: 'GET'
+    function deleteCourse(course_id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`controller/delete_course.php?course_id=${course_id}`, {
+                        method: 'GET'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Deleted!', 'Course has been deleted.', 'success').then(() => {
+                                location.reload(); // Reload to reflect changes
+                            });
+                        } else {
+                            Swal.fire('Error!', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire('Error!', 'An error occurred while deleting the course.', 'error');
+                    });
+            }
+        });
+    }
+
+    function editCourse(course_id) {
+        fetch(`controller/get_course.php?course_id=${course_id}`)
+            .then(response => response.json())
+            .then(course => {
+                // Fill the edit form with the course data
+                document.getElementById('edit-course-id').value = course.ID;
+                document.getElementById('edit-course_name').value = course.COURSE_NAME;
+                document.getElementById('edit-course_code').value = course.COURSE_CODE;
+                document.getElementById('edit-description').value = course.DESCRIPTION;
+
+                // Open the modal using Flowbite
+                const modalElement = document.getElementById('edit-course-modal');
+                const modal = new Modal(modalElement); // Initialize the modal
+                modal.show(); // Show the modal
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error!', 'Failed to load course details.', 'error');
+            });
+    }
+
+
+    // Update course form submission
+    document.getElementById('editCourseForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('controller/update_course.php', {
+                method: 'POST',
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    Swal.fire('Deleted!', 'Course has been deleted.', 'success').then(() => {
+                    Swal.fire('Updated!', 'Course has been updated successfully.', 'success').then(() => {
                         location.reload(); // Reload to reflect changes
                     });
                 } else {
@@ -252,58 +296,72 @@ function deleteCourse(course_id) {
             })
             .catch(error => {
                 console.error('Error:', error);
-                Swal.fire('Error!', 'An error occurred while deleting the course.', 'error');
+                Swal.fire('Error!', 'An error occurred while updating the course.', 'error');
             });
-        }
     });
-}
 
-function editCourse(course_id) {
-    fetch(`controller/get_course.php?course_id=${course_id}`)
-        .then(response => response.json())
-        .then(course => {
-            // Fill the edit form with the course data
-            document.getElementById('edit-course-id').value = course.ID;
-            document.getElementById('edit-course_name').value = course.COURSE_NAME;
-            document.getElementById('edit-course_code').value = course.COURSE_CODE;
-            document.getElementById('edit-description').value = course.DESCRIPTION;
+    function renderCourses(courses) {
+        courseList.innerHTML = '';
+        if (courses.length === 0) {
+       
+            courseList.innerHTML = `
+            <div class="text-center text-gray-500 text-lg font-semibold">
+                No courses found.
+            </div>
+        `;
+            return;
+        }
+        courses.forEach(course => {
+            const courseImage = course.COURSE_IMAGE || 'default-image.jpg';
+            const courseName = course.COURSE_NAME || 'No Course Name';
+            const courseDescription = course.DESCRIPTION || 'No description available';
 
-            // Open the modal using Flowbite
-            const modalElement = document.getElementById('edit-course-modal');
-            const modal = new Modal(modalElement); // Initialize the modal
-            modal.show(); // Show the modal
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire('Error!', 'Failed to load course details.', 'error');
+            courseList.innerHTML += `
+            <div class="bg-white shadow-md rounded-lg border border-gray-300 overflow-hidden hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col">
+                <!-- Image Section -->
+                <div class="w-full h-40 bg-gray-200">
+                    <img src="../resource/uploads/${courseImage}" alt="${courseName}" class="w-full h-full object-cover">
+                </div>
+                <!-- Content Section -->
+                <div class="p-4 flex-grow">
+                    <h2 class="text-lg font-semibold text-gray-800">${courseName}</h2>
+                    <p class="text-sm text-gray-600 mt-2">${courseDescription}</p>
+                </div>
+                <!-- Action Buttons -->
+                <div class="flex justify-end gap-2 p-4">
+                    <button class="bg-blue-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition" onclick="editCourse(${course.ID})">
+                        <i class="fa fa-edit"></i> Edit
+                    </button>
+                    <button class="bg-red-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 transition" onclick="deleteCourse(${course.ID})">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        `;
         });
-}
+    }
 
-
-// Update course form submission
-document.getElementById('editCourseForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const formData = new FormData(this);
-
-    fetch('controller/update_course.php', {
-            method: 'POST',
-            body: formData
-        })
+    // Fetch and display courses initially
+    let allCourses = [];
+    fetch('controller/get_courses.php')
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                Swal.fire('Updated!', 'Course has been updated successfully.', 'success').then(() => {
-                    location.reload(); // Reload to reflect changes
-                });
-            } else {
-                Swal.fire('Error!', data.message, 'error');
-            }
+            allCourses = data; // Store all courses for filtering
+            renderCourses(allCourses);
         })
         .catch(error => {
-            console.error('Error:', error);
-            Swal.fire('Error!', 'An error occurred while updating the course.', 'error');
+            console.error('Error fetching courses:', error);
         });
-});
 
+    // Add event listener for search input
+    const searchInput = document.querySelector('input[name="search"]');
+    searchInput.addEventListener('input', (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        const filteredCourses = allCourses.filter(course =>
+            course.COURSE_NAME.toLowerCase().includes(searchTerm) ||
+            course.COURSE_CODE.toLowerCase().includes(searchTerm) ||
+            course.DESCRIPTION.toLowerCase().includes(searchTerm)
+        );
+        renderCourses(filteredCourses); // Render filtered courses
+    });
 </script>

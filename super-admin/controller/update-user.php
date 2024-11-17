@@ -33,12 +33,8 @@ if (empty($courseId) || !is_numeric($courseId)) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid course selection.']);
     exit;
 }
-if (empty($userTypeId) || !is_numeric($userTypeId)) {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid user type selection.']);
-    exit;
-}
 
-// Proceed to update user if validation passes
+
 $success = $userRepository->updateUser($userId, $courseId, $userTypeId, $firstName, $lastName, $middleName, $email);
 
 if ($success) {

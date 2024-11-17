@@ -33,16 +33,19 @@
     <title><?php echo $title ?></title>
 </head>
 
-<body>
+<body class="bg-violet-600 ">
 
     <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-violet-400" aria-label="Sidebar">
         <div class="h-full px-3 py-4 overflow-y-auto  ">
 
-            <div class="p-2 flex justify-start">
-                <div class="rounded-full bg-slate-50 px-2 py-1">
-                    <i class="fa fa-user" aria-hidden="true"></i>
+            <div class="flex items-center p-4 bg-violet-600 rounded-lg shadow-md">
+                <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-100">
+                    <img src="../resource/uploads/<?php echo $user['avatar_file_path'] ?? 'default-avatar.png'; ?>" alt="Avatar" class="w-full h-full object-cover">
                 </div>
-                <span class="ms-3 text-xl font-bold text-white">Admin</span>
+                <div class="ms-3">
+                    <p class="text-white text-lg font-bold">Admin</p>
+                    <p class="text-white/70 text-sm">Administrator</p>
+                </div>
             </div>
             <hr>
             <ul class="space-y-2 font-medium text-white mt-2">
@@ -109,7 +112,7 @@
         </div>
     </aside>
 
-    <main class=" sm:ml-64">
+    <main class=" sm:ml-64 bg-violet-600 ">
         <?php
         require_once '../template/admin-header.php';
         require_once $content; ?>

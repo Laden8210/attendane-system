@@ -30,9 +30,10 @@ class AttendanceRepository
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("iss", $eventId, $searchTerm, $searchTerm);
         } else {
-            $sql = "SELECT attendance.*, students.FIRST_NAME, students.LAST_NAME 
+            $sql = "SELECT attendance.*, students.*, courses.*
                     FROM attendance
                     JOIN students ON attendance.student_id = students.STUDENT_ID
+                    JOIN courses ON students.COURSE = courses.ID
                     WHERE attendance.event_id = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("i", $eventId);

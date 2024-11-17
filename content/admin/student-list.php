@@ -60,14 +60,14 @@ $students = $studentRepository->readByCourse($user['course_id']);
     }
 </script>
 
-<section class="bg-violet-600 h-screen overflow-auto">
+<section class="bg-violet-600  overflow-hidden" style="height: 85vh;">
     <div class="w-full px-10 py-5">
-        <div class="bg-slate-50 w-full h-screen rounded-lg overflow-x-hidden overflow-y-auto">
+        <div class="bg-slate-50 w-full rounded-lg overflow-x-hidden overflow-y-auto" style="height: 80%;">
             <div class="pt-5 px-2 text-center">
                 <h1 class="text-2xl font-bold">Student List</h1>
                 <hr class="h-2 bg-cyan-500">
-            </div>
-            <div class="h-96 bg-slate-100 rounded">
+            </div> 
+            <div class="bg-slate-100 rounded" style="height: 70vh;">
                 <div class="flex justify-between p-2 text-white">
                     <div>
                         <button data-modal-target="add-student-modal" data-modal-toggle="add-student-modal" class="shadow rounded bg-blue-500 px-2 py-1"><i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
@@ -83,9 +83,9 @@ $students = $studentRepository->readByCourse($user['course_id']);
                     <table class="w-full">
                         <thead class="text-xs uppercase bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-2 py-3">#</th>
+                            <th scope="col" class="px-2 py-3">Student Number</th>
                                 <th scope="col" class="px-6 py-3">Avatar</th>
-                                <th scope="col" class="px-2 py-3">Student Number</th>
+    
                                 <th scope="col" class="px-6 py-3">Last Name</th>
                                 <th scope="col" class="px-6 py-3">First Name</th>
                                 <th scope="col" class="px-6 py-3">Course/YL</th>
@@ -102,17 +102,17 @@ $students = $studentRepository->readByCourse($user['course_id']);
                                 $dataUrl = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                             ?>
                                 <tr class="bg-white border-b text-xs text-center">
-                                    <td class="px-2 py-3"><?php echo $student['STUDENT_ID'] ?></td>
+                                <td class="px-6 py-3"><?php echo $student['STUDENT_NUMBER'] ?></td>
                                     <td class="px-6 py-3">
                                         <div class="w-20 h-20 shadow-xl drop-shadow rounded-full flex items-center overflow-hidden">
                                             <img class="w-full h-full" src="<?php echo htmlspecialchars($dataUrl); ?>" alt="gallery-image" />
                                         </div>
                                     </td>
-                                    <td class="px-6 py-3"><?php echo $student['STUDENT_NUMBER'] ?></td>
+      
                                     <td class="px-6 py-3"><?php echo $student['LAST_NAME'] ?></td>
                                     <td class="px-6 py-3"><?php echo $student['FIRST_NAME'] ?></td>
-                                    <td class="px-6 py-3"><?php echo $student['COURSE'] ?></td>
-                                    <td class="px-6 py-3"><?php echo $student['BLOCK'] ?></td>
+                                    <td class="px-6 py-3"><?php echo $student['COURSE_NAME']. '-'. $student['YEAR'] ?></td>
+                                    <td class="px-6 py-3">Block <?php echo $student['BLOCK'] ?></td>
                                     <td class="px-6 py-3"><?php echo $student['GUARDIAN_PHONE_NO'] ?></td>
 
                                     <td class="px-6 py-3">

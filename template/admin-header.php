@@ -1,24 +1,25 @@
-<nav class="w-full z-10 ">
-    <div class=" mx-auto py-5 px-4 flex items-center justify-between w-full bg-violet-500">
-        <div class="flex justify-between w-full items-center">
-            <div class="flex justify-normal items-center text-white">
-                <div class="mx-2">
-                    <img src="../resource/img/logo.png" alt="" class="w-10">
-                </div>
-                <div class="w-3/4">
-                    <span class="font-bold">Web-based event attendance monitoring system</span> - <?php
-                                                                                                    echo $course['COURSE_NAME'] ?? "";
-                                                                                                    ?>
-
-                </div>
+<nav class="w-full z-10 bg-violet-500 shadow-lg">
+    <div class="container mx-auto py-4 px-6 flex items-center justify-between">
+        <!-- Left Section: Logo and Title -->
+        <div class="flex items-center text-white">
+            <!-- Logo -->
+            <div class="mr-3">
+                <img src="../resource/img/logo.png" alt="Logo" class="w-12 h-12 rounded-full">
             </div>
-
-            <div class="text-white ">
-                <a href="../logout.php">
-                    <i class="fa fa-sign-out" aria-hidden="true"></i>
-                </a>
+            <!-- Title -->
+            <div>
+                <h1 class="text-lg sm:text-xl font-extrabold tracking-wide">
+                    Web-based Event Attendance Monitoring System
+                </h1>
+                <p class="text-sm sm:text-base font-medium text-white/80">
+                    Department: <?php echo $course['COURSE_NAME'] ?? "Not Assigned"; ?>
+                </p>
             </div>
         </div>
 
+        <!-- Right Section: Placeholder for Future Features -->
+        <div class="text-white">
+            <!-- Placeholder or Add Navigation Items Here -->
+        </div>
     </div>
 </nav>

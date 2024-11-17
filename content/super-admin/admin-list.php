@@ -76,9 +76,8 @@
                     <div>
                         <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Select User Type</label>
                         <select name="user_type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option value="">Select User Type</option>
                             <option value="1">Admin</option>
-                            <option value="2">Super Admin</option>
+
                         </select>
                     </div>
                     <div>
@@ -153,9 +152,9 @@
                     <div>
                         <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Select User Type</label>
                         <select name="user_type" id="edit-user-type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option value="">Select User Type</option>
+                    
                             <option value="0">Admin</option>
-                            <option value="1">Super Admin</option>
+
                         </select>
                     </div>
                     <div>
@@ -258,77 +257,86 @@
             Swal.fire({
                 icon: 'success',
                 title: 'Success!',
-                text: data.message, 
+                text: data.message,
                 confirmButtonText: 'OK'
             }).then(() => {
-                addStudentForm.reset(); 
-                document.querySelector('[data-modal-hide="add-student-modal"]').click(); 
-                location.reload(); 
+                addStudentForm.reset();
+                document.querySelector('[data-modal-hide="add-student-modal"]').click();
+                location.reload();
             });
         } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
-                text: data.message || 'An error occurred. Please try again.', 
+                text: data.message || 'An error occurred. Please try again.',
                 confirmButtonText: 'OK'
             });
         }
     });
-
     async function editUser(userId) {
-        const response = await fetch(`controller/edit-user.php?user_id=${userId}`);
-        const user = await response.json();
-
-        // Open modal using Flowbite's modal API
-        const modalElement = document.getElementById('edit-admin-modal');
-        const modal = new Modal(modalElement); // Initialize the modal
-        modal.show(); // Show the modal
-
-        // Populate the form with the user's data
-        document.querySelector('#edit-first-name').value = user.first_name;
-        document.querySelector('#edit-last-name').value = user.last_name;
-        document.querySelector('#edit-middle-name').value = user.middle_name;
-        document.querySelector('#edit-email').value = user.email;
-        document.querySelector('#edit-course').value = user.course_id;
-        document.querySelector('#edit-user-type').value = user.user_type_id;
-
-        const userTypeElement = document.querySelector('#edit-user-type');
-        userTypeElement.value = user.user_type.toString();
-
-        // Modify form submission for updating the user
-        const updateForm = document.getElementById('edit-user-form');
-        updateForm.onsubmit = async (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(updateForm);
-            formData.append('user_id', userId);
-
-            const updateResponse = await fetch('controller/update-user.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const updateData = await updateResponse.json();
-
-            if (updateData.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'User updated successfully',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    updateForm.reset();
-                    location.reload();
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Failed to update user',
-                    confirmButtonText: 'OK'
-                });
+        try {
+            // Fetch user data
+            const response = await fetch(`controller/edit-user.php?user_id=${userId}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch user data: ${response.statusText}`);
             }
-        };
+            const user = await response.json();
+     
+            const modalElement = document.getElementById('edit-admin-modal');
+            const modal = new Modal(modalElement); 
+            modal.show(); 
+            document.querySelector('#edit-first-name').value = user.first_name || '';
+            document.querySelector('#edit-last-name').value = user.last_name || '';
+            document.querySelector('#edit-middle-name').value = user.middle_name || '';
+            document.querySelector('#edit-email').value = user.email || '';
+            document.querySelector('#edit-course').value = user.course_id || '';
+            document.querySelector('#edit-user-type').value = user.user_type_id || '';
+
+            const updateForm = document.getElementById('edit-user-form');
+            updateForm.onsubmit = async (e) => {
+                e.preventDefault();
+                try {
+                    const formData = new FormData(updateForm);
+                    formData.append('user_id', userId);
+
+                    const updateResponse = await fetch('controller/update-user.php', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const updateData = await updateResponse.json();
+
+                    if (updateData.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'User updated successfully',
+                            confirmButtonText: 'OK',
+                        }).then(() => {
+                            updateForm.reset();
+                            location.reload();
+                        });
+                    } else {
+                        throw new Error(updateData.message || 'Failed to update user');
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: error.message || 'An error occurred while updating the user',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            };
+        } catch (error) {
+            console.error('Error:', error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Failed to load user data',
+                confirmButtonText: 'OK',
+            });
+        }
     }
 
     async function deleteUser(userId) {

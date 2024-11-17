@@ -22,56 +22,50 @@
     <title><?php echo $title ?></title>
 </head>
 
-<body>
-
-    <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-violet-400" aria-label="Sidebar">
-        <div class="h-full px-3 py-4 overflow-y-auto  ">
-
-            <div class="p-2 flex justify-start">
-                <div class="rounded-full bg-slate-50 px-2 py-1">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </div>
-                <span class="ms-3 text-xl font-bold text-white">Super Admin</span>
+<body class="bg-violet-600">
+<aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-violet-500" aria-label="Sidebar">
+    <div class="h-full px-4 py-6 overflow-y-auto">
+        <!-- User Profile Section -->
+        <div class="flex items-center p-4 bg-violet-600 rounded-lg shadow-md">
+            <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-100">
+                <img src="../resource/uploads/<?php echo $user['avatar_file_path'] ?? 'default-avatar.png'; ?>" alt="Avatar" class="w-full h-full object-cover">
             </div>
-            <hr>
-            <ul class="space-y-2 font-medium text-white mt-2">
-
-                <li>
-                    <a href="index.php" class="flex items-center p-2 rounded-lg hover:bg-violet-500 group <?php if ($title == 'Dashboard') {
-                                                                                                                echo "bg-violet-500";
-                                                                                                            } ?>">
-                        <i class="fa fa-dashboard" aria-hidden="true"></i>
-                        <span class="ms-3">Dashboard</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="index.php?view=admin-list" class="flex items-center p-2 rounded-lg hover:bg-violet-500 group <?php if ($title == 'Student List') {
-                                                                                                                                echo "bg-violet-500";
-                                                                                                                            } ?>">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="flex-1 ms-3 whitespace-nowrap">Admin List</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="index.php?view=course" class="flex items-center p-2 rounded-lg hover:bg-violet-500 group <?php if ($title == 'Student List') {
-                                                                                                                            echo "bg-violet-500";
-                                                                                                                        } ?>">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="flex-1 ms-3 whitespace-nowrap">Course List</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="../logout.php" class="flex items-center p-2 rounded-lg hover:bg-red-400  group">
-                        <i class="fa fa-sign-out" aria-hidden="true"></i>
-                        <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
-                    </a>
-                </li>
-
+            <div class="ms-3">
+                <p class="text-white text-lg font-bold">Super Admin</p>
+                <p class="text-white/70 text-sm">Administrator</p>
+            </div>
         </div>
-    </aside>
+        <hr class="my-4 border-gray-200">
+
+        <!-- Navigation Links -->
+        <ul class="space-y-2 font-medium text-white">
+            <li>
+                <a href="index.php" class="flex items-center p-2 rounded-lg hover:bg-violet-600 group <?php echo $title == 'Dashboard' ? 'bg-violet-600' : ''; ?>">
+                    <i class="fa fa-dashboard text-lg"></i>
+                    <span class="ms-3 text-sm font-semibold">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="index.php?view=admin-list" class="flex items-center p-2 rounded-lg hover:bg-violet-600 group <?php echo $title == 'Admin List' ? 'bg-violet-600' : ''; ?>">
+                    <i class="fa fa-user text-lg"></i>
+                    <span class="ms-3 text-sm font-semibold">Admin List</span>
+                </a>
+            </li>
+            <li>
+                <a href="index.php?view=course" class="flex items-center p-2 rounded-lg hover:bg-violet-600 group <?php echo $title == 'Course List' ? 'bg-violet-600' : ''; ?>">
+                    <i class="fa fa-book text-lg"></i>
+                    <span class="ms-3 text-sm font-semibold">Course List</span>
+                </a>
+            </li>
+            <li>
+                <a href="../logout.php" class="flex items-center p-2 rounded-lg hover:bg-red-500 group">
+                    <i class="fa fa-sign-out text-lg"></i>
+                    <span class="ms-3 text-sm font-semibold">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</aside>
 
     <main class=" sm:ml-64">
         <?php

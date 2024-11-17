@@ -91,7 +91,9 @@ class UserRepository
 
     public function readAll()
     {
-        $sql = "SELECT * FROM users ";
+        $sql = "SELECT * FROM users 
+        left join course on users.course_id = course.ID
+        ";
 
         $result = $this->conn->query($sql);
 

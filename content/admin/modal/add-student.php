@@ -30,17 +30,16 @@
                         <input type="text" name="first-name" id="first-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required />
                     </div>
-                    <div>
-                        <label for="course" class="block mb-2 text-sm font-medium text-gray-900">Course</label>
-                        <select name="course" id="course" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option value="">Select Course</option>
+ 
 
-                            <?php
-                            $courses = $courseRepository->getAllCourses();
-                            foreach ($courses as $course) {
-                                echo "<option value='" . $course['ID'] . "'>" . $course['COURSE_CODE'] . ' - ' . $course['COURSE_NAME'] . "</option>";
-                            }
-                            ?>
+                    <div>
+                        <label for="year" class="block mb-2 text-sm font-medium text-gray-900">Year</label>
+                        <select name="year" id="year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option value="">Select Year</option>
+                            <option value="1st">1st Year</option>
+                            <option value="2nd">2nd Year</option>
+                            <option value="3rd">3rd Year</option>
+                            <option value="4th">4th Year</option>
                         </select>
                     </div>
                     <div>
@@ -73,8 +72,6 @@
         </div>
     </div>
 </div>
-
-
 <script>
     // Add student form
     const addStudentForm = document.getElementById('add-student-form');
@@ -83,19 +80,50 @@
 
         const formData = new FormData(addStudentForm);
 
-        const response = await fetch('controller/add-student.php', {
-            method: 'POST',
-            body: formData
-        });
+        try {
+            const response = await fetch('controller/add-student.php', {
+                method: 'POST',
+                body: formData
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (data.status === 'success') {
-            alert('Student added successfully');
-            addStudentForm.reset();
-            document.querySelector('[data-modal-hide="add-student-modal"]').click();
-        } else {
-            alert('Failed to add student');
+            if (data.status === 'success') {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Student added successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-blue-700 text-white px-5 py-2.5 rounded-lg'
+                    }
+                }).then(() => {
+                    addStudentForm.reset();
+                    document.querySelector('[data-modal-hide="add-student-modal"]').click();
+                    window.location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: data.message || 'Failed to add student.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-red-500 text-white px-5 py-2.5 rounded-lg'
+                    }
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'An unexpected error occurred.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'bg-red-500 text-white px-5 py-2.5 rounded-lg'
+                }
+            });
+            console.error('Error:', error);
         }
     });
 </script>
