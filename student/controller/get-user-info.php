@@ -46,7 +46,11 @@ echo json_encode([
         'LAST_NAME' => $student['LAST_NAME'],
         'FIRST_NAME' => $student['FIRST_NAME'],
         'COURSE' => $student['COURSE'],
-        'STUDENT_ID' => $student['STUDENT_ID'],
+        'STUDENT_ID' => $student['STUDENT_NUMBER'],
+        'YEAR' => $student['YEAR'],
+        'CONTACT_NUMBER' => $student['GUARDIAN_PHONE_NO'],
+        'COURSE' => $student['COURSE_NAME'],
+        'AVATAR' => $student['AVATAR']
     ]
 ]);
 ?>

@@ -1,6 +1,6 @@
-<section class="bg-violet-600 h-screen overflow-auto">
+<section class="bg-violet-600 overflow-auto">
     <div class="w-full px-10 py-5">
-        <div class="bg-slate-50 w-full h-screen rounded-lg overflow-x-hidden overflow-y-auto ">
+        <div class="bg-slate-50 w-full rounded-lg overflow-x-hidden overflow-y-auto ">
             <div class="pt-5 px-2 text-center">
                 <h1 class="text-2xl font-bold">Event Report List</h1>
                 <hr class="h-2 bg-cyan-500">

@@ -10,144 +10,98 @@ $event = $eventRepository->getEventById($id);
 $attendees = $attendanceRepository->getAttendanceByEvent($id);
 
 ?>
+<section class="w-full bg-violet-600 min-h-screen">
+    <!-- Header with Back Button -->
+    <div class="bg-violet-700 py-4 px-6 flex items-center justify-between">
+        <a href="index.php" class="text-white bg-cyan-500 hover:bg-cyan-600 px-4 py-2 rounded-lg flex items-center font-semibold shadow-md">
+            <i class="fa fa-arrow-left mr-2"></i> Back to Events
+        </a>
+        <h1 class="text-white text-2xl font-bold">Event Details</h1>
+    </div>
 
-<section class="w-full  bg-violet-600" style="height: 100vh;">
-    <div class="w-full px-10 py-5">
-        <div class="bg-slate-50 w-full rounded-lg overflow-auto">
-            <div class="pt-10 px-2">
-                <hr class="h-2 bg-cyan-500">
-            </div>
-
-            <div class="text-center mt-2">
-                <a href="index.php?view=scanner&event_id=<?php echo $id ?>" class="rounded shadow-lg px-3 py-1 bg-cyan-500 text-white">Scan QR</a>
-            </div>
-
-            <div class="flex justify-center items-center py-5 px-7 ">
-                <div class="border drop-shadow shadow-xl rounded bg-slate-100 w-full p-2">
-                    <div class="text-center mt-2">
-                        <h1 class="text-2xl font-bold"><?php echo htmlspecialchars($event['event_name']); ?></h1>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-5 ps-10 mt-10">
-                        <div>
-                            <h1 class="text-xl font-semibold">Event Title</h1>
-                            <p class="text-lg ps-5"><?php echo htmlspecialchars($event['event_name']); ?></p>
-                        </div>
-
-                        <div>
-                            <h1 class="text-xl font-semibold">Event Start</h1>
-                            <div class="flex">
-                                <p class="text-lg ps-5"><?php echo date('h:i A', strtotime($event['am_time_in'])); ?></p>
-                                <p class="text-lg ps-5"><?php echo date('h:i A', strtotime($event['pm_time_in'])); ?></p>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h1 class="text-xl font-semibold">Event Venue</h1>
-                            <p class="text-lg ps-5"><?php echo htmlspecialchars($event['details']); ?></p>
-                        </div>
-                        <div>
-                            <h1 class="text-xl font-semibold">Event End</h1>
-                            <div class="flex">
-                                <p class="text-lg ps-5"><?php echo date('h:i A', strtotime($event['am_time_out'])); ?></p>
-                                <p class="text-lg ps-5"><?php echo date('h:i A', strtotime($event['pm_time_out'])); ?></p>
-                            </div>
-                        </div>
-                        <div>
-                            <h1 class="text-xl font-semibold">Event Description</h1>
-                            <p class="text-lg ps-5"><?php echo htmlspecialchars($event['description']); ?></p>
-                        </div>
-
-                        <div>
-                            <h1 class="text-xl font-semibold">Registration Cut-off Time</h1>
-                            <div class="flex">
-                                <p class="text-lg ps-5">
-                                    <?php
-                                    // Calculate morning cut-off time as one hour after morning start
-                                    if (!empty($event['am_time_in'])) {
-                                        $amCutoffTime = date('h:i A', strtotime($event['am_time_in'] . ' +1 hour'));
-                                        echo "Morning: " . $amCutoffTime;
-                                    }
-                                    ?>
-                                </p>
-                                <p class="text-lg ps-5">
-                                    <?php
-                                    // Calculate afternoon cut-off time as one hour after afternoon start
-                                    if (!empty($event['pm_time_in'])) {
-                                        $pmCutoffTime = date('h:i A', strtotime($event['pm_time_in'] . ' +1 hour'));
-                                        echo "Afternoon: " . $pmCutoffTime;
-                                    }
-                                    ?>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-10">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- Event Overview -->
+            <h2 class="text-3xl font-extrabold text-center text-violet-700 mb-6"><?php echo htmlspecialchars($event['event_name']); ?></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700">Event Title</h3>
+                    <p class="text-gray-600"><?php echo htmlspecialchars($event['event_name']); ?></p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700">Event Start</h3>
+                    <p class="text-gray-600"><?php echo date('h:i A', strtotime($event['am_time_in'])) . " / " . date('h:i A', strtotime($event['pm_time_in'])); ?></p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700">Event Venue</h3>
+                    <p class="text-gray-600"><?php echo htmlspecialchars($event['details']); ?></p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700">Event End</h3>
+                    <p class="text-gray-600"><?php echo date('h:i A', strtotime($event['am_time_out'])) . " / " . date('h:i A', strtotime($event['pm_time_out'])); ?></p>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-lg font-semibold text-gray-700">Event Description</h3>
+                    <p class="text-gray-600"><?php echo htmlspecialchars($event['description']); ?></p>
                 </div>
             </div>
 
+            <!-- QR Scan Button -->
+            <div class="text-center mt-8">
+                <a href="index.php?view=scanner&event_id=<?php echo $id ?>" class="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-2 rounded-lg font-semibold shadow-md">
+                    Scan QR Code
+                </a>
+            </div>
+        </div>
 
-            <div>
-                <div class="flex justify-between p-2">
-                    <div class="text-2xl font-bold ms-2">Present Attendees</div>
-                    <div class="items-center">
-                        <div class="relative">
-                            <input type="text" name="search" id="search" class="w-full p-2 outline-none rounded border border-gray-300" placeholder="Search">
-                            <button type="button" id="toggleSearch" class="absolute inset-y-0 right-0 px-3 text-gray-500">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
-                        </div>
-                    </div>
+        <!-- Attendee Section -->
+        <div class="mt-10 bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-violet-700">Present Attendees</h2>
+                <div class="relative">
+                    <input type="text" id="search" placeholder="Search attendees..." class="w-full md:w-64 p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-cyan-500">
                 </div>
+            </div>
 
-                <div class="p-2">
-                    <div class="grid grid-cols-5 gap-2" id="attendee-list">
-                        <?php foreach ($attendees as $attendee): ?>
-                            <div class="border-2 border-slate-500 p-2 h-20 flex justify-center items-center">
-                                <p class="text-center"><?php echo htmlspecialchars($attendee['FIRST_NAME'] . ' ' . $attendee['LAST_NAME']); ?></p>
-                            </div>
-                        <?php endforeach; ?>
+            <div id="attendee-list" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <?php foreach ($attendees as $attendee): ?>
+                    <div class="bg-violet-100 border border-violet-300 p-4 rounded-lg flex items-center justify-center text-center shadow-md hover:bg-violet-200">
+                        <p class="font-semibold text-violet-700"><?php echo htmlspecialchars($attendee['FIRST_NAME'] . ' ' . $attendee['LAST_NAME']); ?></p>
                     </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
 </section>
 
-
 <script>
-    document.getElementById('search').addEventListener('input', function() {
-        const searchTerm = this.value;
+    document.getElementById('search').addEventListener('input', function () {
+        const searchTerm = this.value.trim().toLowerCase();
         const eventId = <?php echo json_encode($id); ?>;
         const attendeeList = document.getElementById('attendee-list');
 
-        // Send search term to server and update attendee list
         fetch('controller/search-attendees.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    event_id: eventId,
-                    search: searchTerm
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                attendeeList.innerHTML = ''; // Clear current attendees
-
-                if (data.success) {
-                    data.attendees.forEach(attendee => {
-                        const attendeeDiv = document.createElement('div');
-                        attendeeDiv.className = 'border-2 border-slate-500 p-2 h-20 flex justify-center items-center';
-                        attendeeDiv.innerHTML = `<p class="text-center">${attendee.FIRST_NAME} ${attendee.LAST_NAME}</p>`;
-                        attendeeList.appendChild(attendeeDiv);
-                    });
-                } else {
-                    attendeeList.innerHTML = '<p class="text-center">No attendees found.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ event_id: eventId, search: searchTerm })
+        })
+        .then(response => response.json())
+        .then(data => {
+            attendeeList.innerHTML = '';
+            if (data.success && data.attendees.length > 0) {
+                data.attendees.forEach(attendee => {
+                    attendeeList.innerHTML += `
+                        <div class="bg-violet-100 border border-violet-300 p-4 rounded-lg flex items-center justify-center text-center shadow-md hover:bg-violet-200">
+                            <p class="font-semibold text-violet-700">${attendee.FIRST_NAME} ${attendee.LAST_NAME}</p>
+                        </div>`;
+                });
+            } else {
+                attendeeList.innerHTML = '<p class="text-gray-500 col-span-full text-center">No attendees found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     });
 </script>

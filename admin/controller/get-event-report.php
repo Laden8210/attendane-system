@@ -62,41 +62,46 @@ if (isset($_GET['event_id'])) {
     <style>
         table {
             border-collapse: collapse;
+            width: 100%;
         }
         th, td {
-            border: 1px solid black;
+            border: 1px solid #000;
             padding: 5px;
             text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
         }
     </style>
     <table>
         <thead>
             <tr>
-                <th width="10%">Student ID</th>
-                <th width="20%">First Name</th>
-                <th width="20%">Last Name</th>
+                <th>Student ID</th>
+                <th >Name</th>
+
                 <th >Course - Year</th>
-                <th width="25%">Attendance Time</th>
-                <th width="10%">Session</th>
-                <th width="15%">Type</th>
+                <th >Attendance Time</th>
+                <th >Session</th>
+                <th>Type</th>
             </tr>
         </thead>
         <tbody>';
-
-    // Table content
+    
+    // Populate the table rows with attendance data
     foreach ($attendances as $attendance) {
         $table .= '
         <tr>
             <td>' . htmlspecialchars($attendance['STUDENT_NUMBER']) . '</td>
-            <td>' . htmlspecialchars(ucwords(strtolower($attendance['FIRST_NAME']))) . '</td>
-            <td>' . htmlspecialchars(ucwords(strtolower($attendance['LAST_NAME']))) . '</td>
+            <td>' . htmlspecialchars(ucwords(strtolower($attendance['FIRST_NAME']))) . ' '. htmlspecialchars(ucwords(strtolower($attendance['LAST_NAME']))). '</td>
+
             <td>' . htmlspecialchars($attendance['COURSE_NAME'] . ' - ' . $attendance['YEAR']) . '</td>
-            <td>' . $attendance['attendance_time'] . '</td>
-            <td>' . strtoupper($attendance['session']) . '</td>
-            <td>' . strtoupper($attendance['type']) . '</td>
+            <td>' . htmlspecialchars($attendance['attendance_time']) . '</td>
+            <td>' . strtoupper(htmlspecialchars($attendance['session'])) . '</td>
+            <td>' . strtoupper(htmlspecialchars($attendance['type'])) . '</td>
         </tr>';
     }
-
+    
     $table .= '</tbody></table>';
 
     

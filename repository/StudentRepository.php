@@ -84,7 +84,9 @@ WHERE officers.OFFICER_ID = ?");
 
     public function readByStudentNumber($student_number)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM students WHERE student_number = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM students 
+        join course on students.COURSE = course.ID
+        WHERE student_number = ?");
         $stmt->bind_param("s", $student_number);
         $stmt->execute();
 
