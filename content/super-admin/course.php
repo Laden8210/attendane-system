@@ -59,7 +59,7 @@
                         <label for="course_name" class="block mb-2 text-sm font-medium text-gray-900">Course Name</label>
                         <input type="text" name="course_name" id="course_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
                     </div>
-  
+
                     <div>
                         <label for="course_image" class="block mb-2 text-sm font-medium text-gray-900">Course Image</label>
                         <input type="file" name="course_image" id="course_image" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
@@ -77,7 +77,7 @@
 </div>
 
 <!-- Edit Course Modal -->
-<div id="edit-course-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+<div id="edit-course-modal" data-modal-target="edit-course-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <div class="relative bg-white rounded-lg shadow ">
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
@@ -120,46 +120,83 @@
 
 
 <script>
+    document.querySelectorAll('[data-modal-hide]').forEach(button => {
+    button.addEventListener('click', (event) => {
+        const modalId = button.getAttribute('data-modal-hide');
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+            modalElement.classList.add('hidden'); 
+            window.location.reload();
+        }
+    });
+});
+
     const courseList = document.getElementById('course-list');
+    let allCourses = [];
+
+    function renderCourses(courses) {
+        courseList.innerHTML = '';
+        if (courses.length === 0) {
+            courseList.innerHTML = `
+            <div class="text-center text-gray-500 text-lg font-semibold">
+                No courses found.
+            </div>
+        `;
+            return;
+        }
+
+        courses.forEach(course => {
+            const courseImage = course.COURSE_IMAGE || 'default-image.jpg';
+            const courseName = course.COURSE_NAME || 'No Course Name';
+            const courseDescription = course.DESCRIPTION || 'No description available';
+
+            courseList.innerHTML += `
+            <div class="bg-white shadow-md rounded-lg border border-gray-300 overflow-hidden hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col">
+                <!-- Image Section -->
+                <div class="w-full h-40 bg-gray-200">
+                    <img src="../resource/uploads/${courseImage}" alt="${courseName}" class="w-full h-full object-cover">
+                </div>
+                <!-- Content Section -->
+                <div class="p-4 flex-grow">
+                    <h2 class="text-lg font-semibold text-gray-800">${courseName}</h2>
+                    <p class="text-sm text-gray-600 mt-2">${courseDescription}</p>
+                </div>
+                <!-- Action Buttons -->
+                <div class="flex justify-end gap-2 p-4">
+                    <button class="bg-blue-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition" onclick="editCourse(${course.ID})">
+                        <i class="fa fa-edit"></i> Edit
+                    </button>
+                    <button class="bg-red-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 transition" onclick="deleteCourse(${course.ID})">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        `;
+        });
+    }
+
+
+    const searchInput = document.querySelector('input[name="search"]');
+    searchInput.addEventListener('input', (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        const filteredCourses = allCourses.filter(course =>
+            course.COURSE_NAME.toLowerCase().includes(searchTerm) ||
+
+            course.DESCRIPTION.toLowerCase().includes(searchTerm)
+        );
+        renderCourses(filteredCourses); 
+    });
+
+
     fetch('controller/get_courses.php')
         .then(response => response.json())
         .then(data => {
-            courseList.innerHTML = '';
-            data.forEach(course => {
-
-                const courseImage = course.COURSE_IMAGE || 'default-image.jpg';
-                const courseName = course.COURSE_NAME || 'No Course Name';
-                const courseDescription = course.DESCRIPTION || 'No description available';
-
-                courseList.innerHTML += `
-                <div class="bg-white shadow-md rounded-lg border border-gray-300 overflow-hidden hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col">
-                    <!-- Image Section -->
-                    <div class="w-full h-40 bg-gray-200">
-                        <img src="../resource/uploads/${courseImage}" alt="${courseName}" class="w-full h-full object-cover">
-                    </div>
-                    <!-- Content Section -->
-                    <div class="p-4 flex-grow">
-                        <h2 class="text-lg font-semibold text-gray-800">${courseName}</h2>
-                        <p class="text-sm text-gray-600 mt-2">${courseDescription}</p>
-                    </div>
-                    <!-- Action Buttons -->
-                    <div class="flex justify-end gap-2 p-4">
-                        <button class="bg-blue-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition" onclick="editCourse(${course.ID})">
-                            <i class="fa fa-edit"></i> Edit
-                        </button>
-                        <button class="bg-red-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 transition" onclick="deleteCourse(${course.ID})">
-                            <i class="fa fa-trash"></i> Delete
-                        </button>
-                    </div>
-                </div>
-            `;
-            });
+            allCourses = data; 
+            renderCourses(allCourses); 
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error fetching courses:', error);
         });
-
-
 
 
 
@@ -256,10 +293,10 @@
         fetch(`controller/get_course.php?course_id=${course_id}`)
             .then(response => response.json())
             .then(course => {
-                // Fill the edit form with the course data
+                console.log(course);
                 document.getElementById('edit-course-id').value = course.ID;
                 document.getElementById('edit-course_name').value = course.COURSE_NAME;
-                document.getElementById('edit-course_code').value = course.COURSE_CODE;
+
                 document.getElementById('edit-description').value = course.DESCRIPTION;
 
                 // Open the modal using Flowbite
@@ -268,7 +305,7 @@
                 modal.show(); // Show the modal
             })
             .catch(error => {
-                console.error('Error:', error);
+
                 Swal.fire('Error!', 'Failed to load course details.', 'error');
             });
     }
@@ -303,7 +340,7 @@
     function renderCourses(courses) {
         courseList.innerHTML = '';
         if (courses.length === 0) {
-       
+
             courseList.innerHTML = `
             <div class="text-center text-gray-500 text-lg font-semibold">
                 No courses found.
@@ -341,27 +378,5 @@
         });
     }
 
-    // Fetch and display courses initially
-    let allCourses = [];
-    fetch('controller/get_courses.php')
-        .then(response => response.json())
-        .then(data => {
-            allCourses = data; // Store all courses for filtering
-            renderCourses(allCourses);
-        })
-        .catch(error => {
-            console.error('Error fetching courses:', error);
-        });
 
-    // Add event listener for search input
-    const searchInput = document.querySelector('input[name="search"]');
-    searchInput.addEventListener('input', (event) => {
-        const searchTerm = event.target.value.toLowerCase();
-        const filteredCourses = allCourses.filter(course =>
-            course.COURSE_NAME.toLowerCase().includes(searchTerm) ||
-            course.COURSE_CODE.toLowerCase().includes(searchTerm) ||
-            course.DESCRIPTION.toLowerCase().includes(searchTerm)
-        );
-        renderCourses(filteredCourses); // Render filtered courses
-    });
 </script>

@@ -29,9 +29,18 @@ $officerRepository = new OfficerRepository($conn);
 
 $usersExist = $userRepository->readAll();
 if (empty($usersExist)) {
+    $view = isset($_GET['view']) ? htmlspecialchars($_GET['view']) : '';
 
-    $title = 'Create Account';
-    $content = 'content/landing-page/create-account.php';
+    if($view == ''){
+        $title = 'Welcome';
+        $content = 'content/landing-page/welcome.php';
+    }else{
+        $title = 'Create Account';
+        $content = 'content/landing-page/create-account.php';
+    }
+
+
+   
 
 } else {
     $courseRepository = new CourseRepository($conn);

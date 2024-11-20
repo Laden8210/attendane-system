@@ -4,7 +4,7 @@
         <div class="flex items-center text-white">
             <!-- Logo -->
             <div class="mr-3">
-                <img src="../resource/img/logo.png" alt="Logo" class="w-12 h-12 rounded-full">
+                <img src="../resource/img/logo.png" alt="Logo" class="w-12 h-12 ">
             </div>
             <!-- Title -->
             <div>

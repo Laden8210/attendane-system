@@ -73,8 +73,8 @@ $student  = $studentRepository->readByCourse($user['course_id']);
             <!-- Information Section -->
             <div class="p-6 bg-gray-100">
                 <div class="flex items-center">
-                    <div class="w-24 h-24 rounded-full overflow-hidden bg-gray-200 mr-6">
-                        <img src="data:image/jpeg;base64,/9j/4AAQSk..." alt="Logo" class="object-cover w-full h-full">
+                    <div class="w-24 h-24  mr-6">
+                        <img src="../resource/img/logo.png" alt="Logo" class="object-cover w-full h-full">
                     </div>
                     <div>
                         <h1 class="text-3xl font-bold text-gray-800">Philippine College of Northwestern Luzon</h1>

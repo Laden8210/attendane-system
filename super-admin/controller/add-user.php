@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['status' => 'error', 'message' => 'Middle name contains invalid characters.']);
         exit;
     }
-
+    
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo json_encode(['status' => 'error', 'message' => 'Invalid email format.']);
         exit;

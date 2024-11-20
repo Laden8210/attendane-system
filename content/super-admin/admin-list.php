@@ -1,6 +1,6 @@
-<section class=" bg-violet-600 h-screen overflow-auto">
+<section class=" bg-violet-600  overflow-auto">
     <div class="w-full px-10 py-5">
-        <div class="bg-slate-50 w-full h-screen rounded-lg overflow-x-hidden overflow-y-auto">
+        <div class="bg-slate-50 w-full rounded-lg overflow-x-hidden overflow-y-auto">
             <div class="pt-5 px-2 text-center">
                 <h1 class="text-2xl font-bold">Admin List</h1>
                 <hr class="h-2 bg-cyan-500">
@@ -68,7 +68,7 @@
                             <?php
                             $courses = $courseRepository->getAllCourses();
                             foreach ($courses as $course) {
-                                echo "<option value='" . $course['ID'] . "'>" . $course['COURSE_CODE'] . ' - ' . $course['COURSE_NAME'] . "</option>";
+                                echo "<option value='" . $course['ID'] . "'>"  . $course['COURSE_NAME'] . "</option>";
                             }
                             ?>
                         </select>
@@ -92,8 +92,7 @@
                     </div>
                     <div>
                         <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Middle Name</label>
-                        <input type="text" name="middle_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
+                        <input type="text" name="middle_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
                     </div>
                     <div>
                         <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
@@ -144,19 +143,12 @@
                             <?php
                             $courses = $courseRepository->getAllCourses();
                             foreach ($courses as $course) {
-                                echo "<option value='" . $course['ID'] . "'>" . $course['COURSE_CODE'] . ' - ' . $course['COURSE_NAME'] . "</option>";
+                                echo "<option value='" . $course['ID'] . "'>" . $course['COURSE_NAME'] . "</option>";
                             }
                             ?>
                         </select>
                     </div>
-                    <div>
-                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Select User Type</label>
-                        <select name="user_type" id="edit-user-type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                    
-                            <option value="0">Admin</option>
 
-                        </select>
-                    </div>
                     <div>
                         <label for="text" class="block mb-2 text-sm font-medium text-gray-900">First Name</label>
                         <input type="text" name="first_name" id="edit-first-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -169,8 +161,7 @@
                     </div>
                     <div>
                         <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Middle Name</label>
-                        <input type="text" name="middle_name" id="edit-middle-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
+                        <input type="text" name="middle_name" id="edit-middle-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
                     </div>
                     <div>
                         <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
@@ -186,6 +177,17 @@
 </div>
 
 <script>
+    document.querySelectorAll('[data-modal-hide]').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const modalId = button.getAttribute('data-modal-hide');
+            const modalElement = document.getElementById(modalId);
+            if (modalElement) {
+                modalElement.classList.add('hidden');
+                window.location.reload();
+            }
+        });
+    });
+
     async function searchUsers() {
         const searchValue = document.getElementById('search').value;
 
@@ -281,16 +283,16 @@
                 throw new Error(`Failed to fetch user data: ${response.statusText}`);
             }
             const user = await response.json();
-     
+
             const modalElement = document.getElementById('edit-admin-modal');
-            const modal = new Modal(modalElement); 
-            modal.show(); 
+            const modal = new Modal(modalElement);
+            modal.show();
             document.querySelector('#edit-first-name').value = user.first_name || '';
             document.querySelector('#edit-last-name').value = user.last_name || '';
             document.querySelector('#edit-middle-name').value = user.middle_name || '';
             document.querySelector('#edit-email').value = user.email || '';
             document.querySelector('#edit-course').value = user.course_id || '';
-            document.querySelector('#edit-user-type').value = user.user_type_id || '';
+
 
             const updateForm = document.getElementById('edit-user-form');
             updateForm.onsubmit = async (e) => {

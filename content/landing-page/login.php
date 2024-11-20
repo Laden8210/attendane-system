@@ -16,6 +16,10 @@
                         <label for="username" class="mr-4 text-violet-900">
                             <i class="fas fa-user"></i>
                         </label>
+                        <input type="hidden" name="course_id" id="course_id"
+       class="w-full p-2 outline-none rounded border border-gray-300"
+       value="<?php echo isset($_GET['course_id']) ? htmlspecialchars($_GET['course_id']) : ''; ?>">
+
                         <input type="text" name="username" id="username"
                             class="w-full p-2 outline-none rounded border border-gray-300"
                             placeholder="Email or Username" required>
@@ -79,7 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const backButton = document.getElementById("backButton");
     backButton.addEventListener("click", () => {
 
-        window.history.back(); 
+        window.location.href = "index.php?view=course";
+ 
     });
 });
 </script>
@@ -105,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                        // Redirect based on user type
+     
                         if (data.user_type_id == 0) {
                             window.location.href = 'super-admin/';
                         } else if (data.user_type_id == 1) {

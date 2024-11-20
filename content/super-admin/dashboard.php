@@ -1,4 +1,9 @@
-<section class="bg-violet-600 min-h-screen flex items-center">
+<style>
+   
+
+
+</style>
+<section class="bg-violet-600 min-h-screen flex ">
     <div class="container mx-auto px-6 py-10">
         <!-- Dashboard Container -->
         <div class="bg-white w-full rounded-lg shadow-lg overflow-hidden">
@@ -9,7 +14,7 @@
             <hr class="border-t-4 border-cyan-400">
 
             <!-- Stats Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 p-6">
                 <!-- Card: Total Admins -->
                 <div class="bg-blue-600 text-white rounded-lg shadow p-6 flex flex-col items-start hover:shadow-lg transform transition hover:scale-105">
                     <div class="flex items-center mb-4">
@@ -32,9 +37,9 @@
 
 
             <!-- Tables Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 max-h-72">
                 <!-- Admins Table -->
-                <div class="bg-gray-50 rounded-lg shadow p-6 overflow-auto">
+                <div class="bg-gray-50 rounded-lg shadow p-6 overflow-auto max-h-50">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Admins</h2>
                     <table class="table-auto w-full text-sm text-left text-gray-700 border-collapse rounded-lg overflow-hidden">
                         <thead class="bg-gray-200 text-gray-600 uppercase text-xs text-center">

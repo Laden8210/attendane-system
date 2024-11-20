@@ -24,7 +24,7 @@ if (count($courses) == 0) {
 
             $bgColor = $bgColors[$index % count($bgColors)];
         ?>
-            <a href="index.php?view=login&&course=course_id=<?php echo $courseId; ?>"
+            <a href="index.php?view=login&course_id=<?php echo $courseId; ?>"
                class="shadow rounded h-80 w-64 p-2 <?php echo $bgColor; ?> hover:transform hover:scale-110 transition-transform duration-300 flex flex-col items-center justify-between">
                 <div class="card-header w-full">
                     <img src="<?php echo $courseImage; ?>" alt="course" class="w-full h-40 object-cover">
