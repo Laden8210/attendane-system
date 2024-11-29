@@ -1,9 +1,8 @@
 <?php
-
-
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$smsNotifications = $smsNotificationRepository->getAllSMSNotifications($search);
 
+
+$smsNotifications = $smsNotificationRepository->getAllSMSNotifications($search,$user['course_id']);
 ?>
 
 <section class="bg-violet-600 h-screen overflow-auto">
@@ -16,10 +15,16 @@ $smsNotifications = $smsNotificationRepository->getAllSMSNotifications($search);
             <div class="h-96 bg-slate-100 rounded">
                 <div class="flex justify-end p-2 text-white">
                     <div class="flex justify-end gap-2 items-center">
-         
                         <label for="search" class="text-black">Search</label>
-                        <input id="search-input" name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" />
-                        <button id="search-button" class="ml-2 px-2 py-1 bg-cyan-500 text-white rounded">Search</button>
+                        <input 
+                            id="search-input" 
+                            name="search" 
+                            type="search" 
+                            placeholder="Search" 
+                            value="<?php echo htmlspecialchars($search); ?>" 
+                            class="text-black outline-none border border-slate-700 px-2 py-1" 
+                            onkeyup="searchTable()"
+                        />
                     </div>
                 </div>
 
@@ -55,8 +60,17 @@ $smsNotifications = $smsNotificationRepository->getAllSMSNotifications($search);
 </section>
 
 <script>
-    document.getElementById('search-button').addEventListener('click', function() {
-        const searchQuery = document.getElementById('search-input').value;
-        window.location.href = `?view=sms&search=${encodeURIComponent(searchQuery)}`;
-    });
+    function searchTable() {
+        const searchInput = document.getElementById('search-input').value.toLowerCase();
+        const tableRows = document.querySelectorAll('#sms-table-body tr');
+
+        tableRows.forEach(row => {
+            const rowText = row.innerText.toLowerCase();
+            if (rowText.includes(searchInput)) {
+                row.style.display = ''; // Show matching rows
+            } else {
+                row.style.display = 'none'; // Hide non-matching rows
+            }
+        });
+    }
 </script>

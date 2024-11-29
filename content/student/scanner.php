@@ -1,4 +1,4 @@
-<?php require_once '../template/student-header.php';
+<?php
 
 $eventId = $_GET['event_id'];
 $eventRepository = new EventRepository($conn);
@@ -62,11 +62,16 @@ if ($status !== 'On-going') {
             </div>
 
             <!-- Stop Scanning Button -->
+            <!-- Stop Scanning Button -->
             <div class="text-center mt-6">
                 <button id="stop-button" class="px-6 py-2 bg-red-500 text-white rounded-lg font-medium shadow-md hover:bg-red-600 transition">
                     Stop Scanning
                 </button>
+                <button id="start-button" class="px-6 py-2 bg-green-500 text-white rounded-lg font-medium shadow-md hover:bg-green-600 transition hidden">
+                    Start Scanning
+                </button>
             </div>
+
         </div>
     </div>
 </section>
@@ -75,6 +80,48 @@ if ($status !== 'On-going') {
 <script>
     const eventId = document.getElementById('event_id').value;
     const html5QrCode = new Html5Qrcode("reader");
+
+    const stopButton = document.getElementById("stop-button");
+    const startButton = document.getElementById("start-button");
+
+    // Stop Scanning Functionality
+    stopButton.addEventListener("click", () => {
+        html5QrCode.stop().then(() => {
+            document.getElementById("scan-status").textContent = "Scanning stopped.";
+            stopButton.classList.add("hidden"); // Hide the Stop button
+            startButton.classList.remove("hidden"); // Show the Start button
+        }).catch(err => console.error("Unable to stop scanning:", err));
+    });
+
+    // Start Scanning Functionality
+    startButton.addEventListener("click", () => {
+        startScanning(); // Restart scanning
+        startButton.classList.add("hidden"); // Hide the Start button
+        stopButton.classList.remove("hidden"); // Show the Stop button
+    });
+
+    // Start Scanning Function
+    function startScanning() {
+        html5QrCode.start({
+                facingMode: "environment"
+            }, // Use the environment camera
+            {
+                fps: 10, // Frames per second
+                qrbox: {
+                    width: 400,
+                    height: 400
+                } // Scanner box size
+            },
+            onScanSuccess, // Success callback
+            errorMessage => {
+                document.getElementById("scan-status").textContent = `Scanning... (${errorMessage})`;
+            }
+        ).catch(err => {
+            console.error(`Unable to start scanning: ${err}`);
+            document.getElementById("scan-status").textContent = "Error starting scanner.";
+        });
+    }
+
 
     async function displayUserInfo(qrCodeMessage) {
         const response = await fetch(`controller/get-user-info.php?qrCode=${qrCodeMessage}&event_id=${eventId}`);
@@ -181,7 +228,7 @@ if ($status !== 'On-going') {
             },
             onScanSuccess,
             errorMessage => {
-                document.getElementById("scan-status").textContent = `Scanning... (${errorMessage})`;
+ 
             }
         ).catch(err => {
             console.error(`Unable to start scanning: ${err}`);
@@ -189,11 +236,7 @@ if ($status !== 'On-going') {
         });
     }
 
-    document.getElementById("stop-button").addEventListener("click", () => {
-        html5QrCode.stop().then(() => {
-            document.getElementById("scan-status").textContent = "Scanning stopped.";
-        }).catch(err => console.error("Unable to stop scanning:", err));
-    });
+
 
     startScanning();
 </script>

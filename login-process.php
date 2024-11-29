@@ -41,6 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($officer && $password == $officer['PASSWORD']) {
 
+
+            if ($officer['COURSE'] != $course_id) {
+                echo json_encode(['success' => false, 'message' => 'Please select your course!']);
+                exit;
+            }
+
             session_start();
             $_SESSION['officer_id'] = $officer['OFFICER_ID'];
 

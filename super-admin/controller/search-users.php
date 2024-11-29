@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $users = $userRepository->readAll();
     }
 
-    // Filter out the current user
     $filteredUsers = array_filter($users, function ($user) use ($userID) {
         return $user['user_id'] != $userID;
     });

@@ -4,11 +4,10 @@ $officers = $officerRepository->getOfficersByCourse($user['course_id']);
 $student  = $studentRepository->readByCourse($user['course_id']);
 
 ?>
-
-<section class="bg-violet-600 min-h-screen flex items-center">
+<section class="bg-violet-600  flex items-center overflow-hidden">
     <div class="container mx-auto px-6 py-10">
         <!-- Dashboard Container -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden h-full">
+        <div class="bg-white rounded-lg shadow-lg">
             <!-- Header Section -->
             <div class="bg-cyan-500 text-white py-6 px-6">
                 <h1 class="text-4xl font-bold text-center">Dashboard</h1>
@@ -17,8 +16,8 @@ $student  = $studentRepository->readByCourse($user['course_id']);
 
             <!-- Stats Section -->
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6">
-                <!-- Card: On Going Event -->
-                <div class="bg-green-600 text-white rounded-lg shadow-lg p-6 flex flex-col justify-between transform transition duration-300 hover:scale-105">
+                <!-- Card: Ongoing Events -->
+                <div class="bg-green-600 text-white rounded-lg shadow-lg p-6 flex flex-col justify-between">
                     <div class="flex items-center mb-4">
                         <div class="w-16 h-16 rounded-full bg-green-100 flex justify-center items-center">
                             <i class="fa fa-calendar-check text-green-600 text-3xl"></i>
@@ -31,7 +30,7 @@ $student  = $studentRepository->readByCourse($user['course_id']);
                 </div>
 
                 <!-- Card: Total Events -->
-                <div class="bg-blue-700 text-white rounded-lg shadow-lg p-6 flex flex-col justify-between transform transition duration-300 hover:scale-105">
+                <div class="bg-blue-700 text-white rounded-lg shadow-lg p-6 flex flex-col justify-between">
                     <div class="flex items-center mb-4">
                         <div class="w-16 h-16 rounded-full bg-blue-100 flex justify-center items-center">
                             <i class="fa fa-calendar-alt text-blue-700 text-3xl"></i>
@@ -44,7 +43,7 @@ $student  = $studentRepository->readByCourse($user['course_id']);
                 </div>
 
                 <!-- Card: Officers -->
-                <div class="bg-red-600 text-white rounded-lg shadow-lg p-6 flex flex-col justify-between transform transition duration-300 hover:scale-105">
+                <div class="bg-red-600 text-white rounded-lg shadow-lg p-6 flex flex-col justify-between">
                     <div class="flex items-center mb-4">
                         <div class="w-16 h-16 rounded-full bg-red-100 flex justify-center items-center">
                             <i class="fa fa-user-tie text-red-600 text-3xl"></i>
@@ -57,7 +56,7 @@ $student  = $studentRepository->readByCourse($user['course_id']);
                 </div>
 
                 <!-- Card: Students -->
-                <div class="bg-pink-700 text-white rounded-lg shadow-lg p-6 flex flex-col justify-between transform transition duration-300 hover:scale-105">
+                <div class="bg-pink-700 text-white rounded-lg shadow-lg p-6 flex flex-col justify-between">
                     <div class="flex items-center mb-4">
                         <div class="w-16 h-16 rounded-full bg-pink-100 flex justify-center items-center">
                             <i class="fa fa-users text-pink-700 text-3xl"></i>
@@ -70,18 +69,16 @@ $student  = $studentRepository->readByCourse($user['course_id']);
                 </div>
             </div>
 
-            <!-- Information Section -->
+            <!-- School Name and Vision Section -->
             <div class="p-6 bg-gray-100">
-                <div class="flex items-center">
-                    <div class="w-24 h-24  mr-6">
-                        <img src="../resource/img/logo.png" alt="Logo" class="object-cover w-full h-full">
-                    </div>
-                    <div>
-                        <h1 class="text-3xl font-bold text-gray-800">Philippine College of Northwestern Luzon</h1>
-                        <p class="text-gray-600 mt-3 leading-relaxed">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto unde ducimus quo voluptas eos? Perspiciatis, reiciendis doloremque blanditiis aperiam laborum.
-                        </p>
-                    </div>
+                <div class="text-center">
+                    <h1 class="text-4xl font-bold text-gray-800 mb-4">Philippine College of Northwestern Luzon</h1>
+                    <p class="text-lg text-gray-600 leading-relaxed">
+                        "An Investment In Knowledge, Pays The Best Interest."
+                    </p>
+                    <p class="text-md text-gray-600 mt-4">
+                        <i>Our Vision: To provide quality education that empowers individuals to achieve their fullest potential.</i>
+                    </p>
                 </div>
             </div>
 

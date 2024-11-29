@@ -23,12 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $eventId = $data['event_id'];
 
         $student = $studentRepository->readByStudentNumber($qrCode);
-
         if (!$student) {
             echo json_encode(['success' => false, 'message' => 'Student not found.']);
             exit;
         }
-
 
         $event = $eventRepository->getEventById($eventId);
         if (!$event) {
@@ -36,48 +34,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
+  
+        $amTimeInStart = $event['am_time_in'];   
+        $amTimeOut = $event['am_time_out'];
+        $pmTimeInStart = $event['pm_time_in'];     
+        $pmTimeOut = $event['pm_time_out'];       
+
         $studentId = $student['STUDENT_ID'];
         $currentTime = date('Y-m-d H:i:s');
+        $currentDate = date('Y-m-d');
         $currentHour = date('H');
-        $session = ($currentHour < 12) ? 'AM' : 'PM'; 
+        $session = ($currentHour < 12) ? 'AM' : 'PM';
 
 
-        $eventStartTime = ($session === 'AM') ? $event['am_time_in'] : $event['pm_time_in'];
-        $eventEndTime = ($session === 'AM') ? $event['am_time_out'] : $event['pm_time_out'];
+        if ($session === 'AM') {
+            $timeInEnd = "{$currentDate} {$amTimeInStart}";
+            $timeOutStart = "{$currentDate} {$amTimeOut}";  
+        } else {
+            $timeInEnd = "{$currentDate} {$pmTimeInStart}"; 
+            $timeOutStart = "{$currentDate} {$pmTimeOut}";  
+        }
 
-  
-        $type = 1;
-
-        $timeInAllowed = (strtotime($currentTime) >= strtotime($eventStartTime)) && 
-                         (strtotime($currentTime) <= strtotime($eventStartTime . ' +1 hour'));
-
-        $timeOutAllowed = (strtotime($currentTime) >= strtotime($eventEndTime)) && 
-                          (strtotime($currentTime) <= strtotime($eventEndTime . ' +30 minutes'));
-
-      
-        if ($timeInAllowed) {
+        if ($currentTime <= $timeInEnd) {
             $type = 1; 
-        } elseif ($timeOutAllowed) {
+        } elseif ($currentTime >= $timeOutStart) {
             $type = 2; 
 
-
-            $hasClockedIn = $attendanceRepository->hasClockedIn($studentId, $eventId, $session);
-            if (!$hasClockedIn) {
-                echo json_encode(['success' => false, 'message' => 'You cannot clock out without first clocking in.']);
-                exit;
-            }
+     
         } else {
-            echo json_encode(['success' => false, 'message' => 'You are outside the allowed time for this session.']);
+
+            echo json_encode(['success' => false, 'message' => 'Attendance is only allowed during the scheduled times.']);
             exit;
         }
 
 
         $alreadyClockedInOrOut = $attendanceRepository->hasClockedInOrOut($studentId, $eventId, $session, $type);
         if ($alreadyClockedInOrOut) {
-            echo json_encode(['success' => false, 'message' => 'You have already clocked in/out for this session.']);
+            echo json_encode(['success' => false, 'message' => 'You have already recorded this type of attendance for this session.']);
             exit;
         }
-
 
         $attendanceSaved = $attendanceRepository->addAttendance($studentId, $eventId, $currentTime, $session, $type);
         if (!$attendanceSaved) {
@@ -85,9 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-
         $phoneNumber = $student['GUARDIAN_PHONE_NO'];
-        $smsMessage = "You have successfully checked in/out to the school event. Thank you for your participation!";
+        $smsMessage = ($type === 1) 
+            ? "You have successfully recorded your Time In for the event. Thank you for your participation!" 
+            : "You have successfully recorded your Time Out for the event. Thank you for your participation!";
         $smsSent = $sms->sendSMS($phoneNumber, $smsMessage);
         $smsNotificationRepository->addSMSNotification($phoneNumber, $studentId, $smsMessage);
 

@@ -1,5 +1,5 @@
 <nav class="w-full z-10 bg-violet-500 shadow-lg">
-    <div class="container mx-auto py-4 px-6 flex items-center justify-between">
+    <div class=" mx-auto py-4 px-6 flex items-center justify-between">
         <!-- Left Section: Logo and Title -->
         <div class="flex items-center text-white">
             <!-- Logo -->

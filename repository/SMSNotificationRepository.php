@@ -31,9 +31,11 @@ class SMSNotificationRepository
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getAllSMSNotifications($search = '')
+    public function getAllSMSNotifications($search = '', $course)
     {
-        $sql = "SELECT * FROM sms_notifications WHERE recipient_phone LIKE ? OR message LIKE ? ORDER BY sent_at DESC";
+        $sql = "SELECT * FROM sms_notifications 
+        JOIN students on students.GUARDIAN_PHONE_NO = sms_notifications.recipient_phone        
+        WHERE recipient_phone LIKE ? OR message LIKE ? ORDER BY sent_at DESC";
         $searchTerm = '%' . $search . '%';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ss", $searchTerm, $searchTerm);

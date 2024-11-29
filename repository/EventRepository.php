@@ -68,5 +68,22 @@ class EventRepository
 
         return $stmt->execute();
     }
+
+    public function getEventByCourseAndSearch($courseId, $search = '') {
+        $sql = "SELECT * FROM events 
+                WHERE course_id = ? 
+                AND (event_name LIKE ? OR description LIKE ? OR details LIKE ?)";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception("Failed to prepare statement: " . $this->conn->error);
+        }
+        $likeSearch = '%' . $search . '%';
+        $stmt->bind_param('isss', $courseId, $likeSearch, $likeSearch, $likeSearch);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
+    
     
 }

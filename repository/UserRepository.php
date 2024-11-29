@@ -107,22 +107,50 @@ class UserRepository
 
     public function searchUsers($searchTerm)
     {
-        $searchTerm = $this->conn->real_escape_string($searchTerm);
-        $searchWildcard = "%$searchTerm%";
-
         $sql = "SELECT * FROM users 
-                JOIN course ON users.course_id = course.ID 
-                WHERE first_name LIKE ? 
-                OR last_name LIKE ? 
-                OR email LIKE ?";
-
+        JOIN course ON users.course_id = course.ID 
+        WHERE user_id LIKE ? 
+        OR course_id LIKE ? 
+        OR user_type_id LIKE ? 
+        OR first_name LIKE ? 
+        OR last_name LIKE ? 
+        OR middle_name LIKE ? 
+        OR email LIKE ? 
+        OR password LIKE ? 
+        OR avatar_file_path LIKE ? 
+        OR users.created_at LIKE ?
+        OR course.ID LIKE ? 
+        OR COURSE_NAME LIKE ? 
+        OR COURSE_IMAGE LIKE ? 
+        OR DESCRIPTION LIKE ? 
+        OR course.CREATED_AT LIKE ? 
+        OR course.UPDATED_AT LIKE ?";
 
         $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
             die("ERROR: Could not prepare the statement: " . $this->conn->error);
         }
 
-        $stmt->bind_param("sss", $searchWildcard, $searchWildcard, $searchWildcard);
+        $searchWildcard = "%" . $searchTerm . "%";
+        $stmt->bind_param(
+            "ssssssssssssssss",
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard,
+            $searchWildcard
+        );
 
         $stmt->execute();
         $result = $stmt->get_result();

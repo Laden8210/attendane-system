@@ -2,7 +2,9 @@
 
 require_once '../template/student-header.php';
 
-$events = $eventRepository->getEventByCourse($student['COURSE']);    
+$search = isset($_GET['search']) ? $_GET['search'] : ''; // Capture the search term from the query string
+$events = $eventRepository->getEventByCourseAndSearch($student['COURSE'], $search); // Adjust the query to support search
+
 ?>
 <section class="w-full h-screen bg-violet-600">
     <div class="w-full px-10 py-5" style="height: 90vh;">
@@ -14,16 +16,21 @@ $events = $eventRepository->getEventByCourse($student['COURSE']);
             <div class="flex justify-end p-2">
                 <div class="items-center">
                     <div class="relative">
-                        <input type="text" name="search" id="search" class="w-full p-2 outline-none rounded border border-gray-300" placeholder="Search Event">
-                        <button type="button" id="toggleSearch" class="absolute inset-y-0 right-0 px-3 text-gray-500">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            id="search" 
+                            class="w-full p-2 outline-none rounded border border-gray-300" 
+                            placeholder="Search Event" 
+                            value="<?php echo htmlspecialchars($search); ?>" 
+                            onkeyup="searchEvents()" 
+                        >
                     </div>
                 </div>
             </div>
 
             <div class="p-2 overflow-auto">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div id="event-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <?php if (count($events) > 0): ?>
                         <?php foreach ($events as $event): ?>
                             <a href="index.php?view=event-details&id=<?php echo $event['id']; ?>">
@@ -53,3 +60,21 @@ $events = $eventRepository->getEventByCourse($student['COURSE']);
         </div>
     </div>
 </section>
+
+<script>
+    function searchEvents() {
+    const searchInput = document.getElementById('search').value;
+
+    fetch(`index.php?search=${encodeURIComponent(searchInput)}`)
+        .then(response => response.text())
+        .then(html => {
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newEventList = doc.querySelector('#event-list').innerHTML;
+            document.querySelector('#event-list').innerHTML = newEventList;
+        })
+        .catch(error => console.error('Error fetching events:', error));
+}
+
+</script>

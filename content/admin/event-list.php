@@ -11,7 +11,7 @@
                         <button data-modal-target="add-event-modal" data-modal-toggle="add-event-modal" class="shadow rounded bg-blue-500 px-2 py-1"><i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
                     </div>
                     <div class="flex justify-end gap-2 items-center">
-                    
+
                         <label for="search" class="text-black">Search</label>
                         <input name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" id="search" />
                     </div>
@@ -33,9 +33,11 @@
                         </thead>
                         <tbody>
                             <?php $events = $eventRepository->getEventByCourse($user['course_id']); ?>
-                            <?php foreach ($events as $event) : ?>
+                            <?php 
+                            $count = 1;
+                            foreach ($events as $event) : ?>
                                 <tr class="bg-white border-b text-xs text-center">
-                                    <td class="px-2 py-3"><?= $event['id'] ?></td>
+                                <td class="px-2 py-3"><?= $count++ ?></td>
                                     <td class="px-6 py-3"><?= $event['event_name'] ?></td>
                                     <td class="px-6 py-3"><?= date('F j, Y', strtotime($event['event_date'])) ?></td>
                                     <td class="px-6 py-3"><?= $event['description'] ?></td>
@@ -55,32 +57,32 @@
                                         $pmTimeIn = date('H:i:s', strtotime($event['pm_time_in']));
                                         $pmTimeOut = date('H:i:s', strtotime($event['pm_time_out']));
 
-                              
+
                                         $status = '';
 
                                         if ($currentDate < $eventDate) {
-                                 
+
                                             $status = '<span class="px-2 py-1 text-white bg-blue-500 rounded-full">Upcoming</span>';
                                         } elseif ($currentDate == $eventDate) {
-                                 
+
                                             if ($currentTime < $amTimeIn) {
-                                 
+
                                                 $status = '<span class="px-2 py-1 text-white bg-blue-500 rounded-full">Upcoming</span>';
                                             } elseif ($currentTime >= $amTimeIn && $currentTime <= $amTimeOut) {
-                                             
+
                                                 $status = '<span class="px-2 py-1 text-white bg-green-500 rounded-full">Ongoing (AM)</span>';
                                             } elseif ($currentTime > $amTimeOut && $currentTime < $pmTimeIn) {
-                                            
+
                                                 $status = '<span class="px-2 py-1 text-white bg-yellow-500 rounded-full">Break</span>';
                                             } elseif ($currentTime >= $pmTimeIn && $currentTime <= $pmTimeOut) {
-                                    
+
                                                 $status = '<span class="px-2 py-1 text-white bg-green-500 rounded-full">Ongoing (PM)</span>';
                                             } else {
-                                      
+
                                                 $status = '<span class="px-2 py-1 text-white bg-red-500 rounded-full">Done</span>';
                                             }
                                         } else {
-                            
+
                                             $status = '<span class="px-2 py-1 text-white bg-red-500 rounded-full">Done</span>';
                                         }
 
@@ -88,7 +90,7 @@
                                         ?>
                                     </td>
 
-                 
+
                                     <td class="px-6 py-3">
                                         <?=
                                         date('g:i A', strtotime($event['am_time_in'])) . ' - ' . date('g:i A', strtotime($event['am_time_out'])) . ' : ' .
@@ -110,14 +112,17 @@
         </div>
     </div>
 </section>
-<div id="edit-event-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+<div
+
+    id="edit-event-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <div class="relative bg-white rounded-lg shadow ">
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
                 <h3 class="text-xl font-semibold text-gray-900 ">Edit Event</h3>
                 <button
-                data-modal-hide="edit-event-modal"
-                type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center" data-modal-hide="edit-event-modal">
+                    data-modal-hide="edit-event-modal"
+
+                    type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center" data-modal-hide="edit-event-modal">
                     <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 1" />
                     </svg>
@@ -243,44 +248,54 @@
 
 
 <script>
-
-document.addEventListener('DOMContentLoaded', function () {
-    const addEventForm = document.getElementById('addEventForm');
-
-    addEventForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(addEventForm);
-
-        try {
-            const response = await fetch('controller/add-event.php', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-
-            if (data.status === 'success') {
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Event added successfully.',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    // Hide the modal and reload the page to show the new event
-                    const modal = new Modal(document.getElementById('add-event-modal'));
-                    modal.hide();
-                    location.reload();
-                });
-            } else {
-                Swal.fire('Error', data.message, 'error');
+    document.querySelectorAll('[data-modal-hide]').forEach(button => {
+        button.addEventListener('click', function() {
+            const modalId = this.getAttribute('data-modal-hide');
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                location.reload();
             }
-        } catch (error) {
-            Swal.fire('Error', 'Failed to add event. Please try again.', 'error');
-        }
+        });
     });
-});
 
-    
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const addEventForm = document.getElementById('addEventForm');
+
+        addEventForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(addEventForm);
+
+            try {
+                const response = await fetch('controller/add-event.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Event added successfully.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Hide the modal and reload the page to show the new event
+                        const modal = new Modal(document.getElementById('add-event-modal'));
+                        modal.hide();
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            } catch (error) {
+                Swal.fire('Error', 'Failed to add event. Please try again.', 'error');
+            }
+        });
+    });
+
+
     async function deleteEvent(eventId) {
         Swal.fire({
             title: "Are you sure?",
@@ -315,26 +330,27 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    function editEvent(eventId) {
-    fetch(`controller/get-event.php?id=${eventId}`)
-        .then(response => response.json())
-        .then(data => {
- 
-            document.getElementById('edit-event-id').value = data.event.id;
-            document.getElementById('edit-event-name').value = data.event.event_name;
-            document.getElementById('edit-description').value = data.event.description;
-            document.getElementById('edit-details').value = data.event.details;
-            document.getElementById('edit-event-date').value = data.event.event_date;
-            document.getElementById('edit-am-time-in').value = data.event.am_time_in;
-            document.getElementById('edit-am-time-out').value = data.event.am_time_out;
-            document.getElementById('edit-pm-time-in').value = data.event.pm_time_in;
-            document.getElementById('edit-pm-time-out').value = data.event.pm_time_out;
 
-            const modal = new Modal(document.getElementById('edit-event-modal'));
-            modal.show();
-        })
-        .catch(error => console.error('Error fetching event data:', error));
-}
+    function editEvent(eventId) {
+        fetch(`controller/get-event.php?id=${eventId}`)
+            .then(response => response.json())
+            .then(data => {
+
+                document.getElementById('edit-event-id').value = data.event.id;
+                document.getElementById('edit-event-name').value = data.event.event_name;
+                document.getElementById('edit-description').value = data.event.description;
+                document.getElementById('edit-details').value = data.event.details;
+                document.getElementById('edit-event-date').value = data.event.event_date;
+                document.getElementById('edit-am-time-in').value = data.event.am_time_in;
+                document.getElementById('edit-am-time-out').value = data.event.am_time_out;
+                document.getElementById('edit-pm-time-in').value = data.event.pm_time_in;
+                document.getElementById('edit-pm-time-out').value = data.event.pm_time_out;
+
+                const modal = new Modal(document.getElementById('edit-event-modal'));
+                modal.show();
+            })
+            .catch(error => console.error('Error fetching event data:', error));
+    }
 
 
     const editEventForm = document.getElementById('editEventForm');

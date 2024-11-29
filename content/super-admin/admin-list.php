@@ -207,27 +207,27 @@
         tbody.innerHTML = ''; // Clear existing table rows
 
         if (data.status === 'success') {
-            data.users.forEach(user => {
+            data.users.forEach((user, index) => { 
                 const row = `
-                <tr class="bg-white border-b text-xs text-center">
-                    <td class="px-2 py-3">${user.user_id}</td>
-                    <td class="px-2 py-3">${user.last_name}</td>
-                    <td class="px-2 py-3">${user.first_name}</td>
-                    <td class="px-2 py-3">${user.middle_name}</td>
-                    <td class="px-2 py-3">${user.email}</td>
-                    <td class="px-2 py-3">${user.COURSE_NAME}</td>
-                    <td class="px-6 py-3">
-                        <button class="text-xs rounded-full bg-red-600 hover:bg-red-500 px-2 py-1 text-white"
-                            onclick="deleteUser(${user.user_id})">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                        <button class="text-xs rounded-full bg-blue-600 hover:bg-blue-500 px-2 py-1 text-white"
-                            onclick="editUser(${user.user_id})">
-                            <i class="fa fa-edit" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
+        <tr class="bg-white border-b text-xs text-center">
+            <td class="px-2 py-3">${index + 1}</td> <!-- Index count starts from 1 -->
+            <td class="px-2 py-3">${user.last_name}</td>
+            <td class="px-2 py-3">${user.first_name}</td>
+            <td class="px-2 py-3">${user.middle_name}</td>
+            <td class="px-2 py-3">${user.email}</td>
+            <td class="px-2 py-3">${user.COURSE_NAME}</td>
+            <td class="px-6 py-3">
+                <button class="text-xs rounded-full bg-red-600 hover:bg-red-500 px-2 py-1 text-white"
+                    onclick="deleteUser(${user.user_id})">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+                <button class="text-xs rounded-full bg-blue-600 hover:bg-blue-500 px-2 py-1 text-white"
+                    onclick="editUser(${user.user_id})">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+        `;
                 tbody.insertAdjacentHTML('beforeend', row);
             });
         } else {

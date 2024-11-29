@@ -17,9 +17,8 @@
                             <i class="fas fa-user"></i>
                         </label>
                         <input type="hidden" name="course_id" id="course_id"
-       class="w-full p-2 outline-none rounded border border-gray-300"
-       value="<?php echo isset($_GET['course_id']) ? htmlspecialchars($_GET['course_id']) : ''; ?>">
-
+                            class="w-full p-2 outline-none rounded border border-gray-300"
+                            value="<?php echo isset($_GET['course_id']) ? htmlspecialchars($_GET['course_id']) : ''; ?>">
                         <input type="text" name="username" id="username"
                             class="w-full p-2 outline-none rounded border border-gray-300"
                             placeholder="Email or Username" required>
@@ -37,6 +36,12 @@
                             title="Toggle Password Visibility">
                             <i id="toggleIcon" class="fas fa-eye"></i>
                         </button>
+                    </div>
+                    <!-- Forgot Password -->
+                    <div class="text-right mt-2">
+                        <a href="forgot-password.php" class="text-sm text-blue-500 hover:underline">
+                            Forgot Password?
+                        </a>
                     </div>
                 </div>
                 <!-- Submit Button -->
@@ -65,26 +70,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     togglePassword.addEventListener("click", () => {
         const isPassword = passwordField.type === "password";
-        console.log(isPassword);
         if (!isPassword) {
             passwordField.type = "text";
             toggleIcon.classList.add("fa-eye-slash");
             toggleIcon.classList.remove("fa-eye");
-        }else
-        {   
+        } else {
             toggleIcon.classList.add("fa-eye");
             toggleIcon.classList.remove("fa-eye-slash");
             passwordField.type = "password";
         }
-
     });
-
 
     const backButton = document.getElementById("backButton");
     backButton.addEventListener("click", () => {
-
         window.location.href = "index.php?view=course";
- 
     });
 });
 </script>
@@ -110,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-     
                         if (data.user_type_id == 0) {
                             window.location.href = 'super-admin/';
                         } else if (data.user_type_id == 1) {

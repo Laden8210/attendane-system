@@ -5,8 +5,9 @@ require_once '../../repository/config.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $course_id = intval($_POST['course_id']);
     $course_name = $_POST['course_name'];
-    $course_code = $_POST['course_code'];
+
     $description = $_POST['description'];
+    $course_color = $_POST['course_color'];
     $file_name = null;
 
     // Handle file upload if a new image is provided
@@ -24,11 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $courseRepo = new CourseRepository($conn);
 
     if ($file_name) {
-        $success = $courseRepo->updateCourse($course_id, $course_name, $course_code, $file_name, $description);
+        $success = $courseRepo->updateCourse($course_id, $course_name,  $file_name, $description, $course_color);
     } else {
         // If no new image, keep the old image in place
         $existingCourse = $courseRepo->getCourseById($course_id);
-        $success = $courseRepo->updateCourse($course_id, $course_name, $course_code, $existingCourse['COURSE_IMAGE'], $description);
+        $success = $courseRepo->updateCourse($course_id, $course_name, $existingCourse['COURSE_IMAGE'], $description, $course_color);
     }
 
     if ($success) {

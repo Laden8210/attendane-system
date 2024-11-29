@@ -43,8 +43,8 @@
                     <img src="../resource/uploads/<?php echo $user['avatar_file_path'] ?? 'default-avatar.png'; ?>" alt="Avatar" class="w-full h-full object-cover">
                 </div>
                 <div class="ms-3">
-                    <p class="text-white text-lg font-bold">Admin</p>
-                    <p class="text-white/70 text-sm">Administrator</p>
+                    <p class="text-white text-lg font-bold">Dean</p>
+                    <p class="text-white/70 text-sm">School Dean</p>
                 </div>
             </div>
             <hr>

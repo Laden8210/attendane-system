@@ -73,15 +73,18 @@ WHERE officers.OFFICER_ID = ?");
 
     public function readByCourse($course)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM students 
-        join course on students.COURSE = course.ID
-        WHERE COURSE = ?");
+        $stmt = $this->conn->prepare("
+            SELECT * FROM students 
+            JOIN course ON students.COURSE = course.ID
+            WHERE COURSE = ?
+            ORDER BY students.YEAR ASC
+        ");
         $stmt->bind_param("s", $course);
         $stmt->execute();
-
+    
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-
+    
     public function readByStudentNumber($student_number)
     {
         $stmt = $this->conn->prepare("SELECT * FROM students 
@@ -102,10 +105,10 @@ WHERE officers.OFFICER_ID = ?");
         return $stmt->get_result()->fetch_assoc();
     }
 
-    public function update($id, $last_name, $first_name, $middle_name, $course, $block, $guardian_phone_no, $avatar)
+    public function update($id, $last_name, $first_name,  $block, $guardian_phone_no, $avatar)
     {
-        $stmt = $this->conn->prepare("UPDATE students SET LAST_NAME = ?, FIRST_NAME = ?, LAST_NAME = ?, COURSE = ?, BLOCK = ?, GUARDIAN_PHONE_NO = ?, AVATAR = ? WHERE student_id = ?");
-        $stmt->bind_param("ssssssbi", $last_name, $first_name, $middle_name, $course, $block, $guardian_phone_no, $avatar, $id);
+        $stmt = $this->conn->prepare("UPDATE students SET LAST_NAME = ?, FIRST_NAME = ?,BLOCK = ?, GUARDIAN_PHONE_NO = ?, AVATAR = ? WHERE student_id = ?");
+        $stmt->bind_param("ssssbi", $last_name, $first_name,  $block, $guardian_phone_no, $avatar, $id);
 
         if ($stmt->execute()) {
             return true;

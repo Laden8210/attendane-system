@@ -1,9 +1,21 @@
 <style>
-   
+    /* Custom styling for scrollable areas */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
 
+    ::-webkit-scrollbar-thumb {
+        background: #6b7280; /* Gray */
+        border-radius: 4px;
+    }
 
+    ::-webkit-scrollbar-track {
+        background: #f3f4f6; /* Light Gray */
+    }
 </style>
-<section class="bg-violet-600 min-h-screen flex ">
+
+<section class="bg-violet-600 min-h-screen flex">
     <div class="container mx-auto px-6 py-10">
         <!-- Dashboard Container -->
         <div class="bg-white w-full rounded-lg shadow-lg overflow-hidden">
@@ -16,7 +28,7 @@
             <!-- Stats Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 p-6">
                 <!-- Card: Total Admins -->
-                <div class="bg-blue-600 text-white rounded-lg shadow p-6 flex flex-col items-start hover:shadow-lg transform transition hover:scale-105">
+                <div class="bg-blue-600 text-white rounded-lg shadow-lg p-6 flex flex-col items-start hover:shadow-lg transform transition hover:scale-105">
                     <div class="flex items-center mb-4">
                         <i class="fas fa-user-friends text-4xl"></i>
                         <h2 class="text-xl font-semibold ml-4">Total Admin</h2>
@@ -25,7 +37,7 @@
                 </div>
 
                 <!-- Card: Total Courses -->
-                <div class="bg-green-600 text-white rounded-lg shadow p-6 flex flex-col items-start hover:shadow-lg transform transition hover:scale-105">
+                <div class="bg-green-600 text-white rounded-lg shadow-lg p-6 flex flex-col items-start shadow-lg transform transition hover:scale-105">
                     <div class="flex items-center mb-4">
                         <i class="fas fa-book text-4xl"></i>
                         <h2 class="text-xl font-semibold ml-4">Total Courses</h2>
@@ -34,12 +46,10 @@
                 </div>
             </div>
 
-
-
             <!-- Tables Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 max-h-72">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
                 <!-- Admins Table -->
-                <div class="bg-gray-50 rounded-lg shadow p-6 overflow-auto max-h-50">
+                <div class="bg-gray-50 rounded-lg shadow p-6 overflow-auto max-h-72 border border-gray-600">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Admins</h2>
                     <table class="table-auto w-full text-sm text-left text-gray-700 border-collapse rounded-lg overflow-hidden">
                         <thead class="bg-gray-200 text-gray-600 uppercase text-xs text-center">
@@ -57,7 +67,7 @@
                 </div>
 
                 <!-- Courses Table -->
-                <div class="bg-gray-50 rounded-lg shadow p-6 overflow-auto">
+                <div class="bg-gray-50 rounded-lg shadow p-6 overflow-auto max-h-72 border border-gray-600">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Courses</h2>
                     <table class="table-auto w-full text-sm text-left text-gray-700 border-collapse rounded-lg overflow-hidden">
                         <thead class="bg-gray-200 text-gray-600 uppercase text-xs text-center">

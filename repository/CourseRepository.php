@@ -8,9 +8,9 @@ class CourseRepository {
     }
 
 
-    public function createCourse($courseName, $courseImage, $description) {
-        $stmt = $this->conn->prepare("INSERT INTO course (COURSE_NAME, COURSE_IMAGE, DESCRIPTION) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $courseName,  $courseImage, $description);
+    public function createCourse($courseName, $courseImage, $description, $course_color) {
+        $stmt = $this->conn->prepare("INSERT INTO course (COURSE_NAME, COURSE_IMAGE, DESCRIPTION, COLOR) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $courseName,  $courseImage, $description, $course_color);
         if ($stmt->execute()) {
             return true;
         }
@@ -34,9 +34,9 @@ class CourseRepository {
         return $result->fetch_assoc();
     }
 
-    public function updateCourse($id, $courseName, $courseCode, $courseImage, $description) {
-        $stmt = $this->conn->prepare("UPDATE course SET COURSE_NAME = ?, COURSE_CODE = ?, COURSE_IMAGE = ?, DESCRIPTION = ? WHERE ID = ?");
-        $stmt->bind_param("ssssi", $courseName, $courseCode, $courseImage, $description, $id);
+    public function updateCourse($id, $courseName, $courseImage, $description, $course_color) {
+        $stmt = $this->conn->prepare("UPDATE course SET COURSE_NAME = ?, COURSE_IMAGE = ?, DESCRIPTION = ?, COLOR = ? WHERE ID = ?");
+        $stmt->bind_param("ssssi", $courseName, $courseImage, $description, $course_color,  $id);
         return $stmt->execute();
     }
 

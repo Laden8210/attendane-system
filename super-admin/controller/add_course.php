@@ -13,13 +13,15 @@ try{
         $description = htmlspecialchars(trim($_POST['description']));
     
         $courseImage = $_FILES['course_image'];
+
+        $course_color = htmlspecialchars((trim($_POST['course_color'])));
     
     
         $uniqueFilename = uniqid() . '-' . basename($courseImage['name']);
         $imagePath = '../../resource/uploads/' . $uniqueFilename;
     
         if (move_uploaded_file($courseImage['tmp_name'], $imagePath)) {
-            if ($courseRepo->createCourse($courseName, $uniqueFilename, $description)) {
+            if ($courseRepo->createCourse($courseName, $uniqueFilename, $description, $course_color)) {
                 echo json_encode(['success' => true, 'message' => 'Course added successfully!']);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Failed to add course.']);

@@ -14,8 +14,11 @@
                     </div>
                     <div class="flex justify-end gap-2 items-center">
                         <label for="search" class="text-black">Search</label>
-                        <input name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" />
+                        <input name="search" id="search" type="search" placeholder="Search"
+                            class="text-black outline-none border border-slate-700 px-2 py-1"
+                            onkeyup="searchTable()" />
                     </div>
+
                 </div>
                 <div class="p-2 rounded-lg drop-shadow">
                     <table class="w-full">
@@ -115,26 +118,45 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Flowbite modals
-    const addOfficerModalElement = document.getElementById('add-officer-modal');
-    const editOfficerModalElement = document.getElementById('edit-officer-modal');
-    
-    const addOfficerModal = new Modal(addOfficerModalElement);
-    const editOfficerModal = new Modal(editOfficerModalElement); 
+    function searchTable() {
+        const searchInput = document.getElementById('search').value.toLowerCase();
+        const tableRows = document.querySelectorAll('tbody tr');
 
-    // Fetch and display all officers
-    async function fetchOfficers() {
-        const response = await fetch('controller/officer-controller.php?action=list');
-        const data = await response.json();
-        const tbody = document.querySelector('tbody');
-        tbody.innerHTML = ''; // Clear existing rows
+        tableRows.forEach(row => {
+            const rowText = row.innerText.toLowerCase();
+            if (rowText.includes(searchInput)) {
+                row.style.display = ''; // Show row
+            } else {
+                row.style.display = 'none'; // Hide row
+            }
+        });
+    }
 
-        if (data.officers.length > 0) {
-            data.officers.forEach((officer, index) => {
-                const avatarSrc = officer.AVATAR ? `data:image/jpeg;base64,${officer.AVATAR}` : 'https://via.placeholder.com/150'; // Fallback image
-          
-                const row = `
+    // Expose searchTable to the global scope
+    window.searchTable = searchTable;
+    document.addEventListener('DOMContentLoaded', function() {
+
+
+
+        // Initialize Flowbite modals
+        const addOfficerModalElement = document.getElementById('add-officer-modal');
+        const editOfficerModalElement = document.getElementById('edit-officer-modal');
+
+        const addOfficerModal = new Modal(addOfficerModalElement);
+        const editOfficerModal = new Modal(editOfficerModalElement);
+
+        // Fetch and display all officers
+        async function fetchOfficers() {
+            const response = await fetch('controller/officer-controller.php?action=list');
+            const data = await response.json();
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            if (data.officers.length > 0) {
+                data.officers.forEach((officer, index) => {
+                    const avatarSrc = officer.AVATAR ? `data:image/jpeg;base64,${officer.AVATAR}` : 'https://via.placeholder.com/150'; // Fallback image
+
+                    const row = `
                 <tr class="bg-white border-b text-xs text-center">
                     <td class="px-2 py-3">${index + 1}</td>
                     <td class="px-2 py-3">
@@ -142,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </td>
                     <td class="px-2 py-3">${officer.LAST_NAME}</td>
                     <td class="px-2 py-3">${officer.FIRST_NAME}</td>
-                    <td class="px-2 py-3">${officer.COURSE}</td>
+                    <td class="px-2 py-3">${officer.COURSE_NAME}</td>
                     <td class="px-2 py-3">${officer.USERNAME}</td>
                     <td class="px-2 py-3">******</td>
                     <td class="px-6 py-3">
@@ -151,129 +173,128 @@ document.addEventListener('DOMContentLoaded', function() {
                     </td>
                 </tr>
             `;
-                tbody.insertAdjacentHTML('beforeend', row);
-            });
-        } else {
-            tbody.innerHTML = '<tr><td colspan="11" class="text-center text-sm">No officers found.</td></tr>';
-        }
-    }
-
-    // Function to delete an officer
-    async function deleteOfficer(officerId) {
-        const confirmation = await Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        });
-
-        if (confirmation.isConfirmed) {
-            const response = await fetch(`controller/officer-controller.php?action=delete&officer_id=${officerId}`, {
-                method: 'POST'
-            });
-            const result = await response.json();
-            if (result.success) {
-                Swal.fire('Deleted!', 'Officer has been deleted.', 'success');
-                fetchOfficers(); // Refresh the list after deletion
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
             } else {
-                Swal.fire('Error!', 'Failed to delete officer.', 'error');
+                tbody.innerHTML = '<tr><td colspan="11" class="text-center text-sm">No officers found.</td></tr>';
             }
         }
-    }
 
-    // Function to populate the student dropdown
-    async function populateStudentDropdown() {
-        const response = await fetch('controller/student-controller.php?action=list');
-        const data = await response.json();
-        const studentDropdown = document.querySelector('#student-select');
+        // Function to delete an officer
+        async function deleteOfficer(officerId) {
+            const confirmation = await Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            });
 
-        const editStudentDropdown= document.querySelector('#edit-student-select');
-        data.students.forEach(student => {
-            const option = document.createElement('option');
-            option.value = student.STUDENT_ID;
-            option.text = `${student.FIRST_NAME} ${student.LAST_NAME}`;
-            studentDropdown.add(option);
-
-            
-        });
-
-        data.students.forEach(student => {
-            const option = document.createElement('option');
-            option.value = student.STUDENT_ID;
-            option.text = `${student.FIRST_NAME} ${student.LAST_NAME}`;
-
-            editStudentDropdown.add(option)
-            
-        });
-    }
-
-
-    const addOfficerForm = document.querySelector('#add-officer-form');
-    addOfficerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(addOfficerForm);
-
-        const response = await fetch('controller/officer-controller.php?action=create', {
-            method: 'POST',
-            body: formData
-        });
-        const result = await response.json();
-
-        if (result.success) {
-            Swal.fire('Success!', 'Officer added successfully!', 'success');
-            addOfficerForm.reset();
-            document.querySelector('[data-modal-hide="add-officer-modal"]').click(); // Close modal
-            fetchOfficers(); // Refresh the list
-        } else {
-            Swal.fire('Error!', 'Failed to add officer.', 'error');
+            if (confirmation.isConfirmed) {
+                const response = await fetch(`controller/officer-controller.php?action=delete&officer_id=${officerId}`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    Swal.fire('Deleted!', 'Officer has been deleted.', 'success');
+                    fetchOfficers(); // Refresh the list after deletion
+                } else {
+                    Swal.fire('Error!', 'Failed to delete officer.', 'error');
+                }
+            }
         }
+
+        // Function to populate the student dropdown
+        async function populateStudentDropdown() {
+            const response = await fetch('controller/student-controller.php?action=list');
+            const data = await response.json();
+            const studentDropdown = document.querySelector('#student-select');
+
+            const editStudentDropdown = document.querySelector('#edit-student-select');
+            data.students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.STUDENT_ID;
+                option.text = `${student.FIRST_NAME} ${student.LAST_NAME}`;
+                studentDropdown.add(option);
+
+
+            });
+
+            data.students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.STUDENT_ID;
+                option.text = `${student.FIRST_NAME} ${student.LAST_NAME}`;
+
+                editStudentDropdown.add(option)
+
+            });
+        }
+
+
+        const addOfficerForm = document.querySelector('#add-officer-form');
+        addOfficerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(addOfficerForm);
+
+            const response = await fetch('controller/officer-controller.php?action=create', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                Swal.fire('Success!', 'Officer added successfully!', 'success');
+                addOfficerForm.reset();
+                document.querySelector('[data-modal-hide="add-officer-modal"]').click(); // Close modal
+                fetchOfficers(); // Refresh the list
+            } else {
+                Swal.fire('Error!', 'Failed to add officer.', 'error');
+            }
+        });
+
+        // Edit Officer
+        async function editOfficer(officerId) {
+            const response = await fetch(`controller/officer-controller.php?action=edit&officer_id=${officerId}`);
+            const officer = await response.json();
+
+            if (officer) {
+                document.querySelector('#edit-officer-id').value = officer.OFFICER_ID;
+                document.querySelector('#edit-student-select').value = officer.STUDENT_ID;
+                document.querySelector('#edit-username').value = officer.USERNAME;
+
+                editOfficerModal.show(); // Open modal for editing
+            }
+        }
+
+        // Update Officer form submission with Swal
+        const editOfficerForm = document.querySelector('#edit-officer-form');
+        editOfficerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(editOfficerForm);
+
+            const response = await fetch('controller/officer-controller.php?action=update', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                Swal.fire('Success!', 'Officer updated successfully!', 'success');
+                document.querySelector('[data-modal-hide="edit-officer-modal"]').click(); // Close modal
+                fetchOfficers(); // Refresh the list
+            } else {
+                Swal.fire('Error!', 'Failed to update officer.', 'error');
+            }
+        });
+
+        // Load data when the page is ready
+        fetchOfficers();
+        populateStudentDropdown();
+
+        // Expose functions to the global scope
+        window.deleteOfficer = deleteOfficer;
+        window.editOfficer = editOfficer;
     });
-
-    // Edit Officer
-    async function editOfficer(officerId) {
-        const response = await fetch(`controller/officer-controller.php?action=edit&officer_id=${officerId}`);
-        const officer = await response.json();
-
-        if (officer) {
-            document.querySelector('#edit-officer-id').value = officer.OFFICER_ID;
-            document.querySelector('#edit-student-select').value = officer.STUDENT_ID;
-            document.querySelector('#edit-username').value = officer.USERNAME;
-
-            editOfficerModal.show(); // Open modal for editing
-        }
-    }
-
-    // Update Officer form submission with Swal
-    const editOfficerForm = document.querySelector('#edit-officer-form');
-    editOfficerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(editOfficerForm);
-
-        const response = await fetch('controller/officer-controller.php?action=update', {
-            method: 'POST',
-            body: formData
-        });
-        const result = await response.json();
-
-        if (result.success) {
-            Swal.fire('Success!', 'Officer updated successfully!', 'success');
-            document.querySelector('[data-modal-hide="edit-officer-modal"]').click(); // Close modal
-            fetchOfficers(); // Refresh the list
-        } else {
-            Swal.fire('Error!', 'Failed to update officer.', 'error');
-        }
-    });
-
-    // Load data when the page is ready
-    fetchOfficers();
-    populateStudentDropdown();
-
-    // Expose functions to the global scope
-    window.deleteOfficer = deleteOfficer;
-    window.editOfficer = editOfficer;
-});
-
 </script>
