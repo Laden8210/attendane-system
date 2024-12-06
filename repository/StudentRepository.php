@@ -52,10 +52,10 @@ class StudentRepository
     public function readStudentByOfficerID($id)
     {
         $stmt = $this->conn->prepare("SELECT * 
-FROM students 
-JOIN officers 
-ON students.STUDENT_ID = officers.STUDENT_ID 
-WHERE officers.OFFICER_ID = ?");
+        FROM students 
+        JOIN officers 
+        ON students.STUDENT_ID = officers.STUDENT_ID 
+        WHERE officers.OFFICER_ID = ?");
 
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -81,10 +81,10 @@ WHERE officers.OFFICER_ID = ?");
         ");
         $stmt->bind_param("s", $course);
         $stmt->execute();
-    
+
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-    
+
     public function readByStudentNumber($student_number)
     {
         $stmt = $this->conn->prepare("SELECT * FROM students 
@@ -126,6 +126,36 @@ WHERE officers.OFFICER_ID = ?");
         if ($stmt->execute()) {
             return true;
         } else {
+            return false;
+        }
+    }
+
+    public function findStudentByDetails($last_name, $first_name, $course, $block, $guardian_phone_no, $year)
+    {
+        try {
+            $query = $this->conn->prepare("
+            SELECT * 
+            FROM students 
+            WHERE LAST_NAME = ? 
+              AND FIRST_NAME = ? 
+              AND COURSE = ? 
+              AND BLOCK = ? 
+              AND GUARDIAN_PHONE_NO = ? 
+              AND YEAR = ?
+        ");
+
+            // Bind parameters to the query
+            $query->bind_param("ssssss", $last_name, $first_name, $course, $block, $guardian_phone_no, $year);
+
+
+            $query->execute();
+
+            $result = $query->get_result();
+
+            
+            return $result->num_rows > 0 ? $result->fetch_assoc() : false;
+        } catch (Exception $e) {
+  
             return false;
         }
     }

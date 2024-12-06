@@ -23,8 +23,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         exit;
     }
 
+    $requiredFields = [
+        'last-name' => 'Last Name',
+        'first-name' => 'First Name',
+        'block' => 'Block',
+        'guardian-phone' => 'Guardian Phone Number',
+        'year' => 'Year',
+        'avatar' => 'Avatar'
+    ];
 
-    
+    foreach ($requiredFields as $field => $label) {
+        if (empty($_POST[$field]) && $field !== 'avatar') {
+            echo json_encode(['status' => 'error', 'message' => "$label is required."]);
+            exit;
+        }
+    }
+
+    if (empty($_FILES['avatar']['tmp_name'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Avatar is required.']);
+        exit;
+    }
+
+    // If no course is set
+    if (empty($course)) {
+        echo json_encode(['status' => 'error', 'message' => 'Please set a course for this admin.']);
+        exit;
+    }
 
     $last_name = $_POST['last-name'];
     $first_name = $_POST['first-name'];
@@ -34,6 +58,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $avatar = $_FILES['avatar']['name'];
     $avatar_tmp = $_FILES['avatar'];
     $year = $_POST['year'];
+    $existingStudent = $studentRepository->findStudentByDetails($last_name, $first_name, $course, $block, $guardian_phone_no, $year);
+
+    if ($existingStudent) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'A student with the same information already exists in the database.'
+        ]);
+        exit;
+    }
+
+
+    
+
+    
     $imageData = base64_encode(file_get_contents($avatar_tmp['tmp_name']));
     $success = $studentRepository->addStudent($last_name, $first_name, $course, $block, $guardian_phone_no, $imageData, $year);
     if ($success) {

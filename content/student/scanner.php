@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('Asia/Manila');
 $eventId = $_GET['event_id'];
 $eventRepository = new EventRepository($conn);
 $event = $eventRepository->getEventById($eventId);
@@ -9,23 +9,29 @@ if (!$event) {
     exit;
 }
 
-$currentDateTime = strtotime(date('Y-m-d H:i:s'));
-$eventDate = strtotime($event['event_date']);
+
+$currentDate = strtotime(date('Y-m-d')); 
+$eventDate = strtotime($event['event_date']); 
+$eventEndDate = strtotime($event['event_date'] . ' ' . $event['pm_time_out']);
+
 $status = '';
 
-if ($currentDateTime < $eventDate) {
-    $status = 'Upcoming';
-} elseif ($currentDateTime > strtotime($event['event_date'] . ' ' . $event['pm_time_out'])) {
-    $status = 'Ended';
-} else {
-    $status = 'On-going';
+if ($currentDate < $eventDate) {
+    $status = 'Upcoming'; 
+} elseif ($currentDate > $eventEndDate) {
+    $status = 'Ended'; 
+} elseif ($currentDate == $eventDate) {
+    $status = 'On-going'; 
 }
+
+$currentDateFormatted = date('Y-m-d', $currentDate);
+$eventDateFormatted = date('Y-m-d', $eventDate);
 
 if ($status !== 'On-going') {
     echo "<script>
         Swal.fire({
             title: 'Access Denied',
-            text: 'This event is $status. You cannot access the scanner.',
+            text: 'This event is $status You cannot access the scanner.',
             icon: 'warning',
             confirmButtonText: 'Go Back'
         }).then(() => {
@@ -34,6 +40,7 @@ if ($status !== 'On-going') {
     </script>";
     exit;
 }
+
 ?>
 
 <section class="w-full h-screen bg-gradient-to-br from-violet-600 to-violet-700 flex flex-col">

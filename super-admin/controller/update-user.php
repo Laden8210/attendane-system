@@ -34,8 +34,34 @@ if (empty($courseId) || !is_numeric($courseId)) {
     exit;
 }
 
+// Initialize avatar variable
+$file_name = null;
 
-$success = $userRepository->updateUser($userId, $courseId, $userTypeId, $firstName, $lastName, $middleName, $email);
+if (isset($_FILES['edit-avatar']) && $_FILES['edit-avatar']['error'] === UPLOAD_ERR_OK) {
+    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+    $file_type = mime_content_type($_FILES['edit-avatar']['tmp_name']);
+    $file_size = $_FILES['edit-avatar']['size'];
+
+    if (!in_array($file_type, $allowed_types)) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid avatar file type. Only JPG, PNG, and GIF are allowed.']);
+        exit;
+    }
+
+    $upload_dir = '../../resource/uploads/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
+    }
+
+    $file_name = uniqid() . '-' . basename($_FILES['edit-avatar']['name']);
+    $avatar_file_path = $upload_dir . $file_name;
+
+    if (!move_uploaded_file($_FILES['edit-avatar']['tmp_name'], $avatar_file_path)) {
+        echo json_encode(['status' => 'error', 'message' => 'Failed to upload avatar.']);
+        exit;
+    }
+}
+
+$success = $userRepository->updateUser($userId, $courseId, $userTypeId, $firstName, $lastName, $middleName, $email, $file_name);
 
 if ($success) {
     echo json_encode(['status' => 'success', 'message' => 'User updated successfully.']);

@@ -9,7 +9,6 @@ if (isset($_GET['event_id'])) {
     $attendanceRepository = new AttendanceRepository($conn);
     $eventRepository = new EventRepository($conn);
 
-    // Fetch event and attendance data
     $event = $eventRepository->getEventById($eventId);
     $attendances = $attendanceRepository->getAttendanceByEvent($eventId);
 
@@ -90,6 +89,8 @@ if (isset($_GET['event_id'])) {
     
     // Populate the table rows with attendance data
     foreach ($attendances as $attendance) {
+        $type = $attendance['type'] == 1 ? 'Time In' : ($attendance['type'] == 2 ? 'Time Out' : 'Unknown');
+
         $table .= '
         <tr>
             <td>' . htmlspecialchars($attendance['STUDENT_NUMBER']) . '</td>
@@ -98,7 +99,9 @@ if (isset($_GET['event_id'])) {
             <td>' . htmlspecialchars($attendance['COURSE_NAME'] . ' - ' . $attendance['YEAR']) . '</td>
             <td>' . htmlspecialchars($attendance['attendance_time']) . '</td>
             <td>' . strtoupper(htmlspecialchars($attendance['session'])) . '</td>
-            <td>' . strtoupper(htmlspecialchars($attendance['type'])) . '</td>
+
+            
+            <td>' .  strtoupper(htmlspecialchars($type)) . '</td>
         </tr>';
     }
     

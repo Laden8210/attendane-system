@@ -70,7 +70,7 @@ $attendees = $attendanceRepository->getAttendanceByEvent($id);
                     <div class="bg-violet-100 border border-violet-300 p-4 rounded-lg flex flex-col items-start shadow-md hover:bg-violet-200">
                           <p class="font-semibold text-violet-700"><?php echo htmlspecialchars($attendee['FIRST_NAME'] . ' ' . $attendee['LAST_NAME']); ?></p>
                         <p class="text-sm text-gray-600">Student No: <?php echo htmlspecialchars($attendee['STUDENT_NUMBER']); ?></p>
-                        <p class="text-sm text-gray-600">Course: <?php echo htmlspecialchars($attendee['COURSE']); ?></p>
+                        <p class="text-sm text-gray-600">Course: <?php echo htmlspecialchars($attendee['COURSE_NAME']); ?></p>
                         <p class="text-sm text-gray-600">Year: <?php echo htmlspecialchars($attendee['YEAR']); ?></p>
                         <hr class="my-2">
                         <h3 class="font-medium text-gray-700">Attendance Details:</h3>
@@ -105,7 +105,7 @@ document.getElementById('search').addEventListener('input', function () {
     
                         <p class="font-semibold text-violet-700">${attendee.FIRST_NAME} ${attendee.LAST_NAME}</p>
                         <p class="text-sm text-gray-600">Student No: ${attendee.STUDENT_NUMBER}</p>
-                        <p class="text-sm text-gray-600">Course: ${attendee.COURSE}</p>
+                        <p class="text-sm text-gray-600">Course: ${attendee.COURSE_NAME}</p>
                         <p class="text-sm text-gray-600">Year: ${attendee.YEAR}</p>
                         <hr class="my-2">
                         <h3 class="font-medium text-gray-700">Attendance Details:</h3>

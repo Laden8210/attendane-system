@@ -1,3 +1,6 @@
+<?php
+date_default_timezone_set('Asia/Manila');
+?>
 <section class=" bg-violet-600 h-screen overflow-auto">
     <div class="w-full px-10 py-5">
         <div class="bg-slate-50 w-full h-screen rounded-lg overflow-x-hidden overflow-y-auto ">
@@ -33,59 +36,40 @@
                         </thead>
                         <tbody>
                             <?php $events = $eventRepository->getEventByCourse($user['course_id']); ?>
-                            <?php 
+                            <?php
                             $count = 1;
                             foreach ($events as $event) : ?>
                                 <tr class="bg-white border-b text-xs text-center">
-                                <td class="px-2 py-3"><?= $count++ ?></td>
+                                    <td class="px-2 py-3"><?= $count++ ?></td>
                                     <td class="px-6 py-3"><?= $event['event_name'] ?></td>
                                     <td class="px-6 py-3"><?= date('F j, Y', strtotime($event['event_date'])) ?></td>
                                     <td class="px-6 py-3"><?= $event['description'] ?></td>
                                     <td class="px-6 py-3"><?= $event['details'] ?></td>
 
-                                    <!-- Event Status Logic -->
                                     <td class="px-6 py-3">
                                         <?php
-                                        // Get current date and time
+                                        // Get current date
                                         $currentDate = date('Y-m-d');
-                                        $currentTime = date('H:i:s');
 
-                                        // Event times
+                                        // Event date
                                         $eventDate = $event['event_date'];
-                                        $amTimeIn = date('H:i:s', strtotime($event['am_time_in']));
-                                        $amTimeOut = date('H:i:s', strtotime($event['am_time_out']));
-                                        $pmTimeIn = date('H:i:s', strtotime($event['pm_time_in']));
-                                        $pmTimeOut = date('H:i:s', strtotime($event['pm_time_out']));
 
-
+                     
                                         $status = '';
 
-                                        if ($currentDate < $eventDate) {
-
+                               
+                                        if ($currentDate == $eventDate) {
+                                  
+                                            $status = '<span class="px-2 py-1 text-white bg-green-500 rounded-full">Ongoing</span>';
+                                        }elseif ($currentDate < $eventDate) {
                                             $status = '<span class="px-2 py-1 text-white bg-blue-500 rounded-full">Upcoming</span>';
-                                        } elseif ($currentDate == $eventDate) {
-
-                                            if ($currentTime < $amTimeIn) {
-
-                                                $status = '<span class="px-2 py-1 text-white bg-blue-500 rounded-full">Upcoming</span>';
-                                            } elseif ($currentTime >= $amTimeIn && $currentTime <= $amTimeOut) {
-
-                                                $status = '<span class="px-2 py-1 text-white bg-green-500 rounded-full">Ongoing (AM)</span>';
-                                            } elseif ($currentTime > $amTimeOut && $currentTime < $pmTimeIn) {
-
-                                                $status = '<span class="px-2 py-1 text-white bg-yellow-500 rounded-full">Break</span>';
-                                            } elseif ($currentTime >= $pmTimeIn && $currentTime <= $pmTimeOut) {
-
-                                                $status = '<span class="px-2 py-1 text-white bg-green-500 rounded-full">Ongoing (PM)</span>';
-                                            } else {
-
-                                                $status = '<span class="px-2 py-1 text-white bg-red-500 rounded-full">Done</span>';
-                                            }
+                                 
                                         } else {
-
+                                 
                                             $status = '<span class="px-2 py-1 text-white bg-red-500 rounded-full">Done</span>';
                                         }
 
+                      
                                         echo $status;
                                         ?>
                                     </td>

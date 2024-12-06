@@ -100,10 +100,41 @@
                             required />
                     </div>
                     <div>
-                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
-                        <input type="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
+                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
+                        <div class="relative">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10"
+                                required />
+                            <button
+                                type="button"
+                                class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+                                id="toggle-password">
+                                <svg
+                                    id="show-icon"
+                                    class="w-5 h-5 hidden"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.522 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                <svg
+                                    id="hide-icon"
+                                    class="w-5 h-5"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.467-3.991m3.158-2.452A9.961 9.961 0 0112 5c4.478 0 8.268 2.943 9.542 7-.442 1.413-1.181 2.683-2.162 3.758m-3.158 2.452A10.052 10.052 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.467-3.991M9.88 9.88l4.24 4.24M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
+
                     <div>
                         <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Avatar</label>
                         <input type="file" name="avatar" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -168,6 +199,10 @@
                         <input type="email" name="email" id="edit-email" class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required />
                     </div>
+                    <div>
+                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Edit Avatar</label>
+                        <input type="file" name="edit-avatar" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                    </div>
                     <button type="submit"
                         class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Update Admin</button>
                 </form>
@@ -177,6 +212,22 @@
 </div>
 
 <script>
+    document.getElementById('toggle-password').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const showIcon = document.getElementById('show-icon');
+        const hideIcon = document.getElementById('hide-icon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            showIcon.classList.remove('hidden');
+            hideIcon.classList.add('hidden');
+        } else {
+            passwordInput.type = 'password';
+            showIcon.classList.add('hidden');
+            hideIcon.classList.remove('hidden');
+        }
+    });
+
     document.querySelectorAll('[data-modal-hide]').forEach(button => {
         button.addEventListener('click', (event) => {
             const modalId = button.getAttribute('data-modal-hide');
@@ -207,7 +258,7 @@
         tbody.innerHTML = ''; // Clear existing table rows
 
         if (data.status === 'success') {
-            data.users.forEach((user, index) => { 
+            data.users.forEach((user, index) => {
                 const row = `
         <tr class="bg-white border-b text-xs text-center">
             <td class="px-2 py-3">${index + 1}</td> <!-- Index count starts from 1 -->

@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-  
+
         $amTimeInStart = $event['am_time_in'];   
         $amTimeOut = $event['am_time_out'];
         $pmTimeInStart = $event['pm_time_in'];     
@@ -48,21 +48,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         if ($session === 'AM') {
-            $timeInEnd = "{$currentDate} {$amTimeInStart}";
-            $timeOutStart = "{$currentDate} {$amTimeOut}";  
+            $scanStart = date('Y-m-d H:i:s', strtotime("{$currentDate} {$amTimeInStart} -1 hour"));
+            $scanEnd = "{$currentDate} {$amTimeInStart}";
+            $timeoutStart = date('Y-m-d H:i:s', strtotime("{$currentDate} {$amTimeOut} +30 minutes"));
         } else {
-            $timeInEnd = "{$currentDate} {$pmTimeInStart}"; 
-            $timeOutStart = "{$currentDate} {$pmTimeOut}";  
+            $scanStart = date('Y-m-d H:i:s', strtotime("{$currentDate} {$pmTimeInStart} -1 hour"));
+            $scanEnd = "{$currentDate} {$pmTimeInStart}";
+            $timeoutStart = date('Y-m-d H:i:s', strtotime("{$currentDate} {$pmTimeOut} +30 minutes"));
         }
 
-        if ($currentTime <= $timeInEnd) {
-            $type = 1; 
-        } elseif ($currentTime >= $timeOutStart) {
-            $type = 2; 
 
-     
+        if ($currentTime >= $scanStart && $currentTime <= $scanEnd) {
+   
+            $type = 1; // Time In
+        } elseif ($currentTime >= $timeoutStart) {
+  
+            $type = 2; // Time Out
         } else {
-
+    
             echo json_encode(['success' => false, 'message' => 'Attendance is only allowed during the scheduled times.']);
             exit;
         }
@@ -74,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
+   
         $attendanceSaved = $attendanceRepository->addAttendance($studentId, $eventId, $currentTime, $session, $type);
         if (!$attendanceSaved) {
             echo json_encode(['success' => false, 'message' => 'Failed to save attendance.']);
@@ -84,9 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $smsMessage = ($type === 1) 
             ? "You have successfully recorded your Time In for the event. Thank you for your participation!" 
             : "You have successfully recorded your Time Out for the event. Thank you for your participation!";
+        
         $smsSent = $sms->sendSMS($phoneNumber, $smsMessage);
+        
         $smsNotificationRepository->addSMSNotification($phoneNumber, $studentId, $smsMessage);
-
 
         echo json_encode(['success' => true, 'attendance_saved' => $attendanceSaved, 'sms_sent' => $smsSent]);
     } else {
@@ -95,3 +100,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
 }
+
+?>

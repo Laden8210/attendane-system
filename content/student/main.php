@@ -16,15 +16,14 @@ $events = $eventRepository->getEventByCourseAndSearch($student['COURSE'], $searc
             <div class="flex justify-end p-2">
                 <div class="items-center">
                     <div class="relative">
-                        <input 
-                            type="text" 
-                            name="search" 
-                            id="search" 
-                            class="w-full p-2 outline-none rounded border border-gray-300" 
-                            placeholder="Search Event" 
-                            value="<?php echo htmlspecialchars($search); ?>" 
-                            onkeyup="searchEvents()" 
-                        >
+                        <input
+                            type="text"
+                            name="search"
+                            id="search"
+                            class="w-full p-2 outline-none rounded border border-gray-300"
+                            placeholder="Search Event"
+                            value="<?php echo htmlspecialchars($search); ?>"
+                            onkeyup="searchEvents()">
                     </div>
                 </div>
             </div>
@@ -43,7 +42,18 @@ $events = $eventRepository->getEventByCourseAndSearch($student['COURSE'], $searc
                                             <p class="text-base"><span class="font-bold">Afternoon:</span> <?php echo date('h:i A', strtotime($event['pm_time_in'])); ?> - <?php echo date('h:i A', strtotime($event['pm_time_out'])); ?></p>
 
                                             <div class="text-end">
-                                                <span class="text-green-500"><?php echo (strtotime($event['event_date']) == strtotime(date('Y-m-d'))) ? 'On-going' : 'Upcoming'; ?></span>
+                                                <div class="text-end">
+                                                    <span class="<?php echo (strtotime($event['event_date']) < strtotime(date('Y-m-d'))) ? 'text-red-500' : ((strtotime($event['event_date']) == strtotime(date('Y-m-d'))) ? 'text-green-500' : 'text-blue-500'); ?>">
+                                                        <?php
+                                                        echo (strtotime($event['event_date']) < strtotime(date('Y-m-d')))
+                                                            ? 'Past'
+                                                            : ((strtotime($event['event_date']) == strtotime(date('Y-m-d')))
+                                                                ? 'On-going'
+                                                                : 'Upcoming');
+                                                        ?>
+                                                    </span>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -63,18 +73,17 @@ $events = $eventRepository->getEventByCourseAndSearch($student['COURSE'], $searc
 
 <script>
     function searchEvents() {
-    const searchInput = document.getElementById('search').value;
+        const searchInput = document.getElementById('search').value;
 
-    fetch(`index.php?search=${encodeURIComponent(searchInput)}`)
-        .then(response => response.text())
-        .then(html => {
+        fetch(`index.php?search=${encodeURIComponent(searchInput)}`)
+            .then(response => response.text())
+            .then(html => {
 
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const newEventList = doc.querySelector('#event-list').innerHTML;
-            document.querySelector('#event-list').innerHTML = newEventList;
-        })
-        .catch(error => console.error('Error fetching events:', error));
-}
-
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newEventList = doc.querySelector('#event-list').innerHTML;
+                document.querySelector('#event-list').innerHTML = newEventList;
+            })
+            .catch(error => console.error('Error fetching events:', error));
+    }
 </script>

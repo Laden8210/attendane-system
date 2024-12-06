@@ -53,23 +53,42 @@ class UserRepository
     }
 
 
-    public function updateUser($user_id, $course_id, $user_type_id, $first_name, $last_name, $middle_name, $email)
+    public function updateUser($user_id, $course_id, $user_type_id, $first_name, $last_name, $middle_name, $email, $avatar = null)
     {
-        $sql = "UPDATE users SET course_id = ?, user_type_id = ?, first_name = ?, last_name = ?, middle_name = ?, email = ?
-                WHERE user_id = ?";
+
+        $sql = "UPDATE users SET 
+                    course_id = ?, 
+                    user_type_id = ?, 
+                    first_name = ?, 
+                    last_name = ?, 
+                    middle_name = ?, 
+                    email = ?";
+    
+        if ($avatar !== null) {
+            $sql .= ", avatar_file_path = ?";
+        }
+    
+        $sql .= " WHERE user_id = ?";
+  
         $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
             die("ERROR: Could not prepare the statement: " . $this->conn->error);
         }
 
-        $stmt->bind_param("iissssi", $course_id, $user_type_id, $first_name, $last_name, $middle_name, $email, $user_id);
-
+        if ($avatar !== null) {
+            $stmt->bind_param("iisssssi", $course_id, $user_type_id, $first_name, $last_name, $middle_name, $email, $avatar, $user_id);
+        } else {
+            $stmt->bind_param("iissssi", $course_id, $user_type_id, $first_name, $last_name, $middle_name, $email, $user_id);
+        }
 
         $success = $stmt->execute();
-
+ 
         $stmt->close();
+    
+  
         return $success;
     }
+    
 
 
     public function deleteUser($user_id)
