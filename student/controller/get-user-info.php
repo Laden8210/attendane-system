@@ -37,9 +37,15 @@ if (!$student) {
     exit;
 }
 
+if($_GET['course'] != $student['COURSE']){
+    echo json_encode([
+        'success' => false,
+        'message' => 'Student does not belong to the department.',
+        'student_id' => $qrCode
+    ]);
+    exit;
+}
 
-
-// Prepare data to send back
 echo json_encode([
     'success' => true,
     'data' => [

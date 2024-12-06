@@ -131,7 +131,8 @@ if ($status !== 'On-going') {
 
 
     async function displayUserInfo(qrCodeMessage) {
-        const response = await fetch(`controller/get-user-info.php?qrCode=${qrCodeMessage}&event_id=${eventId}`);
+        const response = await fetch(`controller/get-user-info.php?qrCode=${qrCodeMessage}&event_id=${eventId}&course=${<?php echo $student['COURSE']; ?>}`);
+
         const userInfo = await response.json();
 
         if (userInfo.success) {
@@ -164,7 +165,7 @@ if ($status !== 'On-going') {
         } else {
             Swal.fire({
                 title: 'Error',
-                text: 'User information not found.',
+                text: userInfo.message,
                 icon: 'error',
                 confirmButtonText: 'OK'
             }).then(() => startScanning());

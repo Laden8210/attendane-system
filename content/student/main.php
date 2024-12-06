@@ -2,8 +2,8 @@
 
 require_once '../template/student-header.php';
 
-$search = isset($_GET['search']) ? $_GET['search'] : ''; // Capture the search term from the query string
-$events = $eventRepository->getEventByCourseAndSearch($student['COURSE'], $search); // Adjust the query to support search
+$search = isset($_GET['search']) ? $_GET['search'] : ''; 
+$events = $eventRepository->getEventByCourseAndSearch($student['COURSE'], $search);
 
 ?>
 <section class="w-full h-screen bg-violet-600">
