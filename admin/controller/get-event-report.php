@@ -3,7 +3,7 @@ require_once '../../repository/config.php';
 require_once '../../repository/AttendanceRepository.php';
 require_once '../../repository/EventRepository.php'; // Assuming you have an EventRepository
 require_once '../../vendor/tecnickcom/tcpdf/tcpdf.php';
-
+date_default_timezone_set('Asia/Manila');
 if (isset($_GET['event_id'])) {
     $eventId = $_GET['event_id'];
     $attendanceRepository = new AttendanceRepository($conn);
@@ -26,7 +26,8 @@ if (isset($_GET['event_id'])) {
     $pdf->SetSubject('Attendance Report');
 
   
-    $pdf->SetHeaderData('', 0, 'Attendance Report', "Event: " . htmlspecialchars($event['event_name']));
+    $pdf->SetHeaderData('', 0, 'Attendance Report', "Date Generated: " . date('Y-m-d'));
+
 
     $pdf->setHeaderFont(array('helvetica', '', 10));
     $pdf->setFooterFont(array('helvetica', '', 8));
