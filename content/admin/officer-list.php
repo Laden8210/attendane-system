@@ -169,8 +169,7 @@
                     <td class="px-2 py-3">******</td>
                     <td class="px-6 py-3">
                         <button class="text-xs rounded-full bg-red-600 hover:bg-red-500 px-2 py-1 text-white" onclick="deleteOfficer(${officer.OFFICER_ID})"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                        <button class="text-xs rounded-full bg-blue-600 hover:bg-blue-500 px-2 py-1 text-white" onclick="editOfficer(${officer.OFFICER_ID})"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                    </td>
+                                         </td>
                 </tr>
             `;
                     tbody.insertAdjacentHTML('beforeend', row);
@@ -298,3 +297,5 @@
         window.editOfficer = editOfficer;
     });
 </script>
+<!-- <button class="text-xs rounded-full bg-blue-600 hover:bg-blue-500 px-2 py-1 text-white" onclick="editOfficer(${officer.OFFICER_ID})"><i class="fa fa-edit" aria-hidden="true"></i></button>
+  -->
