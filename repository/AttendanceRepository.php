@@ -18,6 +18,8 @@ class AttendanceRepository
         $stmt->bind_param("iisss", $studentId, $eventId, $attendanceTime, $session, $type);
         return $stmt->execute();
     }
+
+    
     public function getAttendanceByEvent($eventId, $searchTerm = null)
     {
         if ($searchTerm) {

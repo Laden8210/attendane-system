@@ -35,10 +35,10 @@ class SMSNotificationRepository
     {
         $sql = "SELECT * FROM sms_notifications 
         JOIN students on students.GUARDIAN_PHONE_NO = sms_notifications.recipient_phone        
-        WHERE recipient_phone LIKE ? OR message LIKE ? ORDER BY sent_at DESC";
+        WHERE (recipient_phone LIKE ? OR message LIKE ?) AND students.COURSE = ? ORDER BY sent_at DESC";
         $searchTerm = '%' . $search . '%';
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", $searchTerm, $searchTerm);
+        $stmt->bind_param("sss", $searchTerm, $searchTerm, $course);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
