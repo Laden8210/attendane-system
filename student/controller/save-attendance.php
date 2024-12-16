@@ -1,5 +1,4 @@
 <?php
-
 date_default_timezone_set('Asia/Manila');
 require_once '../../function/SMS.php';
 require_once '../../repository/config.php';
@@ -35,52 +34,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        
-        $amTimeInStart = $event['am_time_in'];   
-        $amTimeOut = $event['am_time_out'];
-        $pmTimeInStart = $event['pm_time_in'];     
-        $pmTimeOut = $event['pm_time_out'];       
+        $amTimeInStart = $event['am_time_in'];  // e.g., "07:00"
+        $amTimeOut = $event['am_time_out'];    // e.g., "12:00"
+        $pmTimeInStart = $event['pm_time_in']; // e.g., "13:00"
+        $pmTimeOut = $event['pm_time_out'];    // e.g., "17:00"
 
         $studentId = $student['STUDENT_ID'];
         $currentTime = date('Y-m-d H:i:s');
         $currentDate = date('Y-m-d');
-        $currentHour = date('H:i:s');
 
-        // Define session boundaries
-        $amBoundary = strtotime("{$currentDate} 12:00:00");
-        $isMorning = strtotime($currentTime) < $amBoundary;
+        // Session boundaries
+        $morningEnd = strtotime("{$currentDate} 12:00:00");
+        $isMorning = strtotime($currentTime) < $morningEnd;
 
         if ($isMorning) {
-            $scanStart = date('Y-m-d H:i:s', strtotime("{$currentDate} {$amTimeInStart} -1 hour"));
-            $scanEnd = "{$currentDate} {$amTimeInStart}";
-            $timeoutStart = date('Y-m-d H:i:s', strtotime("{$currentDate} {$amTimeOut} +30 minutes"));
+            // Time-in period: 1 hour before to 1 hour 30 minutes after
+            $scanStart = strtotime("{$currentDate} {$amTimeInStart} -1 hour");
+            $lateStart = strtotime("{$currentDate} {$amTimeInStart} +1 minute");
+            $scanEnd = strtotime("{$currentDate} {$amTimeInStart} +1 hour 30 minutes");
+
+            // Time-out period: Event end time + 40 minutes
+            $timeoutStart = strtotime("{$currentDate} {$amTimeOut}");
+            $timeoutEnd = strtotime("{$currentDate} {$amTimeOut} +40 minutes");
+
             $session = 'AM';
         } else {
-            $scanStart = date('Y-m-d H:i:s', strtotime("{$currentDate} {$pmTimeInStart} -1 hour"));
-            $scanEnd = "{$currentDate} {$pmTimeInStart}";
-            $timeoutStart = date('Y-m-d H:i:s', strtotime("{$currentDate} {$pmTimeOut} +30 minutes"));
+            // Time-in period: 1 hour after the event resumes
+            $scanStart = strtotime("{$currentDate} {$pmTimeInStart}");
+            $scanEnd = strtotime("{$currentDate} {$pmTimeInStart} +1 hour");
+
+            // Time-out period: Event end time + 1 hour
+            $timeoutStart = strtotime("{$currentDate} {$pmTimeOut}");
+            $timeoutEnd = strtotime("{$currentDate} {$pmTimeOut} +1 hour");
+
             $session = 'PM';
         }
 
-        // Determine attendance type
-        if ($currentTime >= $scanStart && $currentTime <= $scanEnd) {
-            $type = 1; // Time In
-        } elseif ($currentTime >= $timeoutStart) {
-            $type = 2; // Time Out
+        $currentTimestamp = strtotime($currentTime);
+
+        // Determine attendance type (Time-In or Time-Out)
+        if ($currentTimestamp >= $scanStart && $currentTimestamp <= $scanEnd) {
+            $type = 1; // Time-In
+            $status = ($currentTimestamp >= $lateStart) ? 'Late' : 'On Time';
+        } elseif ($currentTimestamp >= $timeoutStart && $currentTimestamp <= $timeoutEnd) {
+            $type = 2; // Time-Out
+            $status = 'On Time';
         } else {
-            echo json_encode(['success' => false, 'message' => 'Attendance is only allowed during the scheduled times.']);
+            echo json_encode(['success' => false, 'message' => 'Attendance is not allowed outside the scheduled times.']);
             exit;
         }
 
         // Check for duplicate attendance
-        $alreadyClockedInOrOut = $attendanceRepository->hasClockedInOrOut($studentId, $eventId, $session, $type);
-        if ($alreadyClockedInOrOut) {
-            echo json_encode(['success' => false, 'message' => 'You have already recorded this type of attendance for this session.']);
+        $alreadyClocked = $attendanceRepository->hasClockedInOrOut($studentId, $eventId, $session, $type);
+        if ($alreadyClocked) {
+            echo json_encode(['success' => false, 'message' => 'Attendance already recorded for this session.']);
             exit;
         }
 
         // Save attendance
-        $attendanceSaved = $attendanceRepository->addAttendance($studentId, $eventId, $currentTime, $session, $type);
+        $attendanceSaved = $attendanceRepository->addAttendance($studentId, $eventId, $currentTime, $session, $type, $status);
         if (!$attendanceSaved) {
             echo json_encode(['success' => false, 'message' => 'Failed to save attendance.']);
             exit;
@@ -89,18 +101,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Send SMS notification
         $phoneNumber = $student['GUARDIAN_PHONE_NO'];
         $smsMessage = ($type === 1) 
-            ? "You have successfully recorded your Time In for the event. Thank you for your participation!" 
-            : "You have successfully recorded your Time Out for the event. Thank you for your participation!";
-        
+            ? "Dear Parents/Guardians, This confirms your child's attendance at Philippine College of Northwestern Luzon. Time-In: {$currentTime}. Status: {$status}. Best regards, [PCNL]"
+            : "Dear Parents/Guardians, This confirms your child's departure from the school event at PCNL. Time-Out: {$currentTime}. Best regards, [PCNL]";
+
         $smsSent = $sms->sendSMS($phoneNumber, $smsMessage);
         $smsNotificationRepository->addSMSNotification($phoneNumber, $studentId, $smsMessage);
 
-        echo json_encode(['success' => true, 'attendance_saved' => $attendanceSaved, 'sms_sent' => $smsSent]);
+        echo json_encode([
+            'success' => true, 
+            'attendance_saved' => $attendanceSaved, 
+            'sms_sent' => $smsSent,
+            'status' => $status
+        ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Invalid QR code or event ID data.']);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
 }
-
 ?>
