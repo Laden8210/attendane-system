@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('Asia/Manila');
 require_once '../template/student-header.php';
 
 $search = isset($_GET['search']) ? $_GET['search'] : ''; 
