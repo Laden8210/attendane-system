@@ -55,6 +55,7 @@ class StudentRepository
         FROM students 
         JOIN officers 
         ON students.STUDENT_ID = officers.STUDENT_ID 
+        JOIN course ON students.COURSE = course.ID
         WHERE officers.OFFICER_ID = ?");
 
         $stmt->bind_param("i", $id);
