@@ -10,12 +10,12 @@ class AttendanceRepository
     }
 
 
-    public function addAttendance($studentId, $eventId, $attendanceTime, $session, $type)
+    public function addAttendance($studentId, $eventId, $attendanceTime, $session, $type, $status)
     {
-        $sql = "INSERT INTO attendance (student_id, event_id, attendance_time, session, type)
-                VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO attendance (student_id, event_id, attendance_time, session, type, status)
+                VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iisss", $studentId, $eventId, $attendanceTime, $session, $type);
+        $stmt->bind_param("iisss", $studentId, $eventId, $attendanceTime, $session, $type, $status);
         return $stmt->execute();
     }
 

@@ -84,6 +84,7 @@ if (isset($_GET['event_id'])) {
                 <th >Attendance Time</th>
                 <th >Session</th>
                 <th>Type</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>';
@@ -100,7 +101,7 @@ if (isset($_GET['event_id'])) {
             <td>' . htmlspecialchars($attendance['COURSE_NAME'] . ' - ' . $attendance['YEAR']) . '</td>
             <td>' . htmlspecialchars($attendance['attendance_time']) . '</td>
             <td>' . strtoupper(htmlspecialchars($attendance['session'])) . '</td>
-
+           <td>' . strtoupper(htmlspecialchars($attendance['status'])) . '</td>
             
             <td>' .  strtoupper(htmlspecialchars($type)) . '</td>
         </tr>';
