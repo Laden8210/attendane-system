@@ -61,7 +61,7 @@ if (isset($_FILES['edit-avatar']) && $_FILES['edit-avatar']['error'] === UPLOAD_
     }
 }
 
-$success = $userRepository->updateUser($userId, $courseId, $userTypeId, $firstName, $lastName, $middleName, $email, $file_name);
+$success = $userRepository->updateUser($userId, $courseId, $firstName, $lastName, $middleName, $email, $file_name);
 
 if ($success) {
     echo json_encode(['status' => 'success', 'message' => 'User updated successfully.']);

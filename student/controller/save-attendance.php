@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $currentDate = date('Y-m-d');
 
         // Session boundaries
-        $morningEnd = strtotime("{$currentDate} 12:00:00");
+        $morningEnd = strtotime("{$currentDate}  $amTimeOut");
         $isMorning = strtotime($currentTime) < $morningEnd;
 
         if ($isMorning) {
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $timeoutEnd = strtotime("{$currentDate} {$amTimeOut} +40 minutes");
 
             $session = 'AM';
-        } else {
+        }else {
             // Time-in period: 1 hour after the event resumes
             $scanStart = strtotime("{$currentDate} {$pmTimeInStart}");
             $scanEnd = strtotime("{$currentDate} {$pmTimeInStart} +1 hour");

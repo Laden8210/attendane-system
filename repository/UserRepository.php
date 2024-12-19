@@ -53,12 +53,12 @@ class UserRepository
     }
 
 
-    public function updateUser($user_id, $course_id, $user_type_id, $first_name, $last_name, $middle_name, $email, $avatar = null)
+    public function updateUser($user_id, $course_id, $first_name, $last_name, $middle_name, $email, $avatar = null)
     {
 
         $sql = "UPDATE users SET 
                     course_id = ?, 
-                    user_type_id = ?, 
+       
                     first_name = ?, 
                     last_name = ?, 
                     middle_name = ?, 
@@ -76,9 +76,9 @@ class UserRepository
         }
 
         if ($avatar !== null) {
-            $stmt->bind_param("iisssssi", $course_id, $user_type_id, $first_name, $last_name, $middle_name, $email, $avatar, $user_id);
+            $stmt->bind_param("isssssi", $course_id,  $first_name, $last_name, $middle_name, $email, $avatar, $user_id);
         } else {
-            $stmt->bind_param("iissssi", $course_id, $user_type_id, $first_name, $last_name, $middle_name, $email, $user_id);
+            $stmt->bind_param("issssi", $course_id,  $first_name, $last_name, $middle_name, $email, $user_id);
         }
 
         $success = $stmt->execute();
