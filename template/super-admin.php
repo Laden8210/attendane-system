@@ -24,6 +24,7 @@
 </head>
 
 <body class="bg-violet-600">
+
 <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-violet-500" aria-label="Sidebar">
     <div class="h-full px-4 py-6 overflow-y-auto">
         <!-- User Profile Section -->
@@ -78,6 +79,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
+<script>
+        // JavaScript to toggle the sidebar
+        document.getElementById('burger-button').addEventListener('click', function() {
+            const sidebar = document.getElementById('default-sidebar');
+            sidebar.classList.toggle('-translate-x-full'); // Toggle the sidebar visibility
+        });
+
+        // Hide sidebar when clicking outside of it
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('default-sidebar');
+            const burgerButton = document.getElementById('burger-button');
+
+            // Check if the click was outside the sidebar and the burger button
+            if (!sidebar.contains(event.target) && !burgerButton.contains(event.target)) {
+                sidebar.classList.add('-translate-x-full'); // Hide the sidebar
+            }
+        });
+    </script>
 
 <script src="../resource/js/script.js"></script>
 

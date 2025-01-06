@@ -5,13 +5,11 @@
                 <h1 class="text-2xl font-bold">Event Report List</h1>
                 <hr class="h-2 bg-cyan-500">
             </div>
-            <div class="h-96 bg-slate-100 rounded ">
-                <div class="flex justify-end p-2 text-white">
-
-                    <div class="flex justify-end gap-2 items-center">
-
+            <div class="h-96 bg-slate-100 rounded overflow-auto">
+                <div class="flex flex-col md:flex-row justify-between p-2 text-white">
+                    <div class="flex justify-end gap-2 items-center w-full md:w-auto">
                         <label for="search" class="text-black">Search</label>
-                        <input name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" id="search" />
+                        <input name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1 w-full md:w-auto" id="search" />
                     </div>
                 </div>
 

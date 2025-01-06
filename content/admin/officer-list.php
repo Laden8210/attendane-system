@@ -1,27 +1,26 @@
-<section class=" bg-violet-600 h-screen overflow-auto">
-    <div class="w-full px-10 py-5">
+<section class="bg-violet-600 h-screen overflow-auto">
+    <div class="w-full px-4 py-5 md:px-10 md:py-5">
         <div class="bg-slate-50 w-full h-screen rounded-lg overflow-x-hidden overflow-y-auto">
             <div class="pt-5 px-2 text-center">
                 <h1 class="text-2xl font-bold">Officer Account</h1>
                 <hr class="h-2 bg-cyan-500">
             </div>
-            <div class="h-96 bg-slate-100 rounded">
-                <div class="flex justify-between p-2 text-white">
+            <div class="h-auto bg-slate-100 rounded">
+                <div class="flex flex-col md:flex-row justify-between p-2 text-white">
                     <div>
-                        <button data-modal-target="add-officer-modal" data-modal-toggle="add-officer-modal" class="shadow rounded bg-blue-500 px-2 py-1">
+                        <button data-modal-target="add-officer-modal" data-modal-toggle="add-officer-modal" class="shadow rounded bg-blue-500 px-4 py-2">
                             <i class="fa fa-plus" aria-hidden="true"></i> Add New
                         </button>
                     </div>
-                    <div class="flex justify-end gap-2 items-center">
+                    <div class="flex flex-col md:flex-row justify-end gap-2 items-center mt-2 md:mt-0">
                         <label for="search" class="text-black">Search</label>
                         <input name="search" id="search" type="search" placeholder="Search"
-                            class="text-black outline-none border border-slate-700 px-2 py-1"
+                            class="text-black outline-none border border-slate-700 px-2 py-1 w-full md:w-auto"
                             onkeyup="searchTable()" />
                     </div>
-
                 </div>
-                <div class="p-2 rounded-lg drop-shadow">
-                    <table class="w-full">
+                <div class="p-2 rounded-lg drop-shadow overflow-x-auto">
+                    <table class="min-w-full table-auto">
                         <thead class="text-xs uppercase bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-2 py-3">#</th>

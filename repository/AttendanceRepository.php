@@ -30,7 +30,8 @@ class AttendanceRepository
                     JOIN students ON attendance.student_id = students.STUDENT_ID
                     JOIN course ON students.COURSE = course.ID
                     WHERE attendance.event_id = ? AND (students.FIRST_NAME LIKE ? OR students.LAST_NAME LIKE ?)
-                    GROUP BY students.STUDENT_ID, attendance.attendance_id"; 
+                    GROUP BY students.STUDENT_ID, attendance.attendance_id
+                    ORDER BY attendance.attendance_time IS NULL, attendance.attendance_time ASC";
             $searchTerm = "%" . $searchTerm . "%";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("iss", $eventId, $searchTerm, $searchTerm);
@@ -42,7 +43,8 @@ class AttendanceRepository
                     JOIN students ON attendance.student_id = students.STUDENT_ID
                     JOIN course ON students.COURSE = course.ID
                     WHERE attendance.event_id = ?
-                    GROUP BY students.STUDENT_ID, attendance.attendance_id"; 
+                    GROUP BY students.STUDENT_ID, attendance.attendance_id
+                    ORDER BY attendance.attendance_time IS NULL, attendance.attendance_time ASC";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("i", $eventId);
         }

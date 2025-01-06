@@ -34,41 +34,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
+        // Fetching time data from the database
         $amTimeInStart = $event['am_time_in'];  // e.g., "07:00"
         $amTimeOut = $event['am_time_out'];    // e.g., "12:00"
         $pmTimeInStart = $event['pm_time_in']; // e.g., "13:00"
         $pmTimeOut = $event['pm_time_out'];    // e.g., "17:00"
 
-        $studentId = $student['STUDENT_ID'];
         $currentTime = date('Y-m-d H:i:s');
+        $currentTimestamp = strtotime($currentTime);
         $currentDate = date('Y-m-d');
 
-        // Session boundaries
-        $morningEnd = strtotime("{$currentDate}  $amTimeOut");
-        $isMorning = strtotime($currentTime) < $morningEnd;
-
-        if ($isMorning) {
-            // Time-in period: 1 hour before to 1 hour 30 minutes after
+        // Determine session based on current time
+        if ($currentTimestamp >= strtotime("{$currentDate} {$amTimeInStart}") && $currentTimestamp <= strtotime("{$currentDate} {$amTimeOut} +40 minutes")) {
+            // Morning session
             $scanStart = strtotime("{$currentDate} {$amTimeInStart} -1 hour");
             $lateStart = strtotime("{$currentDate} {$amTimeInStart} +1 minute");
             $scanEnd = strtotime("{$currentDate} {$amTimeInStart} +1 hour 30 minutes");
-
-            // Time-out period: Event end time + 40 minutes
             $timeoutStart = strtotime("{$currentDate} {$amTimeOut}");
             $timeoutEnd = strtotime("{$currentDate} {$amTimeOut} +40 minutes");
-
             $session = 'AM';
-        }else {
-            // Time-in period: 1 hour after the event resumes
+        } elseif ($currentTimestamp >= strtotime("{$currentDate} {$pmTimeInStart}") && $currentTimestamp <= strtotime("{$currentDate} {$pmTimeOut} +1 hour")) {
+            // Afternoon session
             $scanStart = strtotime("{$currentDate} {$pmTimeInStart}");
             $scanEnd = strtotime("{$currentDate} {$pmTimeInStart} +1 hour");
-
-            // Time-out period: Event end time + 1 hour
             $timeoutStart = strtotime("{$currentDate} {$pmTimeOut}");
             $timeoutEnd = strtotime("{$currentDate} {$pmTimeOut} +1 hour");
-
             $session = 'PM';
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Attendance is not allowed outside the scheduled times.']);
+            exit;
         }
+
+        $studentId = $student['STUDENT_ID'];
+        $currentTime = date('Y-m-d H:i:s');
+        $currentDate = date('Y-m-d');
 
         $currentTimestamp = strtotime($currentTime);
 

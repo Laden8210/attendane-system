@@ -7,48 +7,69 @@ $students = $studentRepository->readByCourse($user['course_id']);
 
 <script>
     const qrCodeSize = 200;
-    const padding = 20;
 
-    function generateQrCode(studentNumber) {
-        const canvas = document.getElementById("qrcode-" + studentNumber);
-        const context = canvas.getContext('2d');
+    const textPadding = 30;
 
 
+    const padding = 30;
 
-        canvas.width = qrCodeSize;
-        canvas.height = qrCodeSize;
+    function generateQrCode(studentNumber, studentName) {
+        const qrCanvas = document.getElementById("qrcode-" + studentNumber);
+        const qrContext = qrCanvas.getContext('2d');
 
-        context.fillStyle = '#ffffff';
-        context.fillRect(0, 0, qrCodeSize, qrCodeSize);
+        const canvasHeight = qrCodeSize + textPadding;
+        qrCanvas.width = qrCodeSize;
+        qrCanvas.height = canvasHeight;
+
+        qrContext.fillStyle = '#ffffff';
+        qrContext.fillRect(0, 0, qrCanvas.width, qrCanvas.height);
 
         QrCreator.render({
             text: studentNumber,
             radius: 0.1,
             ecLevel: 'H',
-            fill: '#000',
+            fill: '#000000',
             background: '#ffffff',
-            size: qrCodeSize
-        }, canvas);
-    }
+            size: qrCodeSize,
+        }, qrCanvas);
 
+        const combinedCanvas = document.createElement('canvas');
+        combinedCanvas.id = "qrcode-" + studentNumber; 
+        const combinedContext = combinedCanvas.getContext('2d');
+        const paddedWidth = qrCodeSize + padding * 2;
+        const paddedHeight = canvasHeight + padding;
+        combinedCanvas.width = paddedWidth;
+        combinedCanvas.height = paddedHeight;
+
+        combinedContext.fillStyle = '#ffffff';
+        combinedContext.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
+
+        combinedContext.drawImage(qrCanvas, padding, padding);
+
+        const text = studentName;
+        combinedContext.fillStyle = '#000000';
+        combinedContext.font = '14px Arial';
+        const textWidth = combinedContext.measureText(text).width;
+        const textX = (combinedCanvas.width - textWidth) / 2;
+        const textY = qrCodeSize + padding + 20;
+
+        combinedContext.fillText(text, textX, textY);
+
+        qrCanvas.parentNode.replaceChild(combinedCanvas, qrCanvas);
+    }
 
     function downloadQRCode(studentNumber) {
         const qrCodeCanvas = document.getElementById("qrcode-" + studentNumber);
-        const paddedWidth = qrCodeSize + padding * 2;
-        const paddedHeight = qrCodeSize + padding * 2;
-        const paddedCanvas = document.createElement('canvas');
-        paddedCanvas.width = paddedWidth;
-        paddedCanvas.height = paddedHeight;
-        const paddedContext = paddedCanvas.getContext('2d');
-        paddedContext.fillStyle = '#ffffff';
-        paddedContext.fillRect(0, 0, paddedWidth, paddedHeight);
-
-        paddedContext.drawImage(qrCodeCanvas, padding, padding);
+        if (!qrCodeCanvas) {
+            console.error("QR Code canvas not found for student:", studentNumber);
+            return;
+        }
         const link = document.createElement('a');
         link.download = 'QRCode_' + studentNumber + '.png';
-        link.href = paddedCanvas.toDataURL('image/png');
+        link.href = qrCodeCanvas.toDataURL('image/png');
         link.click();
     }
+
 
     function searchTable() {
         const searchInput = document.getElementById("search").value.toLowerCase();
@@ -69,86 +90,79 @@ $students = $studentRepository->readByCourse($user['course_id']);
                 <hr class="h-2 bg-cyan-500">
             </div>
             <div class="bg-slate-100 rounded" style="height: 70vh;">
-                <div class="flex justify-between p-2 text-white">
-                    <div>
+                <div class="flex flex-col md:flex-row justify-between p-2 text-white">
+                    <div class="mb-2 md:mb-0">
                         <button data-modal-target="add-student-modal" data-modal-toggle="add-student-modal"
-                            class="shadow rounded bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 transition-colors duration-200">
+                            class="shadow rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 transition-colors duration-200">
                             <i class="fa fa-plus" aria-hidden="true"></i> Add New
                         </button>
                     </div>
 
-                    <div class="flex justify-end gap-2 items-center">
-
+                    <div class="flex flex-col md:flex-row justify-end gap-2 items-center">
                         <label for="search" class="text-black">Search</label>
-                        <input id="search" name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" onkeyup="searchTable()" />
+                        <input id="search" name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-4 py-2" onkeyup="searchTable()" />
                     </div>
                 </div>
 
                 <div class="p-2 rounded-lg drop-shadow">
-                    <table class="w-full">
-                        <thead class="text-xs uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-2 py-3">Student Number</th>
-                                <th scope="col" class="px-6 py-3">Avatar</th>
-
-                                <th scope="col" class="px-6 py-3">Last Name</th>
-                                <th scope="col" class="px-6 py-3">First Name</th>
-                                <th scope="col" class="px-6 py-3">Course/YL</th>
-                                <th scope="col" class="px-6 py-3">Block</th>
-                                <th scope="col" class="px-6 py-3">Guardian Phone No.</th>
-                                <th scope="col" class="px-6 py-3">QR Code</th>
-                                <th scope="col" class="px-6 py-3">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($students as $student) {
-                                $imageData = base64_decode($student['AVATAR']);
-                                $mimeType = 'image/jpeg';
-                                $dataUrl = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                            ?>
-                                <tr class="bg-white border-b text-xs text-center">
-                                    <td class="px-6 py-3"><?php echo $student['STUDENT_NUMBER'] ?></td>
-                                    <td class="px-6 py-3">
-                                        <div class="w-20 h-20 shadow-xl drop-shadow rounded-full flex items-center overflow-hidden">
-                                            <img class="w-full h-full" src="<?php echo htmlspecialchars($dataUrl); ?>" alt="gallery-image" />
-                                        </div>
-                                    </td>
-
-                                    <td class="px-6 py-3"><?php echo $student['LAST_NAME'] ?></td>
-                                    <td class="px-6 py-3"><?php echo $student['FIRST_NAME'] ?></td>
-                                    <td class="px-6 py-3"><?php echo $student['COURSE_NAME'] . '-' . $student['YEAR'] ?></td>
-                                    <td class="px-6 py-3">Block <?php echo $student['BLOCK'] ?></td>
-                                    <td class="px-6 py-3"><?php echo $student['GUARDIAN_PHONE_NO'] ?></td>
-
-                                    <td class="px-6 py-3">
-                                        <canvas id="qrcode-<?php echo $student['STUDENT_NUMBER']; ?>" class="inline-block p-2 rounded shadow">
-                                            <!-- QR Code will be generated here -->
-                                        </canvas>
-
-                                        <script>
-                                            generateQrCode('<?php echo $student['STUDENT_NUMBER']; ?>');
-                                        </script>
-                                    </td>
-
-                                    <td class="px-6 py-3">
-                                        <button onclick="downloadQRCode('<?php echo $student['STUDENT_NUMBER']; ?>')" class="mt-2 bg-blue-500 text-white rounded px-2 py-1"><i class="fa fa-download" aria-hidden="true"></i></button>
-                                        <button class="text-xs rounded bg-red-600 hover:bg-red-500 px-2 py-1 text-white"
-                                            onclick="deleteStudent(<?php echo $student['STUDENT_ID']; ?>)"
-                                            type="button">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </button>
-                                        <button class="text-xs rounded bg-yellow-500 hover:bg-yellow-400 px-2 py-1 text-white"
-                                            onclick="openEditStudentModal(<?php echo htmlspecialchars(json_encode($student)); ?>)">
-                                            <i class="fa fa-edit" aria-hidden="true"></i>
-                                        </button>
-
-
-                                    </td>
-
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="text-xs uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-2 py-3">Student Number</th>
+                                    <th scope="col" class="px-6 py-3">Avatar</th>
+                                    <th scope="col" class="px-6 py-3">Last Name</th>
+                                    <th scope="col" class="px-6 py-3">First Name</th>
+                                    <th scope="col" class="px-6 py-3">Course/YL</th>
+                                    <th scope="col" class="px-6 py-3">Block</th>
+                                    <th scope="col" class="px-6 py-3">Guardian Phone No.</th>
+                                    <th scope="col" class="px-6 py-3">QR Code</th>
+                                    <th scope="col" class="px-6 py-3">Action</th>
                                 </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($students as $student) {
+                                    $imageData = base64_decode($student['AVATAR']);
+                                    $mimeType = 'image/jpeg';
+                                    $dataUrl = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                                ?>
+                                    <tr class="bg-white border-b text-xs text-center">
+                                        <td class="px-6 py-3"><?php echo $student['STUDENT_NUMBER'] ?></td>
+                                        <td class="px-6 py-3">
+                                            <div class="w-20 h-20 shadow-xl drop-shadow rounded-full flex items-center overflow-hidden">
+                                                <img class="w-full h-full" src="<?php echo htmlspecialchars($dataUrl); ?>" alt="gallery-image" />
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-3"><?php echo $student['LAST_NAME'] ?></td>
+                                        <td class="px-6 py-3"><?php echo $student['FIRST_NAME'] ?></td>
+                                        <td class="px-6 py-3"><?php echo $student['COURSE_NAME'] . '-' . $student['YEAR'] ?></td>
+                                        <td class="px-6 py-3">Block <?php echo $student['BLOCK'] ? $student['BLOCK'] : 'No Block'; ?></td>
+                                        <td class="px-6 py-3"><?php echo $student['GUARDIAN_PHONE_NO'] ?></td>
+                                        <td class="px-6 py-3">
+                                            <canvas id="qrcode-<?php echo $student['STUDENT_NUMBER']; ?>" class="inline-block p-2 rounded shadow">
+                                                <!-- QR Code will be generated here -->
+                                            </canvas>
+                                            <script>
+                                                generateQrCode('<?php echo $student['STUDENT_NUMBER']; ?>', '<?php echo htmlspecialchars($student['FIRST_NAME'] . ' ' . $student['LAST_NAME']); ?>');
+                                            </script>
+                                        </td>
+                                        <td class="px-6 py-3">
+                                            <button onclick="downloadQRCode('<?php echo $student['STUDENT_NUMBER']; ?>')" class="mt-2 bg-blue-500 text-white rounded px-2 py-1"><i class="fa fa-download" aria-hidden="true"></i></button>
+                                            <button class="text-xs rounded bg-red-600 hover:bg-red-500 px-2 py-1 text-white"
+                                                onclick="deleteStudent(<?php echo $student['STUDENT_ID']; ?>)"
+                                                type="button">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                            <button class="text-xs rounded bg-yellow-500 hover:bg-yellow-400 px-2 py-1 text-white"
+                                                onclick="openEditStudentModal(<?php echo htmlspecialchars(json_encode($student)); ?>)">
+                                                <i class="fa fa-edit" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

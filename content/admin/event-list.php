@@ -3,35 +3,34 @@ date_default_timezone_set('Asia/Manila');
 ?>
 <section class=" bg-violet-600 h-screen overflow-auto">
     <div class="w-full px-10 py-5">
-        <div class="bg-slate-50 w-full h-screen rounded-lg overflow-x-hidden overflow-y-auto ">
+        <div class="bg-slate-50 w-full  rounded-lg overflow-x-hidden overflow-y-auto ">
             <div class="pt-5 px-2 text-center">
                 <h1 class="text-2xl font-bold">Event List</h1>
                 <hr class="h-2 bg-cyan-500">
             </div>
-            <div class="h-96 bg-slate-100 rounded ">
-                <div class="flex justify-between p-2 text-white">
-                    <div>
+            <div class="h-96 bg-slate-100 rounded overflow-x-auto">
+                <div class="flex justify-between p-2 text-white flex-col md:flex-row">
+                    <div class="mb-2 md:mb-0">
                         <button data-modal-target="add-event-modal" data-modal-toggle="add-event-modal" class="shadow rounded bg-blue-500 px-2 py-1"><i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
                     </div>
-                    <div class="flex justify-end gap-2 items-center">
-
+                    <div class="flex justify-end gap-2 items-center w-full md:w-auto">
                         <label for="search" class="text-black">Search</label>
-                        <input name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1" id="search" />
+                        <input name="search" type="search" placeholder="Search" class="text-black outline-none border border-slate-700 px-2 py-1 w-full md:w-48" id="search" />
                     </div>
                 </div>
 
                 <div class="p-2 rounded-lg drop-shadow">
-                    <table class="w-full h-full">
+                    <table class="w-full h-full table-auto">
                         <thead class="text-xs uppercase bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-2 py-3">#</th>
-                                <th scope="col" class="px-6 py-3">Title</th>
-                                <th scope="col" class="px-6 py-3">Date</th>
-                                <th scope="col" class="px-6 py-3">Description</th>
-                                <th scope="col" class="px-6 py-3">Details</th>
-                                <th scope="col" class="px-6 py-3">Status</th>
-                                <th scope="col" class="px-6 py-3">Time AM - PM</th>
-                                <th scope="col" class="px-6 py-3">Action</th>
+                                <th scope="col" class="px-2 py-3 text-sm md:text-base">#</th>
+                                <th scope="col" class="px-2 py-3 text-sm md:text-base">Title</th>
+                                <th scope="col" class="px-2 py-3 text-sm md:text-base">Date</th>
+                                <th scope="col" class="px-2 py-3 text-sm md:text-base">Description</th>
+                                <th scope="col" class="px-2 py-3 text-sm md:text-base">Details</th>
+                                <th scope="col" class="px-2 py-3 text-sm md:text-base">Status</th>
+                                <th scope="col" class="px-2 py-3 text-sm md:text-base">Time AM - PM</th>
+                                <th scope="col" class="px-2 py-3 text-sm md:text-base">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,13 +39,13 @@ date_default_timezone_set('Asia/Manila');
                             $count = 1;
                             foreach ($events as $event) : ?>
                                 <tr class="bg-white border-b text-xs text-center">
-                                    <td class="px-2 py-3"><?= $count++ ?></td>
-                                    <td class="px-6 py-3"><?= $event['event_name'] ?></td>
-                                    <td class="px-6 py-3"><?= date('F j, Y', strtotime($event['event_date'])) ?></td>
-                                    <td class="px-6 py-3"><?= $event['description'] ?></td>
-                                    <td class="px-6 py-3"><?= $event['details'] ?></td>
+                                    <td class="px-2 py-3 text-sm md:text-base"><?= $count++ ?></td>
+                                    <td class="px-2 py-3 text-sm md:text-base"><?= $event['event_name'] ?></td>
+                                    <td class="px-2 py-3 text-sm md:text-base"><?= date('F j, Y', strtotime($event['event_date'])) ?></td>
+                                    <td class="px-2 py-3 text-sm md:text-base"><?= $event['description'] ?></td>
+                                    <td class="px-2 py-3 text-sm md:text-base"><?= $event['details'] ?></td>
 
-                                    <td class="px-6 py-3">
+                                    <td class="px-2 py-3 text-sm md:text-base">
                                         <?php
                                         // Get current date
                                         $currentDate = date('Y-m-d');
@@ -75,7 +74,7 @@ date_default_timezone_set('Asia/Manila');
                                     </td>
 
 
-                                    <td class="px-6 py-3">
+                                    <td class="px-2 py-3 text-sm md:text-base">
                                         <?=
                                         date('g:i A', strtotime($event['am_time_in'])) . ' - ' . date('g:i A', strtotime($event['am_time_out'])) . ' : ' .
                                             date('g:i A', strtotime($event['pm_time_in'])) . ' - ' . date('g:i A', strtotime($event['pm_time_out']))
@@ -83,9 +82,9 @@ date_default_timezone_set('Asia/Manila');
                                     </td>
 
 
-                                    <td class="px-6 py-3">
-                                        <button class="bg-blue-500 px-2 py-1 rounded text-white" onclick="editEvent(<?= $event['id'] ?>)">Edit</button>
-                                        <button class="bg-red-500 px-2 py-1 rounded text-white" onclick="deleteEvent(<?= $event['id'] ?>)">Delete</button>
+                                    <td class="px-2 py-3 flex flex-col md:flex-row gap-2">
+                                        <button class="bg-blue-500 px-2 py-1 rounded text-white text-sm md:text-base" onclick="editEvent(<?= $event['id'] ?>)">Edit</button>
+                                        <button class="bg-red-500 px-2 py-1 rounded text-white text-sm md:text-base" onclick="deleteEvent(<?= $event['id'] ?>)">Delete</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

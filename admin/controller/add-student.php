@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $requiredFields = [
         'last-name' => 'Last Name',
         'first-name' => 'First Name',
-        'block' => 'Block',
+
         'guardian-phone' => 'Guardian Phone Number',
         'year' => 'Year',
         'avatar' => 'Avatar'

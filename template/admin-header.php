@@ -20,6 +20,11 @@
         <!-- Right Section: Placeholder for Future Features -->
         <div class="text-white">
             <!-- Placeholder or Add Navigation Items Here -->
+
+            <button id="burger-button" class="sm:hidden p-2 text-white">
+                <i class="fa fa-bars"></i>
+            </button>
+
         </div>
     </div>
 </nav>

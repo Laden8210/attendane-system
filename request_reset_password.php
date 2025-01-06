@@ -47,7 +47,7 @@ $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https:
 
 $host = $_SERVER['HTTP_HOST'];
 
-$resetUrl = $protocol . $host . '/school-attendance' . "/change_password.php?token=$token";
+$resetUrl = $protocol . $host . "/change_password.php?token=$token";
 
 
 

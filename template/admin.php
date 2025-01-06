@@ -33,9 +33,10 @@
     <title><?php echo $title ?></title>
 </head>
 
-<body class="bg-violet-600 ">
+<body class="bg-violet-600 flex">
+    <!-- Add a burger button for mobile view -->
 
-    <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-violet-400" aria-label="Sidebar">
+    <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-violet-400 sm:translate-x-0 -translate-x-full md:translate-x-0" aria-label="Sidebar">
         <div class="h-full px-3 py-4 overflow-y-auto  ">
 
             <div class="flex items-center p-4 bg-violet-600 rounded-lg shadow-md">
@@ -112,12 +113,38 @@
         </div>
     </aside>
 
-    <main class=" sm:ml-64 bg-violet-600 ">
+    <main class="flex-1 bg-violet-600 ml-0 md:ml-64 max-w-full ">
+
+
         <?php
         require_once '../template/admin-header.php';
+        ?>
+
+  
+        <?php
+
         require_once $content; ?>
     </main>
 
+
+    <script>
+        // JavaScript to toggle the sidebar
+        document.getElementById('burger-button').addEventListener('click', function() {
+            const sidebar = document.getElementById('default-sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Hide sidebar when clicking outside of it
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('default-sidebar');
+            const burgerButton = document.getElementById('burger-button');
+
+            // Check if the click was outside the sidebar and the burger button
+            if (!sidebar.contains(event.target) && !burgerButton.contains(event.target)) {
+                sidebar.classList.add('-translate-x-full'); // Hide the sidebar
+            }
+        });
+    </script>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

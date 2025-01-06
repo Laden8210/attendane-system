@@ -19,13 +19,13 @@ if (isset($_GET['event_id'])) {
 
     $pdf = new TCPDF();
 
-    
+
     $pdf->SetCreator(PDF_CREATOR);
     $pdf->SetAuthor('School Event System');
     $pdf->SetTitle('Event Attendance Report');
     $pdf->SetSubject('Attendance Report');
 
-  
+
     $pdf->SetHeaderData('', 0, 'Attendance Report', "Date Generated: " . date('Y-m-d'));
 
 
@@ -81,35 +81,48 @@ if (isset($_GET['event_id'])) {
                 <th >Name</th>
 
                 <th >Course - Year</th>
-                <th >Attendance Time</th>
-                <th >Session</th>
-                <th>Type</th>
+                <th >Block</th>
+                <th >Morning</th>
+                <th >Afternoon</th>
+   
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>';
-    
+
     // Populate the table rows with attendance data
     foreach ($attendances as $attendance) {
-        $type = $attendance['type'] == 1 ? 'Time In' : ($attendance['type'] == 2 ? 'Time Out' : 'Unknown');
+        // Determine the status based on event time
+        $status = ''; // Default status
+
+        // Check for morning attendance
+        $morningPresent = $attendance['attendance_time'] <= $event['am_time_out'];
+        $afternoonPresent = $attendance['attendance_time'] > $event['pm_time_in'];
+
+        // Determine status based on attendance
+        if ($morningPresent && $afternoonPresent) {
+            $status = 'Present'; // Present for both sessions
+        } elseif (!$morningPresent) {
+            $status = 'Late'; // Late for morning session
+        } else {
+            $status = 'Absent'; // Absent if not present for both sessions
+        }
 
         $table .= '
         <tr>
             <td>' . htmlspecialchars($attendance['STUDENT_NUMBER']) . '</td>
-            <td>' . htmlspecialchars(ucwords(strtolower($attendance['FIRST_NAME']))) . ' '. htmlspecialchars(ucwords(strtolower($attendance['LAST_NAME']))). '</td>
-
+            <td>' . htmlspecialchars(ucwords(strtolower($attendance['FIRST_NAME']))) . ' ' . htmlspecialchars(ucwords(strtolower($attendance['LAST_NAME']))) . '</td>
             <td>' . htmlspecialchars($attendance['COURSE_NAME'] . ' - ' . $attendance['YEAR']) . '</td>
-            <td>' . htmlspecialchars($attendance['attendance_time']) . '</td>
-            <td>' . strtoupper(htmlspecialchars($attendance['session'])) . '</td>
-           <td>' . strtoupper(htmlspecialchars($attendance['status'])) . '</td>
-            
-            <td>' .  strtoupper(htmlspecialchars($type)) . '</td>
+            <td>' . htmlspecialchars($attendance['BLOCK']) . '</td>
+            <td>' . htmlspecialchars($event['am_time_in'] . ' - ' . $event['am_time_out']) . '</td>
+            <td>' . htmlspecialchars($event['pm_time_in'] . ' - ' . $event['pm_time_out']) . '</td> 
+            <td>' . strtoupper(htmlspecialchars($status)) . '</td> 
         </tr>';
     }
-    
+
     $table .= '</tbody></table>';
 
-    
+
     $pdf->writeHTML($table, true, false, false, false, '');
 
     $pdf->Output("event_{$eventId}_attendance_report.pdf", 'D');

@@ -1,17 +1,17 @@
-<section class=" bg-violet-600  overflow-auto">
-    <div class="w-full px-10 py-5">
-        <div class="bg-slate-50 w-full rounded-lg overflow-x-hidden overflow-y-auto">
+<section class="bg-violet-600 overflow-auto">
+    <div class="w-full px-4 py-5 md:px-10">
+        <div class="bg-slate-50 w-full rounded-lg overflow-hidden">
             <div class="pt-5 px-2 text-center">
                 <h1 class="text-2xl font-bold">Admin List</h1>
                 <hr class="h-2 bg-cyan-500">
             </div>
-            <div class="h-96 bg-slate-100 rounded">
-                <div class="flex justify-between p-2 text-white">
-                    <div>
+            <div class="h-96 bg-slate-100 rounded overflow-y-auto">
+                <div class="flex flex-col md:flex-row justify-between p-2 text-white">
+                    <div class="mb-2 md:mb-0">
                         <button data-modal-target="add-student-modal" data-modal-toggle="add-student-modal"
                             class="shadow rounded bg-blue-500 px-2 py-1"><i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
                     </div>
-                    <div class="flex justify-end gap-2 items-center">
+                    <div class="flex flex-col md:flex-row justify-end gap-2 items-center">
                         <label for="search" class="text-black">Search</label>
                         <input id="search" name="search" type="search" placeholder="Search by name or email"
                             class="text-black outline-none border border-slate-700 px-2 py-1" oninput="searchUsers()" />
