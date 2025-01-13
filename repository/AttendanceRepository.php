@@ -15,7 +15,7 @@ class AttendanceRepository
         $sql = "INSERT INTO attendance (student_id, event_id, attendance_time, session, type, status)
                 VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iisss", $studentId, $eventId, $attendanceTime, $session, $type, $status);
+        $stmt->bind_param("iissss", $studentId, $eventId, $attendanceTime, $session, $type, $status);
         return $stmt->execute();
     }
 
