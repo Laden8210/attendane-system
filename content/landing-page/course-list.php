@@ -42,9 +42,14 @@ if (count($courses) == 0) {
                         class="w-full h-32 object-cover rounded-md"
                     >
                 </div>
+                
                 <!-- Department Title -->
                 <div class="card-body w-full text-center">
                     <h1 class="text-lg font-semibold text-white"><?php echo $courseTitle; ?></h1>
+                    
+
+
+                    <p class="text-white text-left mt-2 text-xs"><?php echo $course['DESCRIPTION']?></p>
                 </div>
             </a>
         <?php

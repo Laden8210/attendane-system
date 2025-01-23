@@ -33,23 +33,23 @@ class AttendanceRepository
                         
                         -- Morning Attendance
                         MAX(CASE 
-                            WHEN a.session = 'am' AND a.type = 1 THEN a.attendance_time 
+                            WHEN a.session = 'AM' AND a.type = 1 THEN a.attendance_time 
                             ELSE NULL 
                         END) AS morning_time_in,
                         
                         MAX(CASE 
-                            WHEN a.session = 'am' AND a.type = 2 THEN a.attendance_time 
+                            WHEN a.session = 'AM' AND a.type = 2 THEN a.attendance_time 
                             ELSE NULL 
                         END) AS morning_time_out,
                         
                         -- Afternoon Attendance
                         MAX(CASE 
-                            WHEN a.session = 'pm' AND a.type = 1 THEN a.attendance_time 
+                            WHEN a.session = 'PM' AND a.type = 1 THEN a.attendance_time 
                             ELSE NULL 
                         END) AS afternoon_time_in,
                         
                         MAX(CASE 
-                            WHEN a.session = 'pm' AND a.type = 2 THEN a.attendance_time 
+                            WHEN a.session = 'PM' AND a.type = 2 THEN a.attendance_time 
                             ELSE NULL 
                         END) AS afternoon_time_out,
                         
